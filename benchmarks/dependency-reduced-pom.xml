@@ -33,6 +33,12 @@
                   <mainClass>org.openjdk.jmh.Main</mainClass>
                 </transformer>
                 <transformer />
+                <transformer>
+                  <resource>META-INF/spring.factories</resource>
+                </transformer>
+                <transformer>
+                  <resource>META-INF/spring/org.springframework.boot.autoconfigure.AutoConfiguration.imports</resource>
+                </transformer>
               </transformers>
             </configuration>
           </execution>
