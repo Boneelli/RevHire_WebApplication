@@ -21,7 +21,7 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 /**
- * Benchmark della ricerca/caricamento dei job (JobService) su H2 in memoria (così da isolare il costo del metodo).
+ * Benchmark della ricerca/caricamento dei job (JobService) su H2 in memoria.
  *
  * Dati generati per ogni valore di numJobs (multiplo di 10):
  *  - 10 employer
