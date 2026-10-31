@@ -21,8 +21,9 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 /**
- * Benchmark della ricerca/caricamento dei job (JobService) su H2 in memoria.
+ * Misura la funzionalità di restituzione dei job, sia senza filtri e sia con filtri sul titolo.
  *
+ * Benchmark della ricerca/caricamento dei job (JobService) su H2 in memoria (per isolare la funzionalità).
  * Dati generati per ogni valore di numJobs (multiplo di 10):
  *  - 10 employer
  *  - 1 job su 10 e' CLOSED, gli altri OPEN
