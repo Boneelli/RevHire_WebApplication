@@ -11,20 +11,20 @@
 # altre app e notifiche chiuse, computer non usato. Le tre sessioni vanno fatte uguali
 # su before e after (stessi parametri qui sotto!).
 #
-# Dopo la sessione "stress" decidi gli utenti per load e soak (circa il 60% del carico
-# massimo sostenuto) e modifica i valori LOAD_USERS / SOAK_USERS qui sotto: poi NON cambiarli
-# piu' tra before e after.
+# I parametri qui sotto sono stati scelti dopo lo stress del "before": NON devono essere cambiati
+# tra before e after.
 # =====================================================================
 
-# ---- PARAMETRI: devono restare identici tra before e after --------------------
-LOAD_USERS="${LOAD_USERS:-20}"          # utenti dei load (dopo lo stress: ~60% della capacita')
+# ---- PARAMETRI: --------------------
+LOAD_USERS="${LOAD_USERS:-100}"         # utenti dei load (pausa ~1,5 s tra le richieste: ~65 richieste/s)
 LOAD_HOLD_S="${LOAD_HOLD_S:-300}"       # durata a regime di ogni load (secondi)
 LOAD_MIXED_REPS="${LOAD_MIXED_REPS:-3}" # ripetizioni del load misto
 STRESS_STEP_S="${STRESS_STEP_S:-90}"    # durata di ogni gradino dello stress (secondi)
 STRESS_U="${STRESS_U:-10 10 10 20 20}"  # utenti aggiunti a ogni gradino (cumulativi: 10,20,30,50,70)
 SPIKE_BASE="${SPIKE_BASE:-10}"          # utenti di base dello spike
 SPIKE_USERS="${SPIKE_USERS:-100}"       # utenti che entrano di colpo nel picco
-SOAK_USERS="${SOAK_USERS:-20}"          # utenti del soak (~60% della capacita')
+SPIKE_THINK_MS="${SPIKE_THINK_MS:-100}" # pausa tra le richieste nello spike (+ fino a altrettanto a caso)
+SOAK_USERS="${SOAK_USERS:-50}"          # utenti del soak (carico moderato, lungo)
 SOAK_S="${SOAK_S:-1200}"                # durata del soak in secondi
 COOLDOWN_S="${COOLDOWN_S:-120}"         # pausa tra una run e l'altra (secondi)
 IDLE_S="${IDLE_S:-300}"                 # durata della misura a riposo
@@ -76,7 +76,7 @@ LOG="results/$LABEL/sessione_${SESSION}_$(date +%Y%m%d_%H%M%S).log"
 exec > >(tee -a "$LOG") 2>&1
 
 echo "Sessione: $SESSION   versione: $LABEL"
-echo "Parametri: LOAD_USERS=$LOAD_USERS LOAD_HOLD_S=$LOAD_HOLD_S STRESS_STEP_S=$STRESS_STEP_S STRESS_U=\"$STRESS_U\" COOLDOWN_S=$COOLDOWN_S LOAD_MIXED_REPS=$LOAD_MIXED_REPS SPIKE_BASE=$SPIKE_BASE SPIKE_USERS=$SPIKE_USERS SOAK_USERS=$SOAK_USERS SOAK_S=$SOAK_S IDLE_S=$IDLE_S ENERGY_USERS=$ENERGY_USERS ENERGY_RUNS=$ENERGY_RUNS"
+echo "Parametri: LOAD_USERS=$LOAD_USERS LOAD_HOLD_S=$LOAD_HOLD_S STRESS_STEP_S=$STRESS_STEP_S STRESS_U=\"$STRESS_U\" COOLDOWN_S=$COOLDOWN_S LOAD_MIXED_REPS=$LOAD_MIXED_REPS SPIKE_BASE=$SPIKE_BASE SPIKE_USERS=$SPIKE_USERS SPIKE_THINK_MS=$SPIKE_THINK_MS SOAK_USERS=$SOAK_USERS SOAK_S=$SOAK_S IDLE_S=$IDLE_S ENERGY_USERS=$ENERGY_USERS ENERGY_RUNS=$ENERGY_RUNS"
 echo "Log: $LOG"
 echo
 echo "Controlla: Mac in carica, basso consumo spento, schermo acceso, altre app e notifiche chiuse,"
@@ -106,7 +106,8 @@ case "$SESSION" in
       i=$((i+1))
     done
     R run spike seeker -Jbase_users="$SPIKE_BASE" -Jspike_users="$SPIKE_USERS" \
-      -Jdash_pct=0 -Japps_pct=0 -Jfav_pct=0 -Jpdf_pct=0 -Japply_pct=10 -Jreg_pct=5
+      -Jthink_ms="$SPIKE_THINK_MS" -Jthink_var_ms="$SPIKE_THINK_MS" \
+      -Jdash_pct=0 -Japps_pct=0 -Jfav_pct=0 -Jpdf_pct=0 -Japply_pct=5 -Jreg_pct=3
     R run soak mixed -Jusers="$SOAK_USERS" -Jduration_s="$SOAK_S" -Japply_pct=2 -Jfav_pct=2
     ;;
   energy)
