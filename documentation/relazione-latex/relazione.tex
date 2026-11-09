@@ -16,7 +16,7 @@
 
 % Colori e titoli
 \usepackage[dvipsnames]{xcolor}
-\definecolor{primary}{RGB}{30,60,114}
+\definecolor{primary}{RGB}{36,99,235}
 \usepackage{titlesec}
 \titleformat{\section}
 {\Large\bfseries\color{primary}}{\thesection}{0.8em}{}[\vspace{-0.4em}\color{primary}\titlerule]
@@ -137,5 +137,80 @@
     Il progetto prevede inoltre dei test automatici, scritti con JUnit e
     Mockito, e il codice dei test è organizzato come quello dell'applicazione
     (controller, servizi e repository).
+
+    \section{Metodologia}
+
+    La valutazione di RevHire ha seguito un approccio \emph{before/after},
+    attraverso il quale sono state misurate prestazioni, consumi energetici e
+    qualità del codice sulla versione originale del progetto (\emph{baseline}),
+    poi si sono applicate le ottimizzazioni individuate e si sono ripetute le
+    stesse misure sulla versione modificata. Per rendere il confronto valido,
+    le due versioni sono mantenute su branch distinti del repository e sono
+    misurate con gli stessi strumenti, le stesse configurazioni e gli stessi
+    parametri di carico.
+
+    Gli strumenti utilizzati coprono le diverse dimensioni della sostenibilità
+    considerate: l'impatto ambientale e l'efficienza del front-end, la qualità
+    del codice in ottica di consumo energetico, le prestazioni del back-end e
+    l'energia effettivamente consumata durante l'esecuzione.
+
+    \subsection{Ambientale}
+
+    \subsubsection{FrontEnd}
+
+    \paragraph{EcoIndex}
+    \paragraph{GreenIT}
+    \paragraph{WebsiteCarbon}
+    
+    \subsubsection{Creedengo}
+
+    \subsubsection{JMH}
+    JMH (\emph{Java Microbenchmark Harness}) è stato usato per misurare le
+    prestazioni delle funzionalità core di RevHire a livello di singolo metodo,
+    isolate dal resto dell'applicazione, in modo ripetibile e confrontabile tra la
+    versione originale e quella ottimizzata. Per queste misure è stata usata la
+    configurazione con database H2 in memoria, così da isolare il metodo misurato
+    dall'infrastruttura esterna.
+
+    \paragraph{Utilizzo.}
+    I benchmark si trovano in un modulo Maven separato (cartella
+    \texttt{benchmarks}), che produce un JAR eseguibile, \texttt{benchmarks.jar}.
+    Il modulo contiene una classe di benchmark per ciascuna funzionalità core:
+    \begin{itemize}
+        \item \texttt{JobSearchBenchmark}: misura la restituzione delle offerte di
+        lavoro, sia senza filtri (\texttt{getAllOpenJobs}) sia con filtro sul
+        titolo (\texttt{searchJobsByTitle});
+        \item \texttt{PasswordBenchmark}: misura le funzionalità di accesso
+        (\texttt{login}) e di registrazione (\texttt{registerUser}) di
+        \texttt{AuthServiceImpl}, che usano BCrypt;
+        \item \texttt{ResumeHtmlBenchmark}: misura il primo passo del download di un
+        curriculum creato nell'applicazione, cioè la sua conversione in HTML
+        (\texttt{generateResumeHtml});
+        \item \texttt{ResumePdfBenchmark}: misura il secondo passo dello stesso
+        download, cioè la conversione dell'HTML in PDF (\texttt{htmlToPdf}).
+    \end{itemize}
+    L'esecuzione avviene da terminale, dalla cartella \texttt{benchmarks}, dopo
+    aver compilato il progetto con \texttt{mvn clean install -DskipTests} nella
+    radice e \texttt{mvn clean package} nella cartella stessa:
+    \begin{verbatim}
+    java -jar target/benchmarks.jar -e MyBenchmark \
+    -rf json -rff results.json | tee run.log
+    \end{verbatim}
+
+    JMH stampa a console una tabella con una riga per ogni benchmark e le
+    colonne \texttt{Benchmark}, \texttt{Mode}, \texttt{Cnt}, \texttt{Score},
+    \texttt{Error} e \texttt{Units}. \texttt{Score} è il valore medio sulle
+    iterazioni di misura e \texttt{Error} è la semiampiezza del suo intervallo
+    di confidenza al 99,9\%. \texttt{Mode} indica come leggere il punteggio:
+    con \texttt{thrpt} (operazioni per unità di tempo) un valore più alto è
+    migliore, con \texttt{avgt} (tempo medio per operazione) uno più basso è
+    migliore.
+    I risultati sono salvati in \texttt{results.json}, che per ogni
+    benchmark riporta punteggio, errore, intervallo di confidenza e valori grezzi
+    di ciascuna iterazione, mentre l'output a console è in \texttt{run.log}.
+
+    \subsubsection{JMeter}
+
+    \subsubsection{EnergiBridge}
 
 \end{document}
