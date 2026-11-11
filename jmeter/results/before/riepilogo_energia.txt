@@ -1,0 +1,23 @@
+== idle_20261107_171751
+   durata: 302.1 s   campioni: 1487
+   colonne: SYSTEM_POWER (Watts) (potenza)
+   SYSTEM_POWER (Watts)             energia    620.16 J   potenza media    2.05 W
+   uso medio CPU: 4.6 %
+== load_mixed_20261107_172509
+   durata: 255.6 s   campioni: 1264
+   colonne: SYSTEM_POWER (Watts) (potenza)
+   SYSTEM_POWER (Watts)             energia   1813.53 J   potenza media    7.09 W     0.0306 J/richiesta
+   uso medio CPU: 23.0 %
+   richieste: 59191
+== load_mixed_20261107_172930
+   durata: 255.4 s   campioni: 1260
+   colonne: SYSTEM_POWER (Watts) (potenza)
+   SYSTEM_POWER (Watts)             energia   1789.35 J   potenza media    7.01 W     0.0303 J/richiesta
+   uso medio CPU: 24.2 %
+   richieste: 59007
+== load_mixed_20261107_173352
+   durata: 255.9 s   campioni: 1265
+   colonne: SYSTEM_POWER (Watts) (potenza)
+   SYSTEM_POWER (Watts)             energia   1949.83 J   potenza media    7.62 W     0.0330 J/richiesta
+   uso medio CPU: 26.7 %
+   richieste: 59096

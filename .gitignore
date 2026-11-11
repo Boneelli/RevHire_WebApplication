@@ -10,6 +10,7 @@ target/
 !**/src/main/**/target/
 !**/src/test/**/target/
 
+
 # Maven wrapper
 
 .mvn/wrapper/maven-wrapper.jar
