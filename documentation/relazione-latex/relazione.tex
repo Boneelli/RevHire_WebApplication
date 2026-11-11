@@ -209,8 +209,72 @@
     benchmark riporta punteggio, errore, intervallo di confidenza e valori grezzi
     di ciascuna iterazione, mentre l'output a console è in \texttt{run.log}.
 
+    ```latex
     \subsubsection{JMeter}
+    Per la valutazione delle prestazioni dell'applicazione è stata utilizzata una suite
+    di test automatizzati con Apache JMeter, gestita mediante gli script
+    \textit{misure\_reali.sh} e \textit{run\_jmeter.sh}. Il primo definisce la sequenza
+    e i parametri dei test, mentre il secondo gestisce l'esecuzione delle singole run. \\ \\
+    I test vengono eseguiti in un ambiente controllato, con Oracle su Docker e
+    l'applicazione Spring Boot avviata da jar con heap di 1 GB, log ridotti e
+    \textit{show-sql} disattivato. Prima di ogni run il database viene ripristinato
+    con gli stessi dati e vengono esportati i CSV utilizzati da JMeter per simulare
+    gli utenti. Tra una run e la successiva è prevista una pausa di 120 secondi,
+    così da mantenere condizioni di esecuzione confrontabili. \\ \\
+    Le misurazioni sono suddivise in due sessioni:
+    \begin{itemize}
+        \item \textbf{Stress test}: cinque run dedicate alla ricerca delle offerte,
+        al login, alla generazione del PDF del CV e alle dashboard di seeker ed
+        employer. Gli utenti aumentano progressivamente (10, 20, 30, 50, 70),
+        con 90 secondi per gradino e senza pause tra le richieste, per individuare
+        la capacità massima del sistema.
+        \item \textbf{Performance test}: valuta il comportamento con carichi realistici,
+        attraverso test di \textbf{load} sulle singole funzioni e su uno scenario misto
+        ripetuto tre volte, uno \textbf{spike} test con incremento improvviso da 10 a 100
+        utenti e uno \textbf{soak} test con 50 utenti per 20 minuti. Vengono inoltre
+        testate le operazioni di registrazione.
+    \end{itemize}
+    Per ogni run vengono salvati i risultati grezzi (\textit{results.jtl}),
+    i report HTML, i metadati relativi all'ambiente e alla versione del codice
+    (\textit{metadata.txt}) e i riepiloghi delle misurazioni. \\ \\
+    L'intera procedura viene ripetuta sulla versione \textit{before} e sulla
+    versione \textit{after}, mantenendo invariati ambiente, database e parametri,
+    così da rendere confrontabili i risultati. Le ripetizioni permettono inoltre
+    di stimare la variabilità delle misure, inferiore allo 0,5\% per lo scenario
+    misto e pari a circa il 9\% per quelle energetiche. \\ \\
+    La metodologia presenta due limiti: nel soak test non è stato monitorato
+    l'utilizzo della memoria, quindi non è possibile escludere eventuali memory
+    leak; inoltre, EnergiBridge misura il consumo dell'intero sistema, includendo
+    JMeter, Docker, Oracle e gli altri processi, e non quello della sola applicazione.
+
 
     \subsubsection{EnergiBridge}
-
+    Per stimare quanta energia consuma il backend di RevHire è stato utilizzato
+    EnergiBridge, che legge i contatori di potenza della macchina mentre l'applicazione
+    lavora. \\ \\
+    La procedura è automatizzata con la sessione \textit{energy} di \textit{misure\_reali.sh}
+    che stabilisce cosa misurare e con quali parametri. In questo caso, \textit{run\_jmeter.sh}
+    avvia l'applicazione dal JAR, fa partire EnergiBridge insieme a JMeter e lo ferma quando il carico finisce,
+    salvando i dati nella cartella della prova. \\ \\ Alla fine \textit{energy\_summary.py}
+    legge i file prodotti e calcola i diversi valori. \\ \\
+    Per ogni versione sono state fatte due misure:
+    \begin{itemize}
+        \item \textbf{cosumo a riposo}: 300 secondi con l'applicazione accesa ma nessuna
+        richieta, per avere un valore di riferimento del consumo di base;
+        \item \textbf{consumo sotto carico}: tre prove con lo scenario misto di JMeter,
+        con 50 utenti, 10 secondi per arrivare a regime, 240 secondi di carico e 200 ms
+        di pausa tra una richiesta e l'altra.
+    \end{itemize}
+    Per fare in modo che i risultati fossero confrontabili, le consizioni sono rimaste
+    le stesse in tutte le prove. EnergiBridge ha inoltre richiesto i privilegi
+    di amministratore per accedere ai contatori dell'hardware. \\
+    Ogni prova produce:
+    \begin{itemize}
+        \item un file \textit{energy.csv} con il consumo campionato nel tempo e un breve
+        riepilogo;
+        \item un file \textit{metadata.txt} che descrive il computer, il commit, la configurazione
+        della misura e i parametri di JMeter;
+        \item una sintesi calcolata da \textit{energy\_summary.py} con durata, energia totale in joule,
+        potenza media, uso medio della CPU ed energia per richiesta.
+    \end{itemize}
 \end{document}
