@@ -158,8 +158,56 @@
 
     \subsubsection{FrontEnd}
 
-    \paragraph{EcoIndex}
-    \paragraph{GreenIT}
+    \subsubsection{EcoIndex}
+    EcoIndex è uno strumento che stima l'impatto ambientale di una pagina web analizzando tre parametri principali:
+    il peso della pagina (risorse trasferite), la complessità strutturale (numero di elementi nel DOM) e
+    il numero di richieste HTTP verso server o domini esterni.
+
+    Lo strumento è stato applicato all'applicazione distribuita su Render analizzando la vista principale e verificando
+    il rispetto delle buone pratiche di ecodesign (tra cui gestione della cache, esternalizzazione delle risorse e
+    uso di font standard).
+
+    Il punteggio varia da 0 a 100 ed è calcolato dal confronto dei tre parametri misurati con i valori di riferimento
+    del database dello strumento. Ad esso corrisponde una classe di efficienza da A (migliore) a G (peggiore),
+    oltre alla posizione della pagina nella classifica globale.
+
+    Oltre al punteggio, EcoIndex controlla 14 buone pratiche di ecodesign (referenziale RWEB di Green IT),
+    suddivise tra rete, dispositivo utente e datacenter.
+
+    L'output consiste in un report sintetico contenente:
+    \begin{itemize}
+        \item Il punteggio EcoIndex, la classe corrispondente e la posizione in classifica;
+        \item Le stime delle emissioni di CO$_2$e e del consumo idrico su base mensile (1.000 visualizzazioni);
+        \item Il dettaglio di peso, elementi del DOM e richieste HTTP a confronto con la mediana e il valore obiettivo;
+        \item L'elenco delle richieste HTTP suddivise per tipologia di risorsa e dominio;
+        \item L'esito di ciascuna buona pratica (superata, da controllare o non superata).
+    \end{itemize}
+
+    Per la lettura del report occorre considerare la polarità di ciascun indicatore: mentre per il punteggio EcoIndex
+    un valore più alto indica un risultato migliore, per il peso, gli elementi del DOM, le richieste HTTP, le emissioni
+    e i consumi idrici un valore inferiore rappresenta una migliore efficienza.
+
+    \subsubsection{GreenIT Analysis}
+    GreenIT Analysis è un'estensione per browser la quale consente di stimare l'impatto ambientale delle singole viste
+    di un'applicazione web direttamente durante la sessione di navigazione del client, valutando il peso delle risorse
+    trasferite, la complessità dell'albero DOM e il numero di richieste HTTP generate.
+
+    Lo strumento è stato applicato all'applicazione distribuita su Render analizzando la vista principale ma anche
+    le principali sezioni quali Login, Sign Up, Reset Password, Dashboard Candidato, Ricerca Lavori e Resume Builder
+    al fine di verificare il rispetto delle buone pratiche di ecodesign software.
+
+    L'output fornito dall'estensione consiste in un report sintetico contenente:
+    \begin{itemize}
+        \item Il punteggio complessivo, la classe di efficienza energetica corrispondente (da A a G) e la relativa posizione in classifica;
+        \item Le stime delle emissioni di gas serra (espresse in gCO$_2$e) e del consumo idrico (espresso in cl) riferite alla singola visita o proiettate su 1.000 visualizzazioni mensili;
+        \item Il dettaglio quantitativo dei tre parametri di caricamento (peso della pagina espresso in KB, numero di elementi del DOM e conteggio delle richieste HTTP).
+    \end{itemize}
+
+    Per l'interpretazione delle misurazioni occorre considerare la polarità di ciascun indicatore: un punteggio
+    numerico più alto indica prestazioni ed efficienza energetica migliori, mentre per il peso della pagina,
+    la dimensione del DOM, il numero di richieste HTTP, l'impronta di carbonio e il consumo idrico, valori bassi
+    evidenziano un minore impatto ambientale.
+
     \paragraph{WebsiteCarbon}
     
     \subsubsection{Creedengo}
@@ -209,7 +257,6 @@
     benchmark riporta punteggio, errore, intervallo di confidenza e valori grezzi
     di ciascuna iterazione, mentre l'output a console è in \texttt{run.log}.
 
-    ```latex
     \subsubsection{JMeter}
     Per la valutazione delle prestazioni dell'applicazione è stata utilizzata una suite
     di test automatizzati con Apache JMeter, gestita mediante gli script
