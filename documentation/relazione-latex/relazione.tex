@@ -209,7 +209,31 @@
     la dimensione del DOM, il numero di richieste HTTP, l'impronta di carbonio e il consumo idrico, valori bassi
     evidenziano un minore impatto ambientale.
 
-    \subsubsection{WebsiteCarbon}
+    \subsubsection{Website Carbon Calculator}
+    Website Carbon Calculator è uno strumento online che non richiede installazione ed è utilizzato per stimare
+    l'impronta di carbonio e l'efficienza energetica delle pagine web. La valutazione si basa sulla quantità di
+    dati trasferiti durante il caricamento di una pagina, integrando parametri relativi all'intensità carbonica
+    della rete elettrica globale e al tipo di hosting utilizzato (standard o con energia proveniente da fonti
+    rinnovabili).
+
+    Lo strumento è stato utilizzato direttamente via browser inserendo l'URL della pagina principale dell'applicazione
+    RevHire distribuita su Render, al fine di determinare l'impatto ambientale generato da ciascuna visita in termini
+    di emissioni di CO$_2$.
+
+    L'output generato dalla piattaforma è costituito da:
+    \begin{itemize}
+        \item Una valutazione globale espressa tramite una scala di rating che va da A$^+$ (la classe più efficiente) a F (la meno efficiente);
+        \item La posizione percentuale inerente alla pagina rispetto alla media globale dei siti web analizzati;
+        \item La stima della quantità di CO$_2$e emessa per singola visita (espressa in grammi);
+        \item L'impatto annuale proiettato su base di traffico ipotetica (es. 10.000 visite mensili), specificando a cosa potrebbe corrispondere relativamente a consumo in kWh, chilometri equivalenti in auto elettrica e alberi necessari all'assorbimento;
+        \item L'indicazione sulla tipologia di energia utilizzata dai server di hosting e la relativa diminuzione di emissioni (in percentuale) in caso di adozione di un green hosting.
+    \end{itemize}
+
+    Per quanto riguarda l'interpretazione dei risultati, una classe di rating più alta
+    (con valore massimo pari ad A$^+$)
+    e una percentuale di efficienza globale elevata indicano un sito ecologicamente sostenibile, mentre valori minimi
+    di CO$_2$e indicano un ridotto consumo energetico durante il trasferimento dei dati, orientando eventuali
+    interventi verso la riduzione del peso della pagina o al miglioramento dell'efficienza dell'hosting.
     
     \subsubsection{Creedengo}
     Creedengo è un plugin per SonarQube che individua, tramite analisi statica,
