@@ -140,30 +140,31 @@
 
     \section{Metodologia}
 
-    La valutazione di RevHire ha seguito un approccio \emph{before/after},
-    attraverso il quale sono state misurate prestazioni, consumi energetici e
-    qualità del codice sulla versione originale del progetto (\emph{baseline}),
-    poi si sono applicate le ottimizzazioni individuate e si sono ripetute le
-    stesse misure sulla versione modificata. Per rendere il confronto valido,
-    le due versioni sono mantenute su branch distinti del repository e sono
-    misurate con gli stessi strumenti, le stesse configurazioni e gli stessi
-    parametri di carico.
-
-    Gli strumenti utilizzati coprono le diverse dimensioni della sostenibilità
-    considerate: l'impatto ambientale e l'efficienza del front-end, la qualità
-    del codice in ottica di consumo energetico, le prestazioni del back-end e
-    l'energia effettivamente consumata durante l'esecuzione.
-
     \subsection{Ambientale}
+    La valutazione del profilo ambientale e del consumo energetico di RevHire
+    segue un approccio \emph{before/after}. Le prestazioni, i consumi energetici
+    e la qualità del codice sono stati misurati una prima volta sulla versione
+    originale del progetto (\emph{baseline}), appena clonato il repository.
+    Dopo aver applicato le ottimizzazioni individuate, le stesse misure sono
+    state ripetute sulla versione modificata. Entrambe le misurazioni sono state
+    eseguite sullo stesso branch \texttt{main}, in due momenti diversi: la
+    versione \emph{before} corrisponde al codice iniziale, quella \emph{after}
+    al codice al termine delle modifiche. Per rendere il confronto valido, le
+    due misurazioni usano gli stessi strumenti, le stesse configurazioni e gli
+    stessi parametri di carico.
 
-    \subsubsection{FrontEnd}
+    Gli strumenti utilizzati coprono sia l'impatto ambientale e l'efficienza
+    del front-end (tramite gli strumenti EcoIndex, WebsiteCarbon e GreenIT),
+    la qualità del codice in ottica di consumo energetico (tramite Creedengo),
+    le prestazioni del back-end (tramite JMH, e Jmeter) e l'energia
+    effettivamente consumata durante l'esecuzione (tramite EnergiBridge).
 
     \subsubsection{EcoIndex}
     EcoIndex è uno strumento che stima l'impatto ambientale di una pagina web analizzando tre parametri principali:
     il peso della pagina (risorse trasferite), la complessità strutturale (numero di elementi nel DOM) e
     il numero di richieste HTTP verso server o domini esterni.
 
-    Lo strumento è stato applicato all'applicazione distribuita su Render analizzando la vista principale e verificando
+    Lo strumento è stato applicato all'applicazione distribuita su Render (sul branch \textit{deploy}) analizzando la vista principale e verificando
     il rispetto delle buone pratiche di ecodesign (tra cui gestione della cache, esternalizzazione delle risorse e
     uso di font standard).
 
@@ -208,9 +209,24 @@
     la dimensione del DOM, il numero di richieste HTTP, l'impronta di carbonio e il consumo idrico, valori bassi
     evidenziano un minore impatto ambientale.
 
-    \paragraph{WebsiteCarbon}
+    \subsubsection{WebsiteCarbon}
     
     \subsubsection{Creedengo}
+    Creedengo è un plugin per SonarQube che individua, tramite analisi statica,
+    pattern di codice che consumano energia in modo inutile e suggerisce
+    ottimizzazioni sulla base di regole.
+
+    L'analisi \emph{before} è stata eseguita sul codice dell'applicazione prima
+    delle modifiche introdotte dal team, all'inizio del branch \texttt{main}, mentre
+    l'analisi \emph{after} è stata eseguita alla fine dello stesso branch, dopo le
+    modifiche. Entrambe le analisi usano lo stesso profilo di regole.
+
+    Come output, lo strumento riporta il numero di \emph{issue} che violano le
+    regole di Creedengo e/o di SonarQube. Ogni issue sulla qualità del codice
+    appartiene a una categoria (\emph{Maintainability}, \emph{Reliability} o
+    \emph{Security}) ed è corredata da tag che indicano il tipo di regola
+    violata. In particolare per le regole di Creedengo è presente il
+    tag \texttt{creedengo}.
 
     \subsubsection{JMH}
     JMH (\emph{Java Microbenchmark Harness}) è stato usato per misurare le
