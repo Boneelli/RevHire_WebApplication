@@ -1,0 +1,187 @@
+LEGENDA (nome -> richiesta JMeter)
+   Login seeker               POST /auth/login (seeker)
+   Login employer             POST /auth/login (employer)
+   Registrazione              POST /auth/register
+   Lista job                  GET /jobs
+   Dettaglio job              GET /jobs/get/{id}
+   Ricerca job                GET /jobseeker/jobs/search?title=java
+   Dashboard seeker           GET /jobseeker/dashboard/{userId}
+   Candidarsi a un job        POST /applications/submit-application
+   Le mie candidature         GET /applications/seeker/{seekerId}
+   Aggiungi ai preferiti      POST /api/jobseeker/favorites/{userId}/{jobId}
+   Lista preferiti            GET /api/jobseeker/favorites/{seekerId}
+   CV in PDF                  GET /api/resume/resume-pdf/{id}
+   Dashboard employer         GET /employer/dashboard/{userId}
+   Candidature ricevute       GET /applications/employer/{userId}
+   Cambio stato candidatura   POST /applications/update-status/{id}
+
+== LOAD · Login   [load_login_20261107_150703]   (durata 359 s, 20598 richieste, errori 0.00%)
+   funzionalita'                       n    medio mediana     p95     p99      max   err %    req/s
+   Login seeker                    20598     92.7      86     137     182      290    0.00     57.4
+   TOTALE                          20598     92.7      86     137     182      290    0.00     57.4
+
+== LOAD · Uso misto (seeker + employer)   [load_mixed_20261107_152829]   (durata 358 s, 21744 richieste, errori 0.00%)
+   funzionalita'                       n    medio mediana     p95     p99      max   err %    req/s
+   Login seeker                       80     92.2      91     116     135      135    0.00      0.2
+   Login employer                     20     94.5      96     108     108      108    0.00      0.1
+   Registrazione                     136     95.4      99     108     112      120    0.00      0.4
+   Lista job                        1290      9.3       9      16      22       50    0.00      3.6
+   Dettaglio job                    4336      2.3       2       5       7       56    0.00     12.1
+   Ricerca job                      4362      3.8       3       7      10       57    0.00     12.2
+   Dashboard seeker                 4382      3.4       3       7      10      232    0.00     12.2
+   Candidarsi a un job               442     11.0      10      20      26       55    0.00      1.2
+   Le mie candidature               1091     10.5       9      21      26       43    0.00      3.0
+   Aggiungi ai preferiti             444      7.1       6      13      17       55    0.00      1.2
+   Lista preferiti                   441      9.7       8      19      25       36    0.00      1.2
+   CV in PDF                         432     14.3      13      22      36      316    0.00      1.2
+   Dashboard employer               2056      6.9       6      13      19       56    0.00      5.7
+   Candidature ricevute             2047     36.7      35      57      64      115    0.00      5.7
+   Cambio stato candidatura          185      7.5       7      13      22       50    0.00      0.5
+   TOTALE                          21744      9.0       4      39      77      316    0.00     60.7
+
+== LOAD · Uso misto (seeker + employer)   [load_mixed_20261107_153637]   (durata 359 s, 21775 richieste, errori 0.00%)
+   funzionalita'                       n    medio mediana     p95     p99      max   err %    req/s
+   Login seeker                       80     93.9      92     114     131      131    0.00      0.2
+   Login employer                     20     90.1      89     115     115      115    0.00      0.1
+   Registrazione                     132     95.9      98     107     110      119    0.00      0.4
+   Lista job                        1281      9.7       9      17      23       54    0.00      3.6
+   Dettaglio job                    4365      2.4       2       5       7       47    0.00     12.2
+   Ricerca job                      4394      4.0       4       8      10       53    0.00     12.3
+   Dashboard seeker                 4417      3.8       3       8      13      207    0.00     12.3
+   Candidarsi a un job               427     11.1      10      21      26       45    0.00      1.2
+   Le mie candidature               1093     11.3      10      23      31       52    0.00      3.0
+   Aggiungi ai preferiti             427      8.0       7      15      19       70    0.00      1.2
+   Lista preferiti                   427      9.7       8      21      25       36    0.00      1.2
+   CV in PDF                         421     14.0      13      24      34      271    0.00      1.2
+   Dashboard employer               2054      7.2       6      14      21       76    0.00      5.7
+   Candidature ricevute             2044     37.0      35      60      68       85    0.00      5.7
+   Cambio stato candidatura          193      7.7       7      15      23       24    0.00      0.5
+   TOTALE                          21775      9.3       4      38      76      271    0.00     60.7
+
+== LOAD · Uso misto (seeker + employer)   [load_mixed_20261107_154446]   (durata 359 s, 21824 richieste, errori 0.00%)
+   funzionalita'                       n    medio mediana     p95     p99      max   err %    req/s
+   Login seeker                       80     93.9      92     114     137      137    0.00      0.2
+   Login employer                     20     92.1      88     119     119      119    0.00      0.1
+   Registrazione                     126     97.2     101     110     112      114    0.00      0.4
+   Lista job                        1292      9.5       9      17      24       51    0.00      3.6
+   Dettaglio job                    4364      2.2       2       5       7       41    0.00     12.2
+   Ricerca job                      4389      3.7       3       7      11       87    0.00     12.2
+   Dashboard seeker                 4411      3.4       3       7      11      197    0.00     12.3
+   Candidarsi a un job               418     10.8      10      20      25       30    0.00      1.2
+   Le mie candidature               1097      9.6       9      19      24       51    0.00      3.1
+   Aggiungi ai preferiti             435      7.2       6      13      18       42    0.00      1.2
+   Lista preferiti                   434      9.9       9      20      27       48    0.00      1.2
+   CV in PDF                         466     13.4      12      23      33      312    0.00      1.3
+   Dashboard employer               2044      7.0       6      14      21       66    0.00      5.7
+   Candidature ricevute             2035     35.5      34      56      64       95    0.00      5.7
+   Cambio stato candidatura          213      7.8       7      16      24       30    0.00      0.6
+   TOTALE                          21824      8.8       4      36      75      312    0.00     60.8
+
+== LOAD · Uso misto (seeker + employer) (sessione energia)   [load_mixed_20261107_172509]   (durata 250 s, 59191 richieste, errori 0.00%)
+   funzionalita'                       n    medio mediana     p95     p99      max   err %    req/s
+   Login seeker                       40     80.0      77      94     143      143    0.00      0.2
+   Login employer                     10     76.9      77      85      85       85    0.00      0.0
+   Lista job                        3844      5.5       5       9      12       25    0.00     15.4
+   Dettaglio job                   12798      1.1       1       2       3       26    0.00     51.3
+   Ricerca job                     12815      1.7       2       3       4       38    0.00     51.3
+   Dashboard seeker                12825      1.7       2       3       4      200    0.00     51.4
+   Candidarsi a un job               372      6.5       6      10      14       27    0.00      1.5
+   Le mie candidature               3201      5.8       5      11      14       32    0.00     12.8
+   Aggiungi ai preferiti             370      4.2       4       6      13       21    0.00      1.5
+   Lista preferiti                   369      5.3       5       9      12       18    0.00      1.5
+   CV in PDF                        1295      6.3       6      10      13      290    0.00      5.2
+   Dashboard employer               5344      3.8       4       6       9       28    0.00     21.4
+   Candidature ricevute             5340     28.1      27      43      49       67    0.00     21.4
+   Cambio stato candidatura          568      4.2       4       7       9       19    0.00      2.3
+   TOTALE                          59191      4.9       2      27      40      290    0.00    237.0
+
+== LOAD · Uso misto (seeker + employer) (sessione energia)   [load_mixed_20261107_172930]   (durata 250 s, 59007 richieste, errori 0.00%)
+   funzionalita'                       n    medio mediana     p95     p99      max   err %    req/s
+   Login seeker                       40     79.7      77      89     126      126    0.00      0.2
+   Login employer                     10     77.6      78      81      81       81    0.00      0.0
+   Lista job                        3847      6.5       6      11      19       38    0.00     15.4
+   Dettaglio job                   12755      1.3       1       3       7       38    0.00     51.1
+   Ricerca job                     12771      2.1       2       4      10       37    0.00     51.1
+   Dashboard seeker                12782      2.1       2       4       9      182    0.00     51.2
+   Candidarsi a un job               398      7.5       7      13      17       29    0.00      1.6
+   Le mie candidature               3206      7.2       7      13      20       39    0.00     12.8
+   Aggiungi ai preferiti             362      4.6       4       8      13       24    0.00      1.4
+   Lista preferiti                   362      5.9       5      11      15       19    0.00      1.4
+   CV in PDF                        1296      7.1       6      12      18      260    0.00      5.2
+   Dashboard employer               5332      4.0       4       7      10       30    0.00     21.3
+   Candidature ricevute             5323     30.3      28      50      61       95    0.00     21.3
+   Cambio stato candidatura          523      4.5       4       8      10       16    0.00      2.1
+   TOTALE                          59007      5.5       2      27      44      260    0.00    236.2
+
+== LOAD · Uso misto (seeker + employer) (sessione energia)   [load_mixed_20261107_173352]   (durata 250 s, 59096 richieste, errori 0.00%)
+   funzionalita'                       n    medio mediana     p95     p99      max   err %    req/s
+   Login seeker                       40     80.6      78      89     132      132    0.00      0.2
+   Login employer                     10     77.9      78      84      84       84    0.00      0.0
+   Lista job                        3830      5.9       5       9      13       24    0.00     15.3
+   Dettaglio job                   12804      1.2       1       2       3       24    0.00     51.3
+   Ricerca job                     12818      1.9       2       3       5       38    0.00     51.3
+   Dashboard seeker                12827      1.8       2       3       5      185    0.00     51.4
+   Candidarsi a un job               349      7.0       6      11      15       34    0.00      1.4
+   Le mie candidature               3190      6.0       6      10      14       27    0.00     12.8
+   Aggiungi ai preferiti             398      4.3       4       7      10       16    0.00      1.6
+   Lista preferiti                   397      5.9       6      10      16       19    0.00      1.6
+   CV in PDF                        1241      7.0       6      11      15      272    0.00      5.0
+   Dashboard employer               5314      3.9       4       6       9       29    0.00     21.3
+   Candidature ricevute             5309     30.1      29      46      55      104    0.00     21.3
+   Cambio stato candidatura          569      4.4       4       7      10       16    0.00      2.3
+   TOTALE                          59096      5.2       2      28      42      272    0.00    236.6
+
+== LOAD · CV in PDF   [load_pdf_20261107_151512]   (durata 358 s, 21732 richieste, errori 0.00%)
+   funzionalita'                       n    medio mediana     p95     p99      max   err %    req/s
+   CV in PDF                       21732     12.5      12      21      41      358    0.00     60.7
+   TOTALE                          21732     12.5      12      21      41      358    0.00     60.7
+
+== LOAD · Registrazione   [load_register_20261107_152321]   (durata 179 s, 481 richieste, errori 0.00%)
+   funzionalita'                       n    medio mediana     p95     p99      max   err %    req/s
+   Registrazione                     481    100.9     108     117     120      143    0.00      2.7
+   TOTALE                            481    100.9     108     117     120      143    0.00      2.7
+
+== LOAD · Ricerca job   [load_search_20261107_145854]   (durata 359 s, 21790 richieste, errori 0.00%)
+   funzionalita'                       n    medio mediana     p95     p99      max   err %    req/s
+   Login seeker                      100     93.8      93     116     141      141    0.00      0.3
+   Lista job                       10817     11.4      11      17      23      103    0.00     30.2
+   Ricerca job                     10873      4.6       4       8      12      214    0.00     30.3
+   TOTALE                          21790      8.4       7      16      24      214    0.00     60.8
+
+== MEDIA DELLE 3 RIPETIZIONI: LOAD · Uso misto (seeker + employer)
+   funzionalita'                    medio  min-medio  max-medio  p95 medio    err %
+   Login seeker                      93.3       92.2       93.9      114.7     0.00
+   Login employer                    92.2       90.1       94.5      114.0     0.00
+   Registrazione                     96.2       95.4       97.2      108.3     0.00
+   Lista job                          9.5        9.3        9.7       16.7     0.00
+   Dettaglio job                      2.3        2.2        2.4        5.0     0.00
+   Ricerca job                        3.8        3.7        4.0        7.3     0.00
+   Dashboard seeker                   3.5        3.4        3.8        7.3     0.00
+   Candidarsi a un job               10.9       10.8       11.1       20.3     0.00
+   Le mie candidature                10.5        9.6       11.3       21.0     0.00
+   Aggiungi ai preferiti              7.4        7.1        8.0       13.7     0.00
+   Lista preferiti                    9.8        9.7        9.9       20.0     0.00
+   CV in PDF                         13.9       13.4       14.3       23.0     0.00
+   Dashboard employer                 7.0        6.9        7.2       13.7     0.00
+   Candidature ricevute              36.4       35.5       37.0       57.7     0.00
+   Cambio stato candidatura           7.7        7.5        7.8       14.7     0.00
+   TOTALE                             9.0        8.8        9.3       37.7     0.00
+
+== MEDIA DELLE 3 RIPETIZIONI: LOAD · Uso misto (seeker + employer) (sessione energia)
+   funzionalita'                    medio  min-medio  max-medio  p95 medio    err %
+   Login seeker                      80.1       79.7       80.6       90.7     0.00
+   Login employer                    77.5       76.9       77.9       83.3     0.00
+   Lista job                          6.0        5.5        6.5        9.7     0.00
+   Dettaglio job                      1.2        1.1        1.3        2.3     0.00
+   Ricerca job                        1.9        1.7        2.1        3.3     0.00
+   Dashboard seeker                   1.9        1.7        2.1        3.3     0.00
+   Candidarsi a un job                7.0        6.5        7.5       11.3     0.00
+   Le mie candidature                 6.3        5.8        7.2       11.3     0.00
+   Aggiungi ai preferiti              4.4        4.2        4.6        7.0     0.00
+   Lista preferiti                    5.7        5.3        5.9       10.0     0.00
+   CV in PDF                          6.8        6.3        7.1       11.0     0.00
+   Dashboard employer                 3.9        3.8        4.0        6.3     0.00
+   Candidature ricevute              29.5       28.1       30.3       46.3     0.00
+   Cambio stato candidatura           4.4        4.2        4.5        7.3     0.00
+   TOTALE                             5.2        4.9        5.5       27.3     0.00
+

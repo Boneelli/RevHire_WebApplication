@@ -16,6 +16,7 @@ e stampa quali ha usato (riga 'colonne'), cosi' si puo' controllare.
 """
 import csv
 import os
+import re
 import sys
 
 
@@ -83,6 +84,59 @@ def analyze(path):
     return res
 
 
+TIPI = {"idle": "A riposo (nessun carico)", "load_mixed": "Carico misto (50 utenti)"}
+
+
+def etichetta(name):
+    m = re.match(r"^(.+?)_(\d{8})_(\d{2})(\d{2})(\d{2})$", name)
+    if not m:
+        return name
+    return "%s, ore %s:%s:%s" % (TIPI.get(m.group(1), m.group(1)), m.group(3), m.group(4), m.group(5))
+
+
+def print_tables(out):
+    """tabella leggibile: una riga per misura, energia totale e netta (sopra il consumo a riposo)"""
+    cols = []
+    for _, r in out:
+        for h in r["energia_J"]:
+            if h not in cols:
+                cols.append(h)
+    if not cols:
+        print("Nessuna colonna di energia/potenza riconosciuta nei file.")
+    for col in cols:
+        runs = [(n, r) for n, r in out if col in r["energia_J"]]
+        idle = [r["energia_J"][col] / r["durata_s"] for n, r in runs if n.startswith("idle") and r["durata_s"]]
+        p_idle = sum(idle) / len(idle) if idle else None
+        print("ENERGIA - colonna di EnergiBridge: %s" % col)
+        if p_idle is not None:
+            print("Consumo a riposo: %.2f W (media di %d misure). Energia netta = energia - (consumo a riposo x durata)." % (p_idle, len(idle)))
+        print("%-44s %8s %9s %8s %6s %9s %11s %10s %12s" % ("misura", "durata s", "energia J", "media W", "CPU %", "richieste", "J/richiesta", "netta J", "netta J/ric."))
+        carichi = []
+        for n, r in runs:
+            e, d, req = r["energia_J"][col], r["durata_s"], r.get("richieste")
+            netta = e - p_idle * d if p_idle is not None and not n.startswith("idle") else None
+            cpu = r.get("cpu_medio_%")
+            print("%-44s %8.1f %9.1f %8.2f %6s %9s %11s %10s %12s" % (
+                etichetta(n)[:44], d, e, e / d if d else 0, "%.1f" % cpu if cpu is not None else "-", req or "-",
+                "%.4f" % (e / req) if req else "-", "%.1f" % netta if netta is not None else "-",
+                "%.5f" % (netta / req) if netta is not None and req else "-"))
+            if not n.startswith("idle") and req:
+                carichi.append((e, e / req, netta, netta / req if netta is not None else None))
+        if len(carichi) > 1:
+            def m(i):
+                v = [c[i] for c in carichi if c[i] is not None]
+                return sum(v) / len(v) if v else None
+
+            def sp(i):
+                v = [c[i] for c in carichi if c[i] is not None]
+                return 100.0 * (max(v) - min(v)) / (sum(v) / len(v)) if v else None
+            print("MEDIA DELLE %d MISURE SOTTO CARICO: energia %.1f J (variazione tra le misure %.1f%%), %.4f J/richiesta" % (
+                len(carichi), m(0), sp(0), m(1)))
+            if m(2) is not None:
+                print("                                    energia netta %.1f J (variazione %.1f%%), %.5f J/richiesta netti" % (m(2), sp(2), m(3)))
+        print()
+
+
 def main():
     args = [a for a in sys.argv[1:] if a != "--csv"]
     as_csv = "--csv" in sys.argv[1:]
@@ -97,19 +151,8 @@ def main():
             print("%s: file non analizzabile %s" % (name, (r or {}).get("errore", "")), file=sys.stderr)
             continue
         out.append((name, r))
-        if not as_csv:
-            print("== %s" % name)
-            print("   durata: %.1f s   campioni: %d" % (r["durata_s"], r["campioni"]))
-            print("   colonne: " + (", ".join(r["colonne"]) or "(nessuna colonna di energia/potenza riconosciuta)"))
-            for h, e in r["energia_J"].items():
-                line = "   %-32s energia %9.2f J   potenza media %7.2f W" % (h, e, e / r["durata_s"] if r["durata_s"] else 0)
-                if r.get("richieste"):
-                    line += "   %8.4f J/richiesta" % (e / r["richieste"])
-                print(line)
-            if r.get("cpu_medio_%") is not None:
-                print("   uso medio CPU: %.1f %%" % r["cpu_medio_%"])
-            if r.get("richieste"):
-                print("   richieste: %d" % r["richieste"])
+    if not as_csv:
+        print_tables(out)
     if as_csv:
         w = csv.writer(sys.stdout)
         w.writerow(["run", "durata_s", "colonna", "energia_J", "potenza_media_W", "richieste", "J_per_richiesta", "cpu_medio_%"])
