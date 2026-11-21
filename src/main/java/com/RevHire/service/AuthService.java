@@ -4,13 +4,13 @@ import com.RevHire.entity.User;
 
 public interface AuthService {
 
-    User registerUser(User user);
+    User registerUser(final User user);
 
-    User login(String email, String password);
+    User login(final String email, final String password);
 
-    String resetPassword(String email, String securityAnswer, String newPassword);
+    String resetPassword(final String email, final String securityAnswer, final String newPassword);
 
-    void updatePassword(Long userId, String currentPassword, String newPassword);
+    void updatePassword(final Long userId, final String currentPassword, final String newPassword);
 
-    void deleteUser(Long userId);
+    void deleteUser(final Long userId);
 }

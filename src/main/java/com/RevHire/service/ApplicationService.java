@@ -9,24 +9,25 @@ import java.util.List;
 
 public interface ApplicationService {
 
-    public Application applyJob(Long jobId,
-                                Long userId,
-                                Long resumeId,
-                                Long fileId,
-                                String coverLetter);
+    public Application applyJob(final Long jobId,
+                                final Long userId,
+                                final Long resumeId,
+                                final Long fileId,
+                                final String coverLetter);
 
-    public List<ApplicationResponseDTO> getApplicationsBySeeker(Long seekerId);
+    public List<ApplicationResponseDTO> getApplicationsBySeeker(final Long seekerId);
 
-    void withdrawApplication(Long applicationId, String reason);
+    void withdrawApplication(final Long applicationId, final String reason);
 
-    List<ApplicationResponseDTO> getApplicationsByJob(Long jobId);
+    List<ApplicationResponseDTO> getApplicationsByJob(final Long jobId);
 
-    List<EmployerApplicationDTO> getApplicationsByEmployer(Long employerId);
+    List<EmployerApplicationDTO> getApplicationsByEmployer(final Long employerId);
 
 
-    Application updateStatus(Long applicationId, String status);
 
-    String addEmployerNotes(Long applicationId,
-                            Long employerId,
-                            String noteText);
+    Application updateStatus(final Long applicationId, final String status);
+
+    String addEmployerNotes(final Long applicationId,
+                            final Long employerId,
+                            final String noteText);
 }
