@@ -59,7 +59,7 @@ public class JobSeekerController {
         response.put("phone", profile.getPhone());
         response.put("location", profile.getLocation());
 
-        Resume resume = resumeRepo
+        final Resume resume = resumeRepo
                 .findTopBySeekerSeekerIdOrderByResumeIdDesc(profile.getSeekerId())
                 .orElse(null);
 
@@ -86,7 +86,7 @@ public class JobSeekerController {
             final List<ResumeEducation> edus = educationRepo.findByResumeResumeId(resume.getResumeId());
 
             if(!edus.isEmpty()){
-                ResumeEducation e = edus.get(0);
+                final ResumeEducation e = edus.get(0);
                 final String education = e.getDegree()+" - "+e.getInstitution();
                 response.put("education", education);
             }
@@ -138,11 +138,11 @@ public class JobSeekerController {
         resumeSkillRepo.deleteByResumeResumeId(resumeId);
         final String skillsStr = (String) data.get("skills");
         if (skillsStr != null && !skillsStr.isBlank()) {
-            List<ResumeSkill> skills = Arrays.stream(skillsStr.split(","))
+            final List<ResumeSkill> skills = Arrays.stream(skillsStr.split(","))
                     .map(String::trim)
                     .filter(s -> !s.isEmpty())
                     .map(skillName -> {
-                        ResumeSkill skill = new ResumeSkill();
+                        final ResumeSkill skill = new ResumeSkill();
                         skill.setResume(resume);
                         skill.setSkillName(skillName);
                         return skill;
@@ -153,9 +153,9 @@ public class JobSeekerController {
 
         // [Avoid Spring repository call in loop or stream]: una sola chiamata al db fuori dal ciclo
         certificationRepo.deleteByResumeResumeId(resumeId);
-        String certStr = (String) data.get("certifications");
+        final String certStr = (String) data.get("certifications");
         if (certStr != null && !certStr.isBlank()) {
-            List<ResumeCertification> certifications = Arrays.stream(certStr.split(","))
+            final List<ResumeCertification> certifications = Arrays.stream(certStr.split(","))
                     .map(String::trim)
                     .filter(c -> !c.isEmpty())
                     .map(certName -> {
@@ -172,14 +172,14 @@ public class JobSeekerController {
         }
 
         educationRepo.deleteByResumeResumeId(resumeId);
-        String educationVal = (String) data.get("education");
+        final String educationVal = (String) data.get("education");
 
         if(educationVal != null && !educationVal.isEmpty()){
-            ResumeEducation edu = new ResumeEducation();
+            final ResumeEducation edu = new ResumeEducation();
             edu.setResume(resume);
 
             if(educationVal.contains(" - ")){
-                String[] parts = educationVal.split(" - ");
+                final String[] parts = educationVal.split(" - ");
                 edu.setDegree(parts[0]);
                 edu.setInstitution(parts[1]);
             }else{
@@ -195,7 +195,7 @@ public class JobSeekerController {
     }
 
     @PostMapping("/resume/upload/{userId}")
-    public ResponseEntity<?> uploadResume(@PathVariable Long userId, @RequestParam("file") MultipartFile file) {
+    public ResponseEntity<?> uploadResume(@PathVariable final Long userId, @RequestParam("file") final MultipartFile file) {
         logger.info("Uploading resume for userId {}", userId);
 
         try {
@@ -204,18 +204,18 @@ public class JobSeekerController {
                 return ResponseEntity.badRequest().body(Map.of("error", "File size must be less than 2MB"));
             }
 
-            ResumeFile savedFile = jobSeekerService.uploadResumeFile(userId, file);
+            final ResumeFile savedFile = jobSeekerService.uploadResumeFile(userId, file);
             logger.info("Resume uploaded successfully: {}", savedFile.getFileName());
             return ResponseEntity.ok(Map.of("message", "Resume uploaded successfully", "fileName", savedFile.getFileName()));
 
-        } catch (Exception e) {
+        } catch (final Exception e) {
             logger.error("Resume upload failed for userId {}", userId, e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of("error", e.getMessage()));
         }
     }
 
     @PostMapping("/favorites/{seekerId}/{jobId}")
-    public ResponseEntity<?> addFavorite(@PathVariable Long seekerId, @PathVariable Long jobId) {
+    public ResponseEntity<?> addFavorite(@PathVariable final Long seekerId, @PathVariable final Long jobId) {
         logger.info("Adding favorite job {} for seeker {}", jobId, seekerId);
 
         try {
@@ -225,7 +225,7 @@ public class JobSeekerController {
                     "message", "Job added to favorites successfully",
                     "jobId", jobId
             ));
-        } catch (RuntimeException e) {
+        } catch (final RuntimeException e) {
             logger.warn("Job already saved: jobId {}", jobId);
             return ResponseEntity.status(HttpStatus.CONFLICT).body(Map.of(
                     "status", "error",
@@ -235,35 +235,35 @@ public class JobSeekerController {
     }
 
     @GetMapping("/favorites/{seekerId}")
-    public ResponseEntity<List<FavoriteJobDTO>> getFavorites(@PathVariable Long seekerId) {
+    public ResponseEntity<List<FavoriteJobDTO>> getFavorites(@PathVariable final Long seekerId) {
         logger.info("Fetching favorite jobs for seekerId {}", seekerId);
-        List<FavoriteJobDTO> favorites = jobSeekerService.getFavorites(seekerId);
+        final List<FavoriteJobDTO> favorites = jobSeekerService.getFavorites(seekerId);
         return ResponseEntity.ok(favorites);
     }
 
     @DeleteMapping("/favorites/{favId}")
-    public void removeFavorite(@PathVariable Long favId) {
+    public void removeFavorite(@PathVariable final Long favId) {
         logger.warn("Removing favorite job with id {}", favId);
         jobSeekerService.removeFavoriteJob(favId);
     }
 
     @GetMapping("/dashboard/{userId}")
-    public ResponseEntity<?> getDashboard(@PathVariable Long userId) {
+    public ResponseEntity<?> getDashboard(@PathVariable final Long userId) {
         logger.info("Loading dashboard for userId {}", userId);
-        JobSeekerProfile profile = profileRepo.findByUserUserId(userId).orElseThrow(() -> new RuntimeException("Profile not found"));
+        final JobSeekerProfile profile = profileRepo.findByUserUserId(userId).orElseThrow(() -> new RuntimeException("Profile not found"));
 
-        Long seekerId = profile.getSeekerId();
-        long savedJobs = favoriteJobRepo.countBySeekerSeekerId(seekerId);
+        final Long seekerId = profile.getSeekerId();
+        final long savedJobs = favoriteJobRepo.countBySeekerSeekerId(seekerId);
 
-        List<ApplicationResponseDTO> applications = applicationService.getApplicationsBySeeker(seekerId);
+        final List<ApplicationResponseDTO> applications = applicationService.getApplicationsBySeeker(seekerId);
 
         int totalApps = applications.size();
 
-        List<ApplicationResponseDTO> recent = applications.stream().limit(5).toList();
+        final List<ApplicationResponseDTO> recent = applications.stream().limit(5).toList();
 
         int score = profile.getProfileCompletion() != null ? profile.getProfileCompletion() : 0;
 
-        Optional<Resume> resumeOpt = resumeRepo.findTopBySeekerSeekerIdOrderByResumeIdDesc(seekerId);
+        final Optional<Resume> resumeOpt = resumeRepo.findTopBySeekerSeekerIdOrderByResumeIdDesc(seekerId);
 
         if (resumeOpt.isPresent()) {
             score = calculateProfileCompletion(profile, resumeOpt.get());
@@ -279,7 +279,7 @@ public class JobSeekerController {
         ));
     }
 
-    private int parseExperience(String status){
+    private int parseExperience(final String status){
         switch(status){
             case "Fresher":
                 return 0;
@@ -295,7 +295,7 @@ public class JobSeekerController {
         }
     }
 
-    private int calculateProfileCompletion(JobSeekerProfile profile, Resume resume) {
+    private int calculateProfileCompletion(final JobSeekerProfile profile, final Resume resume) {
         int score = 0;
         if(profile.getFullName()!=null && !profile.getFullName().isEmpty())
             score += 10;
@@ -328,11 +328,11 @@ public class JobSeekerController {
     }
 
     @PostMapping("/resume/save/{userId}")
-    public ResponseEntity<?> saveResume(@PathVariable Long userId, @RequestBody ResumeSaveDTO dto) {
+    public ResponseEntity<?> saveResume(@PathVariable final Long userId, @RequestBody final ResumeSaveDTO dto) {
         try {
-            JobSeekerProfile profile = profileRepo.findByUserUserId(userId).orElseThrow(() -> new RuntimeException("Profile not found"));
+            final JobSeekerProfile profile = profileRepo.findByUserUserId(userId).orElseThrow(() -> new RuntimeException("Profile not found"));
 
-            Resume resume = resumeRepo.findTopBySeekerSeekerIdOrderByResumeIdDesc(profile.getSeekerId())
+            final Resume resume = resumeRepo.findTopBySeekerSeekerIdOrderByResumeIdDesc(profile.getSeekerId())
                     .orElseGet(() -> {
                         Resume r = new Resume();
                         r.setSeeker(profile);
@@ -341,7 +341,7 @@ public class JobSeekerController {
 
             resume.setObjective(dto.getObjective());
             resumeRepo.save(resume);
-            Long resumeId = resume.getResumeId();
+            final Long resumeId = resume.getResumeId();
 
             resumeSkillRepo.deleteByResumeResumeId(resumeId);
 
@@ -355,7 +355,7 @@ public class JobSeekerController {
             // [Avoid Spring repository call in loop or stream]: una sola chiamata al db fuori dal ciclo
             educationRepo.deleteByResumeResumeId(resumeId);
             if (dto.getEducations() != null && !dto.getEducations().isEmpty()) {
-                List<ResumeEducation> educations = dto.getEducations().stream()
+                final List<ResumeEducation> educations = dto.getEducations().stream()
                         .map(e -> {
                             ResumeEducation edu = new ResumeEducation();
                             edu.setResume(resume);
@@ -371,7 +371,7 @@ public class JobSeekerController {
             // [Avoid Spring repository call in loop or stream]: una sola chiamata al db fuori dal ciclo
             experienceRepo.deleteByResumeResumeId(resumeId);
             if(dto.getExperiences()!=null && !dto.getExperiences().isEmpty()){
-                List<ResumeExperience> experiences = dto.getExperiences().stream()
+                final List<ResumeExperience> experiences = dto.getExperiences().stream()
                         .map(e ->{
                             ResumeExperience exp=new ResumeExperience();
                             exp.setResume(resume);
@@ -385,7 +385,7 @@ public class JobSeekerController {
             // [Avoid Spring repository call in loop or stream]: una sola chiamata al db fuori dal ciclo
             projectRepo.deleteByResumeResumeId(resumeId);
             if (dto.getProjects() != null && !dto.getProjects().isEmpty()) {
-                List<ResumeProject> projects = dto.getProjects().stream()
+                final List<ResumeProject> projects = dto.getProjects().stream()
                         .map(p -> {
                             ResumeProject proj = new ResumeProject();
                             proj.setResume(resume);
@@ -403,7 +403,7 @@ public class JobSeekerController {
             // [Avoid Spring repository call in loop or stream]: una sola chiamata al db fuori dal ciclo
             certificationRepo.deleteByResumeResumeId(resumeId);
             if(dto.getCertifications()!=null && !dto.getCertifications().isEmpty()){
-                List<ResumeCertification> certifications = dto.getCertifications().stream()
+                final List<ResumeCertification> certifications = dto.getCertifications().stream()
                         .map(c ->{
                             ResumeCertification cert = new ResumeCertification();
                             cert.setResume(resume);

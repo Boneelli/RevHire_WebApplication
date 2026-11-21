@@ -49,7 +49,7 @@ public class ApplicationController {
     }
 
     @PostMapping("/submit-application")
-    final public ResponseEntity<?> apply(@RequestParam Long jobId,
+    final public ResponseEntity<?> apply(final @RequestParam Long jobId,
                                    @RequestParam final Long userId,
                                    @RequestParam final Long resumeId,
                                    @RequestParam(required = false) final Long fileId,
@@ -191,7 +191,7 @@ public class ApplicationController {
     @GetMapping("/details/{applicationId}")
     @ResponseBody
     final public ResponseEntity<EmployerApplicationDTO> getApplicationDetails(
-            @PathVariable Long applicationId) {
+            @PathVariable final Long applicationId) {
 
         logger.info("Fetching application details for applicationId: {}", applicationId);
 

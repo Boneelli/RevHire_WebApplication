@@ -237,14 +237,14 @@ public class JobSeekerUIController {
     @Transactional
     public void updateFullProfile(final Long userId, final ProfileUpdateDTO dto) {
         logger.info("Updating full profile for userId {}", userId);
-        JobSeekerProfile profile = profileRepo.findByUserUserId(userId).orElseThrow(() -> new RuntimeException("Profile not found"));
+        final JobSeekerProfile profile = profileRepo.findByUserUserId(userId).orElseThrow(() -> new RuntimeException("Profile not found"));
 
         profile.setFullName(dto.getFullName());
         profile.setPhone(dto.getPhone());
         profile.setLocation(dto.getLocation());
         profileRepo.save(profile);
 
-        Resume resume = resumeRepo.findBySeekerSeekerId(profile.getSeekerId()).orElseGet(() -> {
+        final Resume resume = resumeRepo.findBySeekerSeekerId(profile.getSeekerId()).orElseGet(() -> {
                     final Resume newR = new Resume();
                     newR.setSeeker(profile);
                     return resumeRepo.save(newR);
@@ -256,7 +256,7 @@ public class JobSeekerUIController {
         // [Avoid Spring repository call in loop or stream]: una sola chiamata al db fuori dal ciclo
         resumeSkillRepo.deleteByResumeResumeId(resume.getResumeId());
         if (dto.getSkills() != null && !dto.getSkills().trim().isEmpty()) {
-            List<ResumeSkill> skills = Arrays.stream(dto.getSkills().split(","))
+            final List<ResumeSkill> skills = Arrays.stream(dto.getSkills().split(","))
                     .map(String::trim)
                     .filter(name -> !name.isEmpty())
                     .map(name -> {

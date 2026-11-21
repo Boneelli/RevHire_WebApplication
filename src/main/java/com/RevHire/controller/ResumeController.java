@@ -140,7 +140,7 @@ public class ResumeController {
     @GetMapping("/download/{fileId}")
     public ResponseEntity<Resource> downloadResumeFile(@PathVariable final Long fileId) {
         logger.info("Downloading resume file {}", fileId);
-        ResumeFile resumeFile = resumeFileRepo.findById(fileId).orElseThrow(() -> new RuntimeException("File record not found"));
+        final ResumeFile resumeFile = resumeFileRepo.findById(fileId).orElseThrow(() -> new RuntimeException("File record not found"));
 
         try {
             final Path path = Paths.get(resumeFile.getFilePath());
@@ -181,7 +181,7 @@ public class ResumeController {
     public ResponseEntity<byte[]> generateResumePdf(@PathVariable final Long resumeId) {
         logger.info("Fetching resume PDF for resumeId {}", resumeId);
 
-        Resume resume = resumeService.getResumeById(resumeId);
+        final Resume resume = resumeService.getResumeById(resumeId);
         if (resume == null) {
             logger.error("Resume not found for resumeId {}", resumeId);
             throw new RuntimeException("Resume not found");
