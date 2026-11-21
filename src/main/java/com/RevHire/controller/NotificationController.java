@@ -25,7 +25,7 @@ public class NotificationController {
     private final NotificationService notificationService;
 
     @GetMapping("/notification")
-    public String showNotificationsPage(HttpSession session) {
+    public String showNotificationsPage(final HttpSession session) {
         logger.info("Opening notifications page");
 
         if (session.getAttribute("userId") == null) {
@@ -38,14 +38,14 @@ public class NotificationController {
 
     @GetMapping("/api/{userId}")
     @ResponseBody
-    public List<NotificationDTO> getNotifications(@PathVariable Long userId) {
+    public List<NotificationDTO> getNotifications(@PathVariable final Long userId) {
         logger.info("Fetching notifications for userId {}", userId);
         return notificationService.getUserNotifications(userId);
     }
 
     @PutMapping("/api/{id}/read")
     @ResponseBody
-    public ResponseEntity<?> markRead(@PathVariable Long id) {
+    public ResponseEntity<?> markRead(@PathVariable final Long id) {
         logger.info("Marking notification {} as read", id);
         notificationService.markAsRead(id);
         return ResponseEntity.ok().build();

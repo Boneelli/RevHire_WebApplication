@@ -27,28 +27,28 @@ public class AuthServiceImpl implements AuthService {
             throw new RuntimeException("Email already registered");
         }
 
-        String hashedPassword = passwordEncoder.encode(user.getPasswordHash());
+        final String hashedPassword = passwordEncoder.encode(user.getPasswordHash());
         user.setPasswordHash(hashedPassword);
 
-        User savedUser = userRepository.save(user);
+        final User savedUser = userRepository.save(user);
         logger.info("User registered successfully with id: {}", savedUser.getUserId());
 
         return savedUser;
     }
 
     @Override
-    public User login(String email, String password) {
+    public User login(final String email, final String password) {
         logger.info("Login attempt for email: {}", email);
 
-        Optional<User> optionalUser = userRepository.findByEmail(email);
+        final Optional<User> optionalUser = userRepository.findByEmail(email);
 
         if (optionalUser.isEmpty()) {
             logger.warn("Login failed - User not found for email: {}", email);
             throw new RuntimeException("Invalid credentials");
         }
 
-        User user = optionalUser.get();
-        String storedPassword = user.getPasswordHash();
+        final User user = optionalUser.get();
+        final String storedPassword = user.getPasswordHash();
 
         if (storedPassword.startsWith("$2a") || storedPassword.startsWith("$2b")) {
             if (passwordEncoder.matches(password, storedPassword)) {
@@ -59,7 +59,7 @@ public class AuthServiceImpl implements AuthService {
         else if (storedPassword.equals(password)) {
             logger.warn("Plain text password detected for email: {}. Upgrading to hashed.", email);
 
-            String newHashedPassword = passwordEncoder.encode(password);
+            final String newHashedPassword = passwordEncoder.encode(password);
             user.setPasswordHash(newHashedPassword);
             userRepository.save(user);
 
@@ -72,14 +72,15 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public String resetPassword(String email, String securityAnswer, String newPassword) {
+    public String resetPassword(final String email, final String securityAnswer, final String newPassword) {
         logger.info("Password reset attempt for email: {}", email);
 
-        User user = userRepository.findByEmail(email).orElseThrow(() -> {
+        final User user = userRepository.findByEmail(email).orElseThrow(() -> {
                     logger.error("Password reset failed - User not found: {}", email);
                     return new RuntimeException("User not found");
                 });
 
+        final User finalUser = user;
         if(user.getSecurityAnswerHash().equals(securityAnswer)) {
             user.setPasswordHash(newPassword);
             userRepository.save(user);
@@ -92,10 +93,10 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public void updatePassword(Long userId, String currentPassword, String newPassword) {
+    public void updatePassword(final Long userId, final String currentPassword, final String newPassword) {
         logger.info("Password update requested for userId: {}", userId);
 
-        User user = userRepository.findById(userId).orElseThrow(() -> {
+        final User user = userRepository.findById(userId).orElseThrow(() -> {
                     logger.error("Password update failed - User not found: {}", userId);
                     return new RuntimeException("User session expired or user not found");
                 });
@@ -110,7 +111,7 @@ public class AuthServiceImpl implements AuthService {
         logger.info("Password updated successfully for userId: {}", userId);
     }
 
-    public void deleteUser(Long userId) {
+    public void deleteUser(final Long userId) {
         logger.info("Delete user request for userId: {}", userId);
 
         if (userRepository.existsById(userId)) {

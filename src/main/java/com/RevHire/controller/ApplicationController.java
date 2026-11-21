@@ -29,11 +29,11 @@ public class ApplicationController {
     private final ApplicationService applicationService;
 
     @GetMapping("/jobseeker/jobs/apply/{jobId}")
-    public String showApplyPage(@PathVariable Long jobId, Model model, HttpSession session) {
+    public String showApplyPage(@PathVariable final Long jobId, final Model model, final HttpSession session) {
 
         logger.info("Opening apply page for jobId: {}", jobId);
 
-        Object userId = session.getAttribute("userId");
+        final Object userId = session.getAttribute("userId");
         if (userId == null) {
             logger.warn("User not logged in. Redirecting to login page.");
             return "redirect:/auth/login";
@@ -49,11 +49,11 @@ public class ApplicationController {
     }
 
     @PostMapping("/submit-application")
-    public ResponseEntity<?> apply(@RequestParam Long jobId,
-                                   @RequestParam Long userId,
-                                   @RequestParam Long resumeId,
-                                   @RequestParam(required = false) Long fileId,
-                                   @RequestParam(required = false) String coverLetter) {
+    final public ResponseEntity<?> apply(@RequestParam Long jobId,
+                                   @RequestParam final Long userId,
+                                   @RequestParam final Long resumeId,
+                                   @RequestParam(required = false) final Long fileId,
+                                   @RequestParam(required = false) final String coverLetter) {
 
         logger.info("Submitting application for jobId: {} by userId: {}", jobId, userId);
 
@@ -63,7 +63,7 @@ public class ApplicationController {
 
             return ResponseEntity.ok("Application submitted successfully");
 
-        } catch (RuntimeException e) {
+        } catch (final RuntimeException e) {
 
             if (e.getMessage().contains("Already applied")) {
                 return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
@@ -76,7 +76,7 @@ public class ApplicationController {
 
     @GetMapping("/seeker/{seekerId}")
     public ResponseEntity<List<ApplicationResponseDTO>> getBySeeker(
-            @PathVariable Long seekerId) {
+            @PathVariable final Long seekerId) {
 
         logger.info("Fetching applications for userId: {}", seekerId);
 
@@ -87,7 +87,7 @@ public class ApplicationController {
 
     @GetMapping("/job/{jobId}")
     public ResponseEntity<List<ApplicationResponseDTO>> getByJob(
-            @PathVariable Long jobId) {
+            @PathVariable final Long jobId) {
 
         logger.info("Fetching applications for jobId: {}", jobId);
 
@@ -98,7 +98,7 @@ public class ApplicationController {
 //    Employeruserid feteching apllications for employeruserid
     @GetMapping("/employer/{employerUserId}")
     @ResponseBody
-    public ResponseEntity<List<EmployerApplicationDTO>> getByEmployer(@PathVariable Long employerUserId) {
+    public ResponseEntity<List<EmployerApplicationDTO>> getByEmployer(@PathVariable final Long employerUserId) {
 
         logger.info("Fetching applications for employerUserId: {}", employerUserId);
 
@@ -108,7 +108,7 @@ public class ApplicationController {
     }
 
     @PostMapping("/withdraw/{id}")
-    public ResponseEntity<String> withdraw(@PathVariable Long id, @RequestParam String reason) {
+    public ResponseEntity<String> withdraw(@PathVariable final Long id, @RequestParam final String reason) {
 
         logger.warn("Application withdrawal requested. applicationId: {}", id);
 
@@ -120,8 +120,8 @@ public class ApplicationController {
     }
 
     @PostMapping("/update-status/{id}")
-    public ResponseEntity<String> updateStatus(@PathVariable Long id,
-                                               @RequestParam String status) {
+    public ResponseEntity<String> updateStatus(@PathVariable final Long id,
+                                               @RequestParam final String status) {
 
         logger.info("Updating application status. applicationId: {}, status: {}", id, status);
 
@@ -134,8 +134,8 @@ public class ApplicationController {
 
     @PutMapping("/notes/{applicationId}")
     public ResponseEntity<?> addNotes(
-            @PathVariable Long applicationId,
-            @RequestBody NoteRequestDTO request) {
+            @PathVariable final Long applicationId,
+            @RequestBody final NoteRequestDTO request) {
 
         logger.info("Adding employer notes to applicationId: {}", applicationId);
 
@@ -149,7 +149,7 @@ public class ApplicationController {
     }
 
     @GetMapping("/manage")
-    public String showManageApplicationsPage(HttpSession session) {
+    public String showManageApplicationsPage(final HttpSession session) {
 
         logger.info("Opening manage applications page");
 
@@ -163,11 +163,11 @@ public class ApplicationController {
 
     @GetMapping("/all")
     @ResponseBody
-    public ResponseEntity<List<EmployerApplicationDTO>> getAllApplications(HttpSession session) {
+    public ResponseEntity<List<EmployerApplicationDTO>> getAllApplications(final HttpSession session) {
 
         logger.info("Fetching all applications for logged-in employer");
 
-        Object userObj = session.getAttribute("loggedInUser");
+        final Object userObj = session.getAttribute("loggedInUser");
 
         if (userObj == null) {
 
@@ -176,11 +176,11 @@ public class ApplicationController {
             return ResponseEntity.status(401).build();
         }
 
-        com.RevHire.entity.User user = (com.RevHire.entity.User) userObj;
+        final com.RevHire.entity.User user = (com.RevHire.entity.User) userObj;
 
-        Long employerUserId = user.getUserId();
+        final Long employerUserId = user.getUserId();
 
-        List<EmployerApplicationDTO> applications =
+        final List<EmployerApplicationDTO> applications =
                 applicationService.getApplicationsByEmployer(employerUserId);
 
         logger.info("Total applications fetched: {}", applications.size());
@@ -190,15 +190,15 @@ public class ApplicationController {
 
     @GetMapping("/details/{applicationId}")
     @ResponseBody
-    public ResponseEntity<EmployerApplicationDTO> getApplicationDetails(
+    final public ResponseEntity<EmployerApplicationDTO> getApplicationDetails(
             @PathVariable Long applicationId) {
 
         logger.info("Fetching application details for applicationId: {}", applicationId);
 
-        List<EmployerApplicationDTO> apps =
+        final List<EmployerApplicationDTO> apps =
                 applicationService.getApplicationsByEmployer(null);
 
-        EmployerApplicationDTO result = apps.stream()
+        final EmployerApplicationDTO result = apps.stream()
                 .filter(a -> a.getApplicationId().equals(applicationId))
                 .findFirst()
                 .orElseThrow(() -> {

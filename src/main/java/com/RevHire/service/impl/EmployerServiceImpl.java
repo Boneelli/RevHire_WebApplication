@@ -32,16 +32,16 @@ public class EmployerServiceImpl implements EmployerService {
 
     @Override
     @Transactional
-    public EmployerProfileDTO createOrUpdateProfile(Long userId, EmployerProfileDTO dto) {
+    public EmployerProfileDTO createOrUpdateProfile(final Long userId, final EmployerProfileDTO dto) {
         logger.info("Creating or updating employer profile for userId: {}", userId);
 
-        User user = userRepository.findById(userId).orElseThrow(() -> {
+        final User user = userRepository.findById(userId).orElseThrow(() -> {
                     logger.error("User not found with id: {}", userId);
                     return new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found");
                 });
 
         // [Use optional orElseGet instead of orElse]: istanzia EmployerProfile solo se assente
-        EmployerProfile profile = employerProfileRepository.findByUserUserId(userId).orElseGet(EmployerProfile::new);
+        final EmployerProfile profile = employerProfileRepository.findByUserUserId(userId).orElseGet(EmployerProfile::new);
 
         if (dto.getContactEmail() != null && !dto.getContactEmail().isEmpty()) {
             logger.info("Updating contact email for userId: {}", userId);
@@ -49,7 +49,7 @@ public class EmployerServiceImpl implements EmployerService {
 
             try {
                 userRepository.save(user);
-            } catch (Exception e) {
+            } catch (final Exception e) {
                 logger.error("Email already exists for another user: {}", dto.getContactEmail());
                 throw new ResponseStatusException(HttpStatus.CONFLICT, "Email already in use by another account");
             }
@@ -69,15 +69,15 @@ public class EmployerServiceImpl implements EmployerService {
     }
 
     @Override
-    public EmployerProfileDTO getProfile(Long userId) {
+    public EmployerProfileDTO getProfile(final Long userId) {
         logger.info("Fetching employer profile for userId: {}", userId);
 
-        EmployerProfile profile = employerProfileRepository.findByUserUserId(userId).orElseThrow(() -> {
+        final EmployerProfile profile = employerProfileRepository.findByUserUserId(userId).orElseThrow(() -> {
                     logger.error("Employer profile not found for userId: {}", userId);
                     return new RuntimeException("Profile not found");
                 });
 
-        EmployerProfileDTO dto = new EmployerProfileDTO();
+        final EmployerProfileDTO dto = new EmployerProfileDTO();
         dto.setCompanyName(profile.getCompanyName());
         dto.setIndustry(profile.getIndustry());
         dto.setCompanySize(profile.getCompanySize());
@@ -96,10 +96,10 @@ public class EmployerServiceImpl implements EmployerService {
     public EmployerDashboardDTO getDashboard(Long userId) {
         logger.info("Fetching dashboard data for userId: {}", userId);
 
-        EmployerProfile profile = employerProfileRepository.findByUserUserId(userId).orElseGet(() -> {
+        final EmployerProfile profile = employerProfileRepository.findByUserUserId(userId).orElseGet(() -> {
                     logger.warn("Employer profile not found. Creating default profile for userId: {}", userId);
-                    User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
-                    EmployerProfile newProfile = new EmployerProfile();
+                    final User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
+                    final EmployerProfile newProfile = new EmployerProfile();
 
                     newProfile.setUser(user);
                     newProfile.setCompanyName("Company");
@@ -112,14 +112,14 @@ public class EmployerServiceImpl implements EmployerService {
                     return employerProfileRepository.save(newProfile);
                 });
 
-        Long employerId = profile.getEmployerId();
+        final Long employerId = profile.getEmployerId();
 
         logger.debug("EmployerId retrieved: {}", employerId);
-        Long totalJobs = jobRepository.countByEmployerEmployerId(employerId);
-        Long activeJobs = jobRepository.countByEmployerEmployerIdAndStatus(employerId, "OPEN");
-        Long totalApplications = applicationRepository.countByJob_Employer_EmployerId(employerId);
-        Long pendingReviews = applicationRepository.countByJob_Employer_EmployerIdAndStatus(employerId, "PENDING");
-        double completion = calculateCompletion(userId);
+        final Long totalJobs = jobRepository.countByEmployerEmployerId(employerId);
+        final Long activeJobs = jobRepository.countByEmployerEmployerIdAndStatus(employerId, "OPEN");
+        final Long totalApplications = applicationRepository.countByJob_Employer_EmployerId(employerId);
+        final Long pendingReviews = applicationRepository.countByJob_Employer_EmployerIdAndStatus(employerId, "PENDING");
+        final double completion = calculateCompletion(userId);
         logger.info("Dashboard statistics calculated for employerId: {}", employerId);
 
         return new EmployerDashboardDTO(
@@ -131,9 +131,9 @@ public class EmployerServiceImpl implements EmployerService {
         );
     }
 
-    private double calculateCompletion(Long employerId) {
+    private double calculateCompletion(final Long employerId) {
         logger.debug("Calculating profile completion for employerId: {}", employerId);
-        EmployerProfile profile = employerProfileRepository.findByUserUserId(employerId).orElse(null);
+        final EmployerProfile profile = employerProfileRepository.findByUserUserId(employerId).orElse(null);
 
         if (profile == null) {
             logger.warn("Profile not found while calculating completion for employerId: {}", employerId);
@@ -147,7 +147,7 @@ public class EmployerServiceImpl implements EmployerService {
         if (profile.getWebsite() != null && !profile.getWebsite().isEmpty()) ++count;
         if (profile.getDescription() != null && !profile.getDescription().isEmpty()) ++count;
 
-        double completion = (count / 4.0) * 100.0;
+        final double completion = (count / 4.0) * 100.0;
         logger.debug("Profile completion calculated: {}%", completion);
 
         return completion;

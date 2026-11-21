@@ -38,22 +38,22 @@ public class JobSeekerController {
     private final ResumeSkillRepository resumeSkillRepo;
 
     @PostMapping("/profile/{userId}")
-    public ResponseEntity<JobSeekerProfile> createProfile(@PathVariable Long userId, @RequestBody JobSeekerProfile profile) {
+    public ResponseEntity<JobSeekerProfile> createProfile(@PathVariable final Long userId, @RequestBody final JobSeekerProfile profile) {
         logger.info("Creating profile for userId: {}", userId);
 
         return ResponseEntity.ok(jobSeekerService.createProfile(profile, userId));
     }
 
     @GetMapping("/profile/{userId}")
-    public ResponseEntity<?> getProfile(@PathVariable Long userId) {
-        Optional<JobSeekerProfile> profileOpt = jobSeekerService.getProfile(userId);
+    public ResponseEntity<?> getProfile(@PathVariable final Long userId) {
+      final Optional<JobSeekerProfile> profileOpt = jobSeekerService.getProfile(userId);
 
         if(profileOpt.isEmpty()) {
             return ResponseEntity.notFound().build();
         }
 
-        JobSeekerProfile profile = profileOpt.get();
-        Map<String,Object> response = new HashMap<>();
+        final JobSeekerProfile profile = profileOpt.get();
+        final Map<String,Object> response = new HashMap<>();
 
         response.put("fullName", profile.getFullName());
         response.put("phone", profile.getPhone());
@@ -65,41 +65,42 @@ public class JobSeekerController {
 
         if(resume != null){
             response.put("experience", resume.getObjective());
-            List<ResumeSkill> skills = resumeSkillRepo.findByResumeResumeId(resume.getResumeId());
+            final List<ResumeSkill> skills = resumeSkillRepo.findByResumeResumeId(resume.getResumeId());
 
             response.put("skills", skills
                             .stream()
                             .map(ResumeSkill::getSkillName)
-                            .reduce((a,b)->a+","+b)
+                            .reduce((final String a, final String b)->a+","+b)
                             .orElse("")
             );
 
-            List<ResumeCertification> certs = certificationRepo.findByResumeResumeId(resume.getResumeId());
+            final List<ResumeCertification> certs = certificationRepo.findByResumeResumeId(resume.getResumeId());
 
             response.put("certifications", certs
                             .stream()
                             .map(ResumeCertification::getCertificationName)
-                            .reduce((a,b)->a+","+b)
+                            .reduce((final String a, final String b)->a+","+b)
                             .orElse("")
             );
 
-            List<ResumeEducation> edus = educationRepo.findByResumeResumeId(resume.getResumeId());
+            final List<ResumeEducation> edus = educationRepo.findByResumeResumeId(resume.getResumeId());
 
             if(!edus.isEmpty()){
                 ResumeEducation e = edus.get(0);
-                response.put("education", e.getDegree()+" - "+e.getInstitution());
+                final String education = e.getDegree()+" - "+e.getInstitution();
+                response.put("education", education);
             }
         }
         return ResponseEntity.ok(response);
     }
 
     @PutMapping("/profile/{userId}")
-    public ResponseEntity<?> updateProfile(@PathVariable Long userId, @RequestBody Map<String,Object> data) {
+    public ResponseEntity<?> updateProfile(@PathVariable final Long userId, @RequestBody final Map<String,Object> data) {
 
         JobSeekerProfile profile = profileRepo.findByUserUserId(userId).orElseGet(() -> {
-                    JobSeekerProfile newProfile = new JobSeekerProfile();
+                    final JobSeekerProfile newProfile = new JobSeekerProfile();
 
-                    User user = new User();
+                    final User user = new User();
                     user.setUserId(userId);
 
                     newProfile.setUser(user);
@@ -119,7 +120,7 @@ public class JobSeekerController {
         Resume resume = resumeRepo
                 .findTopBySeekerSeekerIdOrderByResumeIdDesc(profile.getSeekerId())
                 .orElseGet(() -> {
-                    Resume r = new Resume();
+                    final Resume r = new Resume();
                     r.setSeeker(profile);
                     return resumeRepo.save(r);
                 });
@@ -127,15 +128,15 @@ public class JobSeekerController {
         resume.setObjective((String) data.get("experience"));
         resumeRepo.save(resume);
 
-        int completion = calculateProfileCompletion(profile, resume);
+        final int completion = calculateProfileCompletion(profile, resume);
         profile.setProfileCompletion(completion);
         profileRepo.save(profile);
 
-        Long resumeId = resume.getResumeId();
+        final Long resumeId = resume.getResumeId();
 
         // [Avoid Spring repository call in loop or stream]: una sola chiamata al db fuori dal ciclo
         resumeSkillRepo.deleteByResumeResumeId(resumeId);
-        String skillsStr = (String) data.get("skills");
+        final String skillsStr = (String) data.get("skills");
         if (skillsStr != null && !skillsStr.isBlank()) {
             List<ResumeSkill> skills = Arrays.stream(skillsStr.split(","))
                     .map(String::trim)

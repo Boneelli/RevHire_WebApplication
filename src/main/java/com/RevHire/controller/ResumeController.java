@@ -36,135 +36,135 @@ public class ResumeController {
 
 
     @PostMapping("/create")
-    public ResponseEntity<Resume> createResume(@RequestBody Resume resume) {
+    public ResponseEntity<Resume> createResume(@RequestBody final Resume resume) {
         logger.info("Creating resume");
         return ResponseEntity.ok(resumeService.createResume(resume));
     }
 
     @PutMapping("/update/{resumeId}")
-    public ResponseEntity<Resume> updateResume(@PathVariable Long resumeId, @RequestBody Resume resume) {
+    public ResponseEntity<Resume> updateResume(@PathVariable final Long resumeId, @RequestBody final Resume resume) {
         logger.info("Updating resume with id {}", resumeId);
         return ResponseEntity.ok(resumeService.updateResume(resumeId, resume));
     }
 
     @DeleteMapping("/file/{fileId}")
-    public ResponseEntity<String> deleteResumeFile(@PathVariable Long fileId) {
+    public ResponseEntity<String> deleteResumeFile(@PathVariable final Long fileId) {
         logger.info("Deleting resume file with id {}", fileId);
 
         try {
             resumeService.deleteResumeFile(fileId);
             return ResponseEntity.ok("Deleted");
-        } catch (Exception e) {
+        } catch (final Exception e) {
             logger.error("Error deleting resume file {}", fileId, e);
             return ResponseEntity.status(500).body(e.getMessage());
         }
     }
 
     @GetMapping("/details/{userId}")
-    public ResponseEntity<Resume> getResumeDetails(@PathVariable Long userId) {
+    public ResponseEntity<Resume> getResumeDetails(@PathVariable final Long userId) {
         logger.info("Fetching resume details for userId {}", userId);
-        Resume resume = resumeService.getResumeByUserId(userId);
+        final Resume resume = resumeService.getResumeByUserId(userId);
         return resume != null ? ResponseEntity.ok(resume) : ResponseEntity.notFound().build();
     }
 
     @PostMapping("/education/add")
-    public ResponseEntity<ResumeEducation> addEducation(@RequestBody ResumeEducation education) {
+    public ResponseEntity<ResumeEducation> addEducation(@RequestBody final ResumeEducation education) {
         logger.info("Adding education entry");
         return ResponseEntity.ok(resumeService.addEducation(education));
     }
 
     @GetMapping("/education/{resumeId}")
-    public ResponseEntity<List<ResumeEducation>> getEducation(@PathVariable Long resumeId) {
+    public ResponseEntity<List<ResumeEducation>> getEducation(@PathVariable final Long resumeId) {
         logger.info("Fetching education list for resumeId {}", resumeId);
         return ResponseEntity.ok(resumeService.getEducationByResume(resumeId));
     }
 
     @DeleteMapping("/education/delete/{educationId}")
-    public ResponseEntity<String> deleteEducation(@PathVariable Long educationId) {
+    public ResponseEntity<String> deleteEducation(@PathVariable final Long educationId) {
         logger.info("Deleting education with id {}", educationId);
         resumeService.deleteEducation(educationId);
         return ResponseEntity.ok("Education deleted successfully");
     }
 
     @PostMapping("/experience/add")
-    public ResponseEntity<ResumeExperience> addExperience(@RequestBody ResumeExperience experience) {
+    public ResponseEntity<ResumeExperience> addExperience(@RequestBody final ResumeExperience experience) {
         logger.info("Adding experience entry");
         return ResponseEntity.ok(resumeService.addExperience(experience));
     }
 
     @GetMapping("/experience/{resumeId}")
-    public ResponseEntity<List<ResumeExperience>> getExperience(@PathVariable Long resumeId) {
+    public ResponseEntity<List<ResumeExperience>> getExperience(@PathVariable final Long resumeId) {
         logger.info("Fetching experience list for resumeId {}", resumeId);
         return ResponseEntity.ok(resumeService.getExperienceByResume(resumeId));
     }
 
     @DeleteMapping("/experience/delete/{experienceId}")
-    public ResponseEntity<String> deleteExperience(@PathVariable Long experienceId) {
+    public ResponseEntity<String> deleteExperience(@PathVariable final Long experienceId) {
         logger.info("Deleting experience with id {}", experienceId);
         resumeService.deleteExperience(experienceId);
         return ResponseEntity.ok("Experience deleted successfully");
     }
 
     @PostMapping("/skill/add")
-    public ResponseEntity<ResumeSkill> addSkill(@RequestBody ResumeSkill skill) {
+    public ResponseEntity<ResumeSkill> addSkill(@RequestBody final ResumeSkill skill) {
         logger.info("Adding skill");
         return ResponseEntity.ok(resumeService.addSkill(skill));
     }
 
     @GetMapping("/skill/{resumeId}")
-    public ResponseEntity<List<ResumeSkill>> getSkills(@PathVariable Long resumeId) {
+    public ResponseEntity<List<ResumeSkill>> getSkills(@PathVariable final Long resumeId) {
         logger.info("Fetching skills for resumeId {}", resumeId);
         return ResponseEntity.ok(resumeService.getSkillsByResume(resumeId));
     }
 
     @DeleteMapping("/skill/delete/{skillId}")
-    public ResponseEntity<String> deleteSkill(@PathVariable Long skillId) {
+    public ResponseEntity<String> deleteSkill(@PathVariable final Long skillId) {
         logger.info("Deleting skill with id {}", skillId);
         resumeService.deleteSkill(skillId);
         return ResponseEntity.ok("Skill deleted successfully");
     }
 
     @PostMapping("/upload/{userId}")
-    public ResponseEntity<?> uploadFile(@PathVariable Long userId, @RequestParam("file") MultipartFile file) {
+    public ResponseEntity<?> uploadFile(@PathVariable final Long userId, @RequestParam("file") final MultipartFile file) {
         logger.info("Uploading resume file for userId {}", userId);
         try {
             resumeService.saveResumeFile(userId, file);
             logger.info("File uploaded successfully for userId {}", userId);
             return ResponseEntity.ok().body("{\"message\": \"File uploaded successfully\"}");
-        } catch (Exception e) {
+        } catch (final Exception e) {
             logger.error("Error uploading file for userId {}", userId, e);
             return ResponseEntity.status(500).body("{\"error\": \"" + e.getMessage() + "\"}");
         }
     }
 
     @GetMapping("/download/{fileId}")
-    public ResponseEntity<Resource> downloadResumeFile(@PathVariable Long fileId) {
+    public ResponseEntity<Resource> downloadResumeFile(@PathVariable final Long fileId) {
         logger.info("Downloading resume file {}", fileId);
         ResumeFile resumeFile = resumeFileRepo.findById(fileId).orElseThrow(() -> new RuntimeException("File record not found"));
 
         try {
-            Path path = Paths.get(resumeFile.getFilePath());
+            final Path path = Paths.get(resumeFile.getFilePath());
             if (!Files.exists(path)) {
                 logger.error("Physical file missing at {}", path.toAbsolutePath());
                 throw new RuntimeException("Physical file missing at: " + path.toAbsolutePath());
             }
 
-            Resource resource = new UrlResource(path.toUri());
+            final Resource resource = new UrlResource(path.toUri());
             return ResponseEntity.ok()
                     .contentType(MediaType.APPLICATION_PDF)
                     .header(HttpHeaders.CONTENT_DISPOSITION,
                             "attachment; filename=\"" + resumeFile.getFileName() + "\"")
                     .body(resource);
 
-        } catch (IOException e) {
+        } catch (final IOException e) {
             logger.error("Error reading file {}", fileId, e);
             throw new RuntimeException("Could not read file: " + e.getMessage());
         }
     }
 
     @GetMapping("/page/{resumeId}")
-    public String viewResumePage(@PathVariable Long resumeId, Model model) {
-        Resume resume = resumeService.getResumeById(resumeId);
+    public String viewResumePage(@PathVariable final Long resumeId, final Model model) {
+        final Resume resume = resumeService.getResumeById(resumeId);
 
         model.addAttribute("resume", resume);
         model.addAttribute("profile", resume.getSeeker());
@@ -178,7 +178,7 @@ public class ResumeController {
     }
 
     @GetMapping("/resume-pdf/{resumeId}")
-    public ResponseEntity<byte[]> generateResumePdf(@PathVariable Long resumeId) {
+    public ResponseEntity<byte[]> generateResumePdf(@PathVariable final Long resumeId) {
         logger.info("Fetching resume PDF for resumeId {}", resumeId);
 
         Resume resume = resumeService.getResumeById(resumeId);
@@ -187,44 +187,44 @@ public class ResumeController {
             throw new RuntimeException("Resume not found");
         }
 
-        List<ResumeFile> files = resume.getFiles();
+        final List<ResumeFile> files = resume.getFiles();
         if (files != null && !files.isEmpty()) {
-            ResumeFile latestFile = files.stream()
-                    .sorted((f1, f2) -> f2.getUploadedAt().compareTo(f1.getUploadedAt()))
+            final ResumeFile latestFile = files.stream()
+                    .sorted((final ResumeFile f1, final ResumeFile f2) -> f2.getUploadedAt().compareTo(f1.getUploadedAt()))
                     .findFirst()
                     .get();
             try {
-                Path path = Paths.get(latestFile.getFilePath());
+                final Path path = Paths.get(latestFile.getFilePath());
                 if (!Files.exists(path)) {
                     logger.warn("Uploaded resume file missing, fallback to generated PDF");
                 } else {
-                    byte[] fileBytes = Files.readAllBytes(path);
-                    HttpHeaders headers = new HttpHeaders();
+                    final byte[] fileBytes = Files.readAllBytes(path);
+                    final HttpHeaders headers = new HttpHeaders();
                     headers.setContentType(MediaType.APPLICATION_PDF);
                     headers.setContentDispositionFormData("inline", latestFile.getFileName());
                     return new ResponseEntity<>(fileBytes, headers, HttpStatus.OK);
                 }
-            } catch (IOException e) {
+            } catch (final IOException e) {
                 logger.error("Error reading uploaded resume file", e);
             }
         }
 
         logger.info("Generating PDF from ResumeBuilder for resumeId {}", resumeId);
-        String html = resumeService.generateResumeHtml(resumeId);
-        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        final String html = resumeService.generateResumeHtml(resumeId);
+        final ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
 
         try {
-            PdfRendererBuilder builder = new PdfRendererBuilder();
+            final PdfRendererBuilder builder = new PdfRendererBuilder();
             builder.withHtmlContent(html, null);
             builder.toStream(outputStream);
             builder.run();
-        } catch (IOException e) {
+        } catch (final IOException e) {
             logger.error("Error generating PDF from ResumeBuilder", e);
             throw new RuntimeException("Error generating PDF", e);
         }
 
-        byte[] pdfBytes = outputStream.toByteArray();
-        HttpHeaders headers = new HttpHeaders();
+        final byte[] pdfBytes = outputStream.toByteArray();
+        final HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_PDF);
         headers.setContentDispositionFormData("inline", "resume.pdf");
 
@@ -232,25 +232,25 @@ public class ResumeController {
     }
 
     @GetMapping("/view/{fileId}")
-    public ResponseEntity<Resource> viewResume(@PathVariable Long fileId) {
+    public ResponseEntity<Resource> viewResume(@PathVariable final Long fileId) {
         logger.info("Viewing resume file {}", fileId);
 
-        ResumeFile resumeFile = resumeFileRepo.findById(fileId).orElseThrow(() -> new RuntimeException("File record not found"));
+        final ResumeFile resumeFile = resumeFileRepo.findById(fileId).orElseThrow(() -> new RuntimeException("File record not found"));
 
         try {
-            Path path = Paths.get(resumeFile.getFilePath());
+            final Path path = Paths.get(resumeFile.getFilePath());
             if (!Files.exists(path)) {
                 logger.error("File missing at {}", path.toAbsolutePath());
                 throw new RuntimeException("File missing: " + path.toAbsolutePath());
             }
 
-            Resource resource = new UrlResource(path.toUri());
+            final Resource resource = new UrlResource(path.toUri());
             return ResponseEntity.ok()
                     .contentType(MediaType.APPLICATION_PDF)
                     .header(HttpHeaders.CONTENT_DISPOSITION,
                             "inline; filename=\"" + resumeFile.getFileName() + "\"")
                     .body(resource);
-        } catch (IOException e) {
+        } catch (final IOException e) {
             logger.error("Error viewing file {}", fileId, e);
             throw new RuntimeException("Could not read file: " + e.getMessage());
         }
