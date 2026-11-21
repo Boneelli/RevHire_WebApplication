@@ -19,7 +19,7 @@ public class AuthServiceImpl implements AuthService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public User registerUser(User user) {
+    public User registerUser(final User user) {
         logger.info("Attempting to register user with email: {}", user.getEmail());
 
         if (userRepository.existsByEmail(user.getEmail())) {

@@ -174,7 +174,7 @@ public class ApplicationServiceImpl implements ApplicationService {
     public List<EmployerApplicationDTO> getApplicationsByEmployer(final Long userId) {
         logger.info("Fetching applications for employer userId: {}", userId);
 
-        EmployerProfile employer = employerRepository.findByUserUserId(userId).orElseThrow(() -> {
+        final EmployerProfile employer = employerRepository.findByUserUserId(userId).orElseThrow(() -> {
                     final String msg = "Employer profile not found for userId: " + userId;
                     logger.error(msg);
                     return new RuntimeException(msg);

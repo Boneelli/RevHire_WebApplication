@@ -35,7 +35,7 @@ public class JobSeekerServiceImpl implements JobSeekerService {
     private final JobSeekerProfileRepository seekerRepository;
 
     @Override
-    public JobSeekerProfile createProfile(JobSeekerProfile profile, Long userId) {
+    public JobSeekerProfile createProfile(final JobSeekerProfile profile, final Long userId) {
         logger.info("Creating profile for userId: {}", userId);
 
         final User user = userRepo.findById(userId).orElseThrow(() -> {

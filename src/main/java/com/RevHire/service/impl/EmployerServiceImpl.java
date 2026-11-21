@@ -93,7 +93,7 @@ public class EmployerServiceImpl implements EmployerService {
         return dto;
     }
 
-    public EmployerDashboardDTO getDashboard(Long userId) {
+    public EmployerDashboardDTO getDashboard(final Long userId) {
         logger.info("Fetching dashboard data for userId: {}", userId);
 
         final EmployerProfile profile = employerProfileRepository.findByUserUserId(userId).orElseGet(() -> {
