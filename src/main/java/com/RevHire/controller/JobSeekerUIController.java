@@ -49,12 +49,12 @@ public class JobSeekerUIController {
     private final JobSeekerProfileRepository profileRepo;
 
     @GetMapping("/dashboard/{userId}")
-    public String dashboard(@PathVariable Long userId, Model model, HttpSession session) {
+    public String dashboard(@PathVariable final Long userId, final Model model, final HttpSession session) {
         logger.info("Loading dashboard for userId {}", userId);
 
-        User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
+        final User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
 
-        JobSeekerProfile profile = jobSeekerService.getProfile(userId).orElse(null);
+        final JobSeekerProfile profile = jobSeekerService.getProfile(userId).orElse(null);
 
         String displayName = "Seeker";
         int score = 0;
@@ -79,7 +79,7 @@ public class JobSeekerUIController {
     }
 
     @GetMapping("/profile/manage")
-    public String manageProfile(HttpSession session, Model model) {
+    public String manageProfile(final HttpSession session, final Model model) {
         logger.info("Opening manage profile page");
 
         if (session.getAttribute("userId") == null) {
@@ -92,7 +92,7 @@ public class JobSeekerUIController {
     }
 
     @GetMapping("/edit-profile")
-    public String editProfile(HttpSession session) {
+    public String editProfile(final HttpSession session) {
         logger.info("Opening edit profile page");
 
         if (session.getAttribute("userId") == null) {
@@ -104,7 +104,7 @@ public class JobSeekerUIController {
     }
 
     @GetMapping("/resume/builder")
-    public String showResumeBuilder(HttpSession session, Model model) {
+    public String showResumeBuilder(final HttpSession session, final Model model) {
         logger.info("Opening resume builder");
 
         if (session.getAttribute("userId") == null) {
@@ -117,7 +117,7 @@ public class JobSeekerUIController {
     }
 
     @GetMapping("/resume/upload")
-    public String showUploadPage(HttpSession session, Model model) {
+    public String showUploadPage(final HttpSession session, final Model model) {
         logger.info("Opening resume upload page");
 
         if (session.getAttribute("userId") == null) {
@@ -130,8 +130,8 @@ public class JobSeekerUIController {
     }
 
     @GetMapping("/resume/view")
-    public String viewResume(HttpSession session, Model model) {
-        Long userId = (Long) session.getAttribute("userId");
+    public String viewResume(final HttpSession session, final Model model) {
+        final Long userId = (Long) session.getAttribute("userId");
         logger.info("Viewing resume for userId {}", userId);
 
         if (userId == null) {
@@ -139,26 +139,26 @@ public class JobSeekerUIController {
             return "redirect:/auth/login";
         }
 
-        Optional<JobSeekerProfile> profileOpt = jobSeekerService.getProfile(userId);
+        final Optional<JobSeekerProfile> profileOpt = jobSeekerService.getProfile(userId);
 
         if (profileOpt.isEmpty()) {
             model.addAttribute("resume", null);
             return "jobseeker/view-resume";
         }
 
-        JobSeekerProfile profile = profileOpt.get();
+        final JobSeekerProfile profile = profileOpt.get();
         model.addAttribute("profile", profile);
-        Optional<Resume> resumeOpt = resumeRepo.findBySeekerSeekerId(profile.getSeekerId());
+        final Optional<Resume> resumeOpt = resumeRepo.findBySeekerSeekerId(profile.getSeekerId());
 
         if (resumeOpt.isEmpty()) {
             model.addAttribute("resume", null);
             return "jobseeker/view-resume";
         }
 
-        Resume resume = resumeOpt.get();
+        final Resume resume = resumeOpt.get();
         model.addAttribute("resume", resume);
 
-        Long resumeId = resume.getResumeId();
+        final Long resumeId = resume.getResumeId();
 
         model.addAttribute("educations", resumeService.getEducationByResume(resumeId));
         model.addAttribute("experiences", resumeService.getExperienceByResume(resumeId));
@@ -171,15 +171,15 @@ public class JobSeekerUIController {
 
     @GetMapping("/jobs/search")
     public String showSearchPage(
-            @RequestParam(required = false) String title,
-            @RequestParam(required = false) String location,
-            @RequestParam(required = false) Integer experience,
-            @RequestParam(required = false) String education,
-            @RequestParam(required = false) Double minSalary,
-            @RequestParam(required = false) Double maxSalary,
-            @RequestParam(required = false) String jobType,
-            HttpSession session,
-            Model model) {
+            @RequestParam(required = false) final String title,
+            @RequestParam(required = false) final String location,
+            @RequestParam(required = false) final Integer experience,
+            @RequestParam(required = false) final String education,
+            @RequestParam(required = false) final Double minSalary,
+            @RequestParam(required = false) final Double maxSalary,
+            @RequestParam(required = false) final String jobType,
+            final HttpSession session,
+            final Model model) {
 
         logger.info("Searching jobs with filters: title={}, location={}", title, location);
 
@@ -188,7 +188,7 @@ public class JobSeekerUIController {
             return "redirect:/auth/login";
         }
 
-        List<JobDTO> filteredJobs = jobService.searchJobs(title, location, experience, education, minSalary, maxSalary, jobType);
+        final List<JobDTO> filteredJobs = jobService.searchJobs(title, location, experience, education, minSalary, maxSalary, jobType);
 
         model.addAttribute("jobs", filteredJobs);
         model.addAttribute("activePage", "search");
@@ -197,8 +197,8 @@ public class JobSeekerUIController {
     }
 
     @GetMapping("/applications")
-    public String showApplicationsPage(HttpSession session, Model model) {
-        Long userId = (Long) session.getAttribute("userId");
+    public String showApplicationsPage(final HttpSession session, final Model model) {
+        final Long userId = (Long) session.getAttribute("userId");
         logger.info("Fetching applications for userId {}", userId);
 
         if (userId == null){
@@ -206,7 +206,7 @@ public class JobSeekerUIController {
         }
 
         jobSeekerService.getProfile(userId).ifPresent(profile -> {
-            List<ApplicationResponseDTO> apps = applicationService.getApplicationsBySeeker(profile.getSeekerId());
+            final List<ApplicationResponseDTO> apps = applicationService.getApplicationsBySeeker(profile.getSeekerId());
 
             model.addAttribute("applications", apps);
             model.addAttribute("activePage", "applications");
@@ -216,8 +216,8 @@ public class JobSeekerUIController {
     }
 
     @GetMapping("/jobs/saved")
-    public String showSavedJobs(HttpSession session, Model model) {
-        Long userId = (Long) session.getAttribute("userId");
+    public String showSavedJobs(final HttpSession session, final Model model) {
+        final Long userId = (Long) session.getAttribute("userId");
         logger.info("Loading saved jobs for userId {}", userId);
 
         if (userId == null) {
@@ -225,7 +225,7 @@ public class JobSeekerUIController {
         }
 
         jobSeekerService.getProfile(userId).ifPresent(profile -> {
-            List<FavoriteJobDTO> favorites = jobSeekerService.getFavorites(profile.getSeekerId());
+            final List<FavoriteJobDTO> favorites = jobSeekerService.getFavorites(profile.getSeekerId());
 
             model.addAttribute("savedJobs", favorites);
             model.addAttribute("activePage", "saved");
@@ -235,7 +235,7 @@ public class JobSeekerUIController {
     }
 
     @Transactional
-    public void updateFullProfile(Long userId, ProfileUpdateDTO dto) {
+    public void updateFullProfile(final Long userId, final ProfileUpdateDTO dto) {
         logger.info("Updating full profile for userId {}", userId);
         JobSeekerProfile profile = profileRepo.findByUserUserId(userId).orElseThrow(() -> new RuntimeException("Profile not found"));
 
@@ -245,7 +245,7 @@ public class JobSeekerUIController {
         profileRepo.save(profile);
 
         Resume resume = resumeRepo.findBySeekerSeekerId(profile.getSeekerId()).orElseGet(() -> {
-                    Resume newR = new Resume();
+                    final Resume newR = new Resume();
                     newR.setSeeker(profile);
                     return resumeRepo.save(newR);
                 });
@@ -272,12 +272,12 @@ public class JobSeekerUIController {
             }
         }
 
-        int completion = calculateCompletion(profile, resume);
+        final int completion = calculateCompletion(profile, resume);
         profile.setProfileCompletion(completion);
         profileRepo.save(profile);
     }
 
-    private int calculateCompletion(JobSeekerProfile p, Resume r) {
+    private int calculateCompletion(final JobSeekerProfile p, final Resume r) {
         int count = 0;
 
         if (p.getFullName() != null) count += 20;

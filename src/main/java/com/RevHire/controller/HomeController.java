@@ -26,7 +26,7 @@ public class HomeController {
     }
 
     @GetMapping("/register")
-    public String showRegisterPage(Model model) {
+    public String showRegisterPage(final Model model) {
         logger.info("Register page requested");
         model.addAttribute("user", new User());
         return "auth/register";

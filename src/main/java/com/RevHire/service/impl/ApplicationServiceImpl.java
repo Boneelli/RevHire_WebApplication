@@ -30,7 +30,7 @@ public class ApplicationServiceImpl implements ApplicationService {
     private final ResumeFileRepository resumeFileRepository;
 
     @Override
-    public Application applyJob(Long jobId, Long userId, Long resumeId, Long fileId, String coverLetter){
+    public Application applyJob(final Long jobId, final Long userId, final Long resumeId, final Long fileId, final String coverLetter){
         logger.info("Attempting to apply for jobId: {} by seekerId: {}", jobId, userId);
 
         if(applicationRepository.findByJobJobIdAndSeekerSeekerId(jobId, userId).isPresent()) {
@@ -38,19 +38,19 @@ public class ApplicationServiceImpl implements ApplicationService {
             throw new RuntimeException("Already applied for this job");
         }
 
-        Job job = jobRepository.findById(jobId).orElseThrow(() -> {
+        final Job job = jobRepository.findById(jobId).orElseThrow(() -> {
                     logger.error("Job not found with id: {}", jobId);
                     return new RuntimeException("Job not found with id: " + jobId);
                 });
 
-        JobSeekerProfile seeker = seekerRepository.findByUserUserId(userId).orElseThrow(() -> {
+        final JobSeekerProfile seeker = seekerRepository.findByUserUserId(userId).orElseThrow(() -> {
                     logger.error("Seeker not found with id: {}", userId);
                     return new RuntimeException("Seeker not found with id: " + userId);
                 });
 
-        Long seekerId=seeker.getSeekerId();
+        final Long seekerId=seeker.getSeekerId();
 
-        Resume resume = resumeRepository.findBySeeker_SeekerId(seekerId).orElseThrow(() -> new RuntimeException("Resume not found"));
+        final Resume resume = resumeRepository.findBySeeker_SeekerId(seekerId).orElseThrow(() -> new RuntimeException("Resume not found"));
         ResumeFile selectedFile = null;
 
         if (fileId != null) {
@@ -66,25 +66,25 @@ public class ApplicationServiceImpl implements ApplicationService {
             throw new RuntimeException("Invalid resume selected for this seeker");
         }
 
-        Application application = new Application();
+        final Application application = new Application();
         application.setJob(job);
         application.setSeeker(seeker);
         application.setResume(resume);
         application.setCoverLetter(coverLetter);
         application.setStatus("APPLIED");
 
-        Application saved = applicationRepository.save(application);
+        final Application saved = applicationRepository.save(application);
 
-        Long employerUserId = job.getEmployer().getUser().getUserId();
+        final Long employerUserId = job.getEmployer().getUser().getUserId();
 
-        String message = seeker.getFullName() + " applied for " + job.getTitle();
+        final String message = seeker.getFullName() + " applied for " + job.getTitle();
 
         notificationService.sendNotification(employerUserId, message);
 
         return saved;
     }
 
-    public List<ApplicationResponseDTO> getApplicationsBySeeker(Long seekerId) {
+    public List<ApplicationResponseDTO> getApplicationsBySeeker(final Long seekerId) {
         logger.info("Fetching applications for userId: {}", seekerId);
 
         return applicationRepository.findBySeekerSeekerId(seekerId)
@@ -101,10 +101,10 @@ public class ApplicationServiceImpl implements ApplicationService {
     }
 
     @Override
-    public void withdrawApplication(Long applicationId, String reason) {
+    public void withdrawApplication(final Long applicationId, final String reason) {
         logger.info("Withdraw request received for applicationId: {}", applicationId);
 
-        Application app = applicationRepository.findById(applicationId).orElseThrow(() -> {
+        final Application app = applicationRepository.findById(applicationId).orElseThrow(() -> {
                     logger.error("Application not found with id: {}", applicationId);
                     return new RuntimeException("Application not found");
                 });
@@ -118,15 +118,15 @@ public class ApplicationServiceImpl implements ApplicationService {
     }
 
     @Override
-    public Application updateStatus(Long applicationId, String status) {
+    public Application updateStatus(final Long applicationId, final String status) {
         logger.info("Updating status for applicationId: {} to {}", applicationId, status);
 
-        Application app = applicationRepository.findById(applicationId).orElseThrow(() -> {
+        final Application app = applicationRepository.findById(applicationId).orElseThrow(() -> {
                     logger.error("Application not found with id: {}", applicationId);
                     return new RuntimeException("Application not found");
                 });
 
-        List<String> validStatuses = List.of("APPLIED", "UNDER_REVIEW", "SHORTLISTED", "REJECTED", "WITHDRAWN");
+        final List<String> validStatuses = List.of("APPLIED", "UNDER_REVIEW", "SHORTLISTED", "REJECTED", "WITHDRAWN");
 
         if(!validStatuses.contains(status)) {
             logger.warn("Invalid status attempted: {}", status);
@@ -134,8 +134,8 @@ public class ApplicationServiceImpl implements ApplicationService {
         }
 
         app.setStatus(status);
-        Application updated = applicationRepository.save(app);
-        Long seekerUserId = app.getSeeker().getUser().getUserId();
+        final Application updated = applicationRepository.save(app);
+        final Long seekerUserId = app.getSeeker().getUser().getUserId();
         String message;
 
         if(status.equals("SHORTLISTED")){
@@ -147,14 +147,14 @@ public class ApplicationServiceImpl implements ApplicationService {
         }
 
         notificationService.sendNotification(seekerUserId, message);
-        Application updatedApplication = applicationRepository.save(app);
+        final Application updatedApplication = applicationRepository.save(app);
         logger.info("Application status updated successfully for applicationId: {}", applicationId);
 
         return updatedApplication;
     }
 
     @Override
-    public List<ApplicationResponseDTO> getApplicationsByJob(Long jobId) {
+    public List<ApplicationResponseDTO> getApplicationsByJob(final Long jobId) {
         logger.info("Fetching applications for jobId: {}", jobId);
 
         return applicationRepository.findByJobJobId(jobId)
@@ -171,11 +171,11 @@ public class ApplicationServiceImpl implements ApplicationService {
     }
 
     @Override
-    public List<EmployerApplicationDTO> getApplicationsByEmployer(Long userId) {
+    public List<EmployerApplicationDTO> getApplicationsByEmployer(final Long userId) {
         logger.info("Fetching applications for employer userId: {}", userId);
 
         EmployerProfile employer = employerRepository.findByUserUserId(userId).orElseThrow(() -> {
-                    String msg = "Employer profile not found for userId: " + userId;
+                    final String msg = "Employer profile not found for userId: " + userId;
                     logger.error(msg);
                     return new RuntimeException(msg);
                 });
@@ -197,20 +197,20 @@ public class ApplicationServiceImpl implements ApplicationService {
     }
 
     @Override
-    public String addEmployerNotes(Long applicationId, Long employerId, String noteText) {
+    public String addEmployerNotes(final Long applicationId, final Long employerId, final String noteText) {
         logger.info("Adding employer note for applicationId: {}", applicationId);
 
-        Application application = applicationRepository.findById(applicationId).orElseThrow(() -> {
+        final Application application = applicationRepository.findById(applicationId).orElseThrow(() -> {
                     logger.error("Application not found with id: {}", applicationId);
                     return new RuntimeException("Application not found");
                 });
 
-        EmployerProfile employer = employerRepository.findById(employerId).orElseThrow(() -> {
+        final EmployerProfile employer = employerRepository.findById(employerId).orElseThrow(() -> {
                     logger.error("Employer not found with id: {}", employerId);
                     return new RuntimeException("Employer not found");
                 });
 
-        ApplicationNote note = new ApplicationNote();
+        final ApplicationNote note = new ApplicationNote();
         note.setApplication(application);
         note.setEmployer(employer);
         note.setNoteText(noteText);

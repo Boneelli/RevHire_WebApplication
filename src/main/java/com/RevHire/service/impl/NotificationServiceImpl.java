@@ -22,15 +22,15 @@ public class NotificationServiceImpl implements NotificationService {
     private final UserRepository userRepository;
 
     @Override
-    public void sendNotification(Long userId, String message) {
+    public void sendNotification(final Long userId, final String message) {
         logger.info("Sending notification to userId: {}", userId);
 
-        User user = userRepository.findById(userId).orElseThrow(() -> {
+        final User user = userRepository.findById(userId).orElseThrow(() -> {
                     logger.error("User not found while sending notification. userId: {}", userId);
                     return new RuntimeException("User not found with ID: " + userId);
                 });
 
-        Notification notification = new Notification();
+        final Notification notification = new Notification();
         notification.setUser(user);
         notification.setMessage(message);
         notification.setIsRead(false);
@@ -40,9 +40,9 @@ public class NotificationServiceImpl implements NotificationService {
     }
 
     @Override
-    public List<NotificationDTO> getUserNotifications(Long userId) {
+    public List<NotificationDTO> getUserNotifications(final Long userId) {
         logger.info("Fetching notifications for userId: {}", userId);
-        List<Notification> notifications = notificationRepository.findByUserUserId(userId);
+        final List<Notification> notifications = notificationRepository.findByUserUserId(userId);
         logger.debug("Total notifications found for userId {} : {}", userId, notifications.size());
 
         return notifications.stream()
@@ -56,10 +56,10 @@ public class NotificationServiceImpl implements NotificationService {
     }
 
     @Override
-    public void markAsRead(Long notificationId) {
+    public void markAsRead(final Long notificationId) {
         logger.info("Marking notification as read. notificationId: {}", notificationId);
 
-        Notification n = notificationRepository.findById(notificationId).orElseThrow(() -> {
+        final Notification n = notificationRepository.findById(notificationId).orElseThrow(() -> {
                     logger.error("Notification not found with ID: {}", notificationId);
                     return new RuntimeException("Notif not found");
                 });
