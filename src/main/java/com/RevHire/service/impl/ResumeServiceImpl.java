@@ -332,7 +332,17 @@ public class ResumeServiceImpl implements ResumeService {
         List<ResumeProject> projects = projectRepo.findByResumeResumeId(resumeId);
         List<ResumeCertification> certs = certRepo.findByResumeResumeId(resumeId);
 
-        StringBuilder html = new StringBuilder();
+        // [Initialize StringBuilder or StringBuffer with appropriate size]: capacità calcolata dinamicamente sui dati del CV
+        int objectiveLength = resume.getObjective() != null ? resume.getObjective().length() : 0;
+        int estimatedSize = 350 // tag HTML statici, intestazioni <h3>, stili inline e dati anagrafici
+                + objectiveLength
+                + (educations.size() * 80)   // ~80 char per ogni riga Education
+                + (experiences.size() * 70)  // ~70 char per ogni riga Experience
+                + (projects.size() * 160)    // ~160 char per ogni riga Project (titolo + descrizione)
+                + (certs.size() * 75)        // ~75 char per ogni riga Certification
+                + (skills.size() * 25);      // ~25 char per ogni riga Skill
+
+        StringBuilder html = new StringBuilder(estimatedSize);
 
         html.append("<html>");
         html.append("<body style='font-family:Arial; padding:40px;'>");

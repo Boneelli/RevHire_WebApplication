@@ -40,7 +40,8 @@ public class EmployerServiceImpl implements EmployerService {
                     return new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found");
                 });
 
-        EmployerProfile profile = employerProfileRepository.findByUserUserId(userId).orElse(new EmployerProfile());
+        // [Use optional orElseGet instead of orElse]: istanzia EmployerProfile solo se assente
+        EmployerProfile profile = employerProfileRepository.findByUserUserId(userId).orElseGet(EmployerProfile::new);
 
         if (dto.getContactEmail() != null && !dto.getContactEmail().isEmpty()) {
             logger.info("Updating contact email for userId: {}", userId);
@@ -140,10 +141,11 @@ public class EmployerServiceImpl implements EmployerService {
         }
 
         int count = 0;
-        if (profile.getCompanyName() != null && !profile.getCompanyName().isEmpty()) count++;
-        if (profile.getIndustry() != null && !profile.getIndustry().isEmpty()) count++;
-        if (profile.getWebsite() != null && !profile.getWebsite().isEmpty()) count++;
-        if (profile.getDescription() != null && !profile.getDescription().isEmpty()) count++;
+        //[Use ++i instead of i++]
+        if (profile.getCompanyName() != null && !profile.getCompanyName().isEmpty()) ++count;
+        if (profile.getIndustry() != null && !profile.getIndustry().isEmpty()) ++count;
+        if (profile.getWebsite() != null && !profile.getWebsite().isEmpty()) ++count;
+        if (profile.getDescription() != null && !profile.getDescription().isEmpty()) ++count;
 
         double completion = (count / 4.0) * 100.0;
         logger.debug("Profile completion calculated: {}%", completion);

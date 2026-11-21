@@ -9,7 +9,6 @@ import com.RevHire.service.JobSeekerService;
 import com.RevHire.service.impl.ApplicationServiceImpl;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -134,25 +133,40 @@ public class JobSeekerController {
 
         Long resumeId = resume.getResumeId();
 
+        // [Avoid Spring repository call in loop or stream]: una sola chiamata al db fuori dal ciclo
         resumeSkillRepo.deleteByResumeResumeId(resumeId);
         String skillsStr = (String) data.get("skills");
-        if(skillsStr != null){
-            for(String s : skillsStr.split(",")){
-                ResumeSkill skill = new ResumeSkill();
-                skill.setResume(resume);
-                skill.setSkillName(s.trim());
-                resumeSkillRepo.save(skill);
-            }
+        if (skillsStr != null && !skillsStr.isBlank()) {
+            List<ResumeSkill> skills = Arrays.stream(skillsStr.split(","))
+                    .map(String::trim)
+                    .filter(s -> !s.isEmpty())
+                    .map(skillName -> {
+                        ResumeSkill skill = new ResumeSkill();
+                        skill.setResume(resume);
+                        skill.setSkillName(skillName);
+                        return skill;
+                    })
+                    .toList();
+            resumeSkillRepo.saveAll(skills);
         }
 
+        // [Avoid Spring repository call in loop or stream]: una sola chiamata al db fuori dal ciclo
         certificationRepo.deleteByResumeResumeId(resumeId);
         String certStr = (String) data.get("certifications");
-        if(certStr != null){
-            for(String c : certStr.split(",")){
-                ResumeCertification cert = new ResumeCertification();
-                cert.setResume(resume);
-                cert.setCertificationName(c.trim());
-                certificationRepo.save(cert);
+        if (certStr != null && !certStr.isBlank()) {
+            List<ResumeCertification> certifications = Arrays.stream(certStr.split(","))
+                    .map(String::trim)
+                    .filter(c -> !c.isEmpty())
+                    .map(certName -> {
+                        ResumeCertification cert = new ResumeCertification();
+                        cert.setResume(resume);
+                        cert.setCertificationName(certName);
+                        return cert;
+                    })
+                    .toList();
+
+            if (!certifications.isEmpty()) {
+                certificationRepo.saveAll(certifications);
             }
         }
 
@@ -337,44 +351,69 @@ public class JobSeekerController {
                 resumeSkillRepo.save(s);
             }
 
+            // [Avoid Spring repository call in loop or stream]: una sola chiamata al db fuori dal ciclo
             educationRepo.deleteByResumeResumeId(resumeId);
-            dto.getEducations().forEach(e -> {
-                ResumeEducation edu = new ResumeEducation();
-                edu.setResume(resume);
-                edu.setInstitution(e.getInstitution());
-                edu.setDegree(e.getDegree());
-                educationRepo.save(edu);
-            });
+            if (dto.getEducations() != null && !dto.getEducations().isEmpty()) {
+                List<ResumeEducation> educations = dto.getEducations().stream()
+                        .map(e -> {
+                            ResumeEducation edu = new ResumeEducation();
+                            edu.setResume(resume);
+                            edu.setInstitution(e.getInstitution());
+                            edu.setDegree(e.getDegree());
+                            return edu;
+                        })
+                        .toList();
 
+                educationRepo.saveAll(educations);
+            }
+
+            // [Avoid Spring repository call in loop or stream]: una sola chiamata al db fuori dal ciclo
             experienceRepo.deleteByResumeResumeId(resumeId);
-            dto.getExperiences().forEach(e -> {
-                ResumeExperience exp = new ResumeExperience();
-                exp.setResume(resume);
-                exp.setCompanyName(e.getCompanyName());
-                exp.setRole(e.getRole());
-                experienceRepo.save(exp);
-            });
+            if(dto.getExperiences()!=null && !dto.getExperiences().isEmpty()){
+                List<ResumeExperience> experiences = dto.getExperiences().stream()
+                        .map(e ->{
+                            ResumeExperience exp=new ResumeExperience();
+                            exp.setResume(resume);
+                            exp.setCompanyName(e.getCompanyName());
+                            exp.setRole(e.getRole());
+                            return exp;
+                        }).toList();
+                experienceRepo.saveAll(experiences);
+            }
 
+            // [Avoid Spring repository call in loop or stream]: una sola chiamata al db fuori dal ciclo
             projectRepo.deleteByResumeResumeId(resumeId);
-            dto.getProjects().forEach(p -> {
-                ResumeProject proj = new ResumeProject();
-                proj.setResume(resume);
-                proj.setProjectTitle(p.getProjectTitle());
-                proj.setTechnologies(p.getTechnologies());
-                proj.setProjectLink(p.getProjectLink());
-                proj.setDescription(p.getDescription());
-                projectRepo.save(proj);
+            if (dto.getProjects() != null && !dto.getProjects().isEmpty()) {
+                List<ResumeProject> projects = dto.getProjects().stream()
+                        .map(p -> {
+                            ResumeProject proj = new ResumeProject();
+                            proj.setResume(resume);
+                            proj.setProjectTitle(p.getProjectTitle());
+                            proj.setTechnologies(p.getTechnologies());
+                            proj.setProjectLink(p.getProjectLink());
+                            proj.setDescription(p.getDescription());
+                            return proj;
+                        })
+                        .toList();
 
-            });
+                projectRepo.saveAll(projects);
+            }
 
+            // [Avoid Spring repository call in loop or stream]: una sola chiamata al db fuori dal ciclo
             certificationRepo.deleteByResumeResumeId(resumeId);
-            dto.getCertifications().forEach(c -> {
-                ResumeCertification cert = new ResumeCertification();
-                cert.setResume(resume);
-                cert.setCertificationName(c.getCertificationName());
-                cert.setCompany(c.getCompany());
-                certificationRepo.save(cert);
-            });
+            if(dto.getCertifications()!=null && !dto.getCertifications().isEmpty()){
+                List<ResumeCertification> certifications = dto.getCertifications().stream()
+                        .map(c ->{
+                            ResumeCertification cert = new ResumeCertification();
+                            cert.setResume(resume);
+                            cert.setCertificationName(c.getCertificationName());
+                            cert.setCompany(c.getCompany());
+                            return cert;
+                        })
+                        .toList();
+
+                certificationRepo.saveAll(certifications);
+            }
 
             int completion = calculateProfileCompletion(profile, resume);
             profile.setProfileCompletion(completion);

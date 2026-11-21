@@ -25,6 +25,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -252,17 +253,22 @@ public class JobSeekerUIController {
         resume.setObjective(dto.getJobTitle());
         resumeRepo.save(resume);
 
+        // [Avoid Spring repository call in loop or stream]: una sola chiamata al db fuori dal ciclo
         resumeSkillRepo.deleteByResumeResumeId(resume.getResumeId());
         if (dto.getSkills() != null && !dto.getSkills().trim().isEmpty()) {
-            String[] skillNames = dto.getSkills().split(",");
+            List<ResumeSkill> skills = Arrays.stream(dto.getSkills().split(","))
+                    .map(String::trim)
+                    .filter(name -> !name.isEmpty())
+                    .map(name -> {
+                        ResumeSkill rs = new ResumeSkill();
+                        rs.setResume(resume);
+                        rs.setSkillName(name);
+                        return rs;
+                    })
+                    .toList();
 
-            for (String name : skillNames) {
-                if (!name.trim().isEmpty()) {
-                    ResumeSkill rs = new ResumeSkill();
-                    rs.setResume(resume);
-                    rs.setSkillName(name.trim());
-                    resumeSkillRepo.save(rs);
-                }
+            if (!skills.isEmpty()) {
+                resumeSkillRepo.saveAll(skills);
             }
         }
 
