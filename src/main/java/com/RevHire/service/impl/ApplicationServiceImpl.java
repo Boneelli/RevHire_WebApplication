@@ -84,20 +84,11 @@ public class ApplicationServiceImpl implements ApplicationService {
         return saved;
     }
 
-    public List<ApplicationResponseDTO> getApplicationsBySeeker(final Long seekerId) {
+    public List<ApplicationResponseDTO> getApplicationsBySeeker(Long seekerId) {
         logger.info("Fetching applications for userId: {}", seekerId);
 
-        return applicationRepository.findBySeekerSeekerId(seekerId)
-                .stream()
-                .map(app -> new ApplicationResponseDTO(
-                        app.getApplicationId(),
-                        app.getSeeker().getFullName(),
-                        app.getSeeker().getUser().getEmail(),
-                        app.getJob().getTitle(),
-                        app.getStatus(),
-                        app.getAppliedDate()
-                ))
-                .toList();
+        //chiamata alla query ottimizzata con join fetch per evitare il problema delle N+1 query
+        return applicationRepository.findSeekerApplicationDTOs(seekerId);
     }
 
     @Override
@@ -171,29 +162,16 @@ public class ApplicationServiceImpl implements ApplicationService {
     }
 
     @Override
-    public List<EmployerApplicationDTO> getApplicationsByEmployer(final Long userId) {
+    public List<EmployerApplicationDTO> getApplicationsByEmployer(Long userId) {
         logger.info("Fetching applications for employer userId: {}", userId);
 
-        final EmployerProfile employer = employerRepository.findByUserUserId(userId).orElseThrow(() -> {
-                    final String msg = "Employer profile not found for userId: " + userId;
-                    logger.error(msg);
-                    return new RuntimeException(msg);
-                });
-
-        return applicationRepository
-                .findByJobEmployerEmployerId(employer.getEmployerId())
-                .stream()
-                .map(app -> new EmployerApplicationDTO(
-                        app.getApplicationId(),
-                        app.getJob().getTitle(),
-                        app.getJob().getJobId(),
-                        app.getSeeker().getFullName(),
-                        app.getSeeker().getUser().getEmail(),
-                        app.getStatus(),
-                        app.getAppliedDate(),
-                        app.getResume() != null ? app.getResume().getResumeId() : null
-                ))
-                .toList();
+        EmployerProfile employer = employerRepository.findByUserUserId(userId).orElseThrow(() -> {
+            String msg = "Employer profile not found for userId: " + userId;
+            logger.error(msg);
+            return new RuntimeException(msg);
+        });
+        //chiamata alla query ottimizzata con join fetch per evitare il problema delle N+1 query
+        return applicationRepository.findEmployerApplicationDTOs(employer.getEmployerId());
     }
 
     @Override
