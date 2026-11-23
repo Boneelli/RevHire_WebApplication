@@ -260,7 +260,7 @@ public class JobSeekerUIController {
                     .map(String::trim)
                     .filter(name -> !name.isEmpty())
                     .map(name -> {
-                        ResumeSkill rs = new ResumeSkill();
+                        final ResumeSkill rs = new ResumeSkill();
                         rs.setResume(resume);
                         rs.setSkillName(name);
                         return rs;

@@ -60,7 +60,7 @@
         \vspace{0.8cm}
         {\color{primary}\rule{0.5\textwidth}{0.8pt}\par}
         \vspace{0.8cm}
-        {\large Corso di Sustainable Software Engineering\par}
+        {\large Corso di Sustainable Software Engineering a.a. 2026/2027\par}
         \vfill
         {\large
         Alessandro Bonelli [NF22500420]\\[0.3em]
@@ -77,13 +77,12 @@
 
     \subsection{Descrizione del progetto originale}
     RevHire è un'applicazione web dedicata alla ricerca di lavoro, realizzata in
-    Java con il framework Spring Boot. Il progetto è stato sviluppato da un
-    gruppo di studenti durante la seconda fase di un percorso di formazione
-    (Revature Training Program).
+    Java con il framework Spring Boot e sviluppato da un team di studenti sotto il nome di
+    RevHire (link alla repo del team: \url{https://github.com/RevHire-Team})
 
-    Gli utenti si dividono in due ruoli. Il candidato può registrarsi, compilare
-    un curriculum (obiettivo, formazione, esperienze, competenze, progetti,
-    certificazioni) oppure caricarlo in PDF o DOCX fino a 2~MB, cercare offerte
+    Gli utenti si dividono in due ruoli: JobSeeker (il candidato) e Employer (il datore di lavoro).
+    Il candidato può registrarsi, compilare
+    un curriculum oppure caricarlo in PDF o DOCX, cercare offerte
     con vari filtri e candidarsi con un click. Può anche ritirare una candidatura,
     salvare le offerte tra i preferiti e controllare lo stato di ciò che ha
     inviato.
@@ -95,14 +94,13 @@
     dashboard con il numero di offerte, di offerte attive, di candidature
     ricevute e di quelle ancora da valutare.
 
-    L'applicazione segue il pattern MVC. Il codice è diviso in controller,
+    L'applicazione segue il pattern MVC, per cui il codice è diviso in controller,
     servizi, repository ed entità, le pagine sono generate lato server con
     Thymeleaf e i dati sono salvati su un database Oracle tramite JPA/Hibernate.
 
     \subsection{Ambito e funzionalità del sistema}
-    RevHire fa parte delle piattaforme di \emph{recruiting}: serve a far
-    incontrare chi offre lavoro e chi lo cerca, e a gestire la candidatura dalla
-    pubblicazione dell'offerta fino alla valutazione.
+    La web application di RevHire ha come obiettivo quello di far incontrare chi offre lavoro e chi lo cerca, permettendo di
+    gestire la candidatura dalla pubblicazione dell'offerta fino alla valutazione.
 
     Le funzioni principali sono:
     \begin{itemize}
@@ -117,8 +115,8 @@
 
     \subsection{Tecnologie utilizzate}
     Il progetto è costruito con Maven, tramite il Maven Wrapper già incluso nel
-    repository, e gira su Java con Spring Boot 3.2.5. Le tecnologie principali
-    sono queste:
+    repository e gira su Java con Spring Boot 3.2.5. Le tecnologie principali
+    sono:
     \begin{itemize}
         \item \textbf{Spring Boot e Spring MVC}: struttura dell'applicazione e
         gestione delle richieste web;
@@ -138,10 +136,39 @@
     Mockito, e il codice dei test è organizzato come quello dell'applicazione
     (controller, servizi e repository).
 
+    \section{Obiettivi}
+    L'obiettivo del progetto è quello di misurare le prestazioni del sistema attuale
+    in merito ai 4 pilastri della sostenibilità software (ambientale, tecnica, sociale ed economica), al fine
+    di individuare eventuali criticità e proporre ottimizzazioni (ove possibile) per mitigare i possibili
+    impatti negativi.
+
+    Di seguito sono riportati gli obiettivi specifici che sono stati definiti.
+
+    \subsection{Goals ambientali}
+
+    \begin{description}[style=nextline, leftmargin=1em, itemsep=1em]
+    \item[G1 -- TODO]
+    \textbf{Descrizione:} TODO \\
+    \textbf{Motivazione:} TODO (breve spiegazione del perché questo goal è importante per la sostenibilità ambientale) \\
+    \textbf{Tool:} \texttt{TODO}
+
+    \item[G2 -- TODO]
+    \textbf{Descrizione:} Bla bla bla. \\
+    \textbf{Motivazione:} TODO (breve spiegazione del perché questo goal è importante per la sostenibilità ambientale) \\
+    \textbf{Tool:} \texttt{TODO}
+    \end{description}
+    
+    \subsection{Goals tecnici}
+    
+    \subsection{Goals sociali}
+    
+    \subsection{Goals economici}
+
+
     \section{Metodologia}
 
-    \subsection{Ambientale}
-    La valutazione del profilo ambientale e del consumo energetico di RevHire
+    \subsection{Ambientale & Tecnico}
+    La valutazione del profilo tecnico-ambientale e del consumo energetico di RevHire
     segue un approccio \emph{before/after}. Le prestazioni, i consumi energetici
     e la qualità del codice sono stati misurati una prima volta sulla versione
     originale del progetto (\emph{baseline}), appena clonato il repository.
@@ -150,14 +177,15 @@
     eseguite sullo stesso branch \texttt{main}, in due momenti diversi: la
     versione \emph{before} corrisponde al codice iniziale, quella \emph{after}
     al codice al termine delle modifiche. Per rendere il confronto valido, le
-    due misurazioni usano gli stessi strumenti, le stesse configurazioni e gli
-    stessi parametri di carico.
+    misurazioni \textit{after} sono state eseguite sulla stessa macchina con la stessa configurazione
+    e utilizzando gli stessi strumenti e parametri di carico delle misurazioni \textit{before}.
 
     Gli strumenti utilizzati coprono sia l'impatto ambientale e l'efficienza
     del front-end (tramite gli strumenti EcoIndex, WebsiteCarbon e GreenIT),
-    la qualità del codice in ottica di consumo energetico (tramite Creedengo),
+    la qualità del codice in ottica di consumo energetico e manutenibilità tecnica (tramite Creedengo),
     le prestazioni del back-end (tramite JMH, e Jmeter) e l'energia
     effettivamente consumata durante l'esecuzione (tramite EnergiBridge).
+
 
     \subsubsection{EcoIndex}
     EcoIndex è uno strumento che stima l'impatto ambientale di una pagina web analizzando tre parametri principali:

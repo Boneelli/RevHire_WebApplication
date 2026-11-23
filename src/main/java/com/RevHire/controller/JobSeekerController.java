@@ -97,7 +97,7 @@ public class JobSeekerController {
     @PutMapping("/profile/{userId}")
     public ResponseEntity<?> updateProfile(@PathVariable final Long userId, @RequestBody final Map<String,Object> data) {
 
-        JobSeekerProfile profile = profileRepo.findByUserUserId(userId).orElseGet(() -> {
+        final JobSeekerProfile profile = profileRepo.findByUserUserId(userId).orElseGet(() -> {
                     final JobSeekerProfile newProfile = new JobSeekerProfile();
 
                     final User user = new User();
@@ -117,7 +117,7 @@ public class JobSeekerController {
         }
         profileRepo.save(profile);
 
-        Resume resume = resumeRepo
+        final Resume resume = resumeRepo
                 .findTopBySeekerSeekerIdOrderByResumeIdDesc(profile.getSeekerId())
                 .orElseGet(() -> {
                     final Resume r = new Resume();
@@ -159,7 +159,7 @@ public class JobSeekerController {
                     .map(String::trim)
                     .filter(c -> !c.isEmpty())
                     .map(certName -> {
-                        ResumeCertification cert = new ResumeCertification();
+                        final ResumeCertification cert = new ResumeCertification();
                         cert.setResume(resume);
                         cert.setCertificationName(certName);
                         return cert;
@@ -257,7 +257,7 @@ public class JobSeekerController {
 
         final List<ApplicationResponseDTO> applications = applicationService.getApplicationsBySeeker(seekerId);
 
-        int totalApps = applications.size();
+        final int totalApps = applications.size();
 
         final List<ApplicationResponseDTO> recent = applications.stream().limit(5).toList();
 
@@ -334,7 +334,7 @@ public class JobSeekerController {
 
             final Resume resume = resumeRepo.findTopBySeekerSeekerIdOrderByResumeIdDesc(profile.getSeekerId())
                     .orElseGet(() -> {
-                        Resume r = new Resume();
+                        final Resume r = new Resume();
                         r.setSeeker(profile);
                         return resumeRepo.save(r);
                     });
@@ -345,19 +345,23 @@ public class JobSeekerController {
 
             resumeSkillRepo.deleteByResumeResumeId(resumeId);
 
-            for(String skill : dto.getSkills()){
-                ResumeSkill s = new ResumeSkill();
-                s.setResume(resume);
-                s.setSkillName(skill);
-                resumeSkillRepo.save(s);
-            }
+            // [Avoid Spring repository call in loop or stream]: una sola chiamata al db fuori dal ciclo
+            final List<ResumeSkill> skills = dto.getSkills().stream()
+                    .map(skill -> {
+                        final ResumeSkill s = new ResumeSkill();
+                        s.setResume(resume);
+                        s.setSkillName(skill);
+                        return s;
+                    })
+                    .toList();
+            resumeSkillRepo.saveAll(skills);
 
             // [Avoid Spring repository call in loop or stream]: una sola chiamata al db fuori dal ciclo
             educationRepo.deleteByResumeResumeId(resumeId);
             if (dto.getEducations() != null && !dto.getEducations().isEmpty()) {
                 final List<ResumeEducation> educations = dto.getEducations().stream()
                         .map(e -> {
-                            ResumeEducation edu = new ResumeEducation();
+                            final ResumeEducation edu = new ResumeEducation();
                             edu.setResume(resume);
                             edu.setInstitution(e.getInstitution());
                             edu.setDegree(e.getDegree());
@@ -373,7 +377,7 @@ public class JobSeekerController {
             if(dto.getExperiences()!=null && !dto.getExperiences().isEmpty()){
                 final List<ResumeExperience> experiences = dto.getExperiences().stream()
                         .map(e ->{
-                            ResumeExperience exp=new ResumeExperience();
+                            final ResumeExperience exp=new ResumeExperience();
                             exp.setResume(resume);
                             exp.setCompanyName(e.getCompanyName());
                             exp.setRole(e.getRole());
@@ -387,7 +391,7 @@ public class JobSeekerController {
             if (dto.getProjects() != null && !dto.getProjects().isEmpty()) {
                 final List<ResumeProject> projects = dto.getProjects().stream()
                         .map(p -> {
-                            ResumeProject proj = new ResumeProject();
+                            final ResumeProject proj = new ResumeProject();
                             proj.setResume(resume);
                             proj.setProjectTitle(p.getProjectTitle());
                             proj.setTechnologies(p.getTechnologies());
@@ -405,7 +409,7 @@ public class JobSeekerController {
             if(dto.getCertifications()!=null && !dto.getCertifications().isEmpty()){
                 final List<ResumeCertification> certifications = dto.getCertifications().stream()
                         .map(c ->{
-                            ResumeCertification cert = new ResumeCertification();
+                            final ResumeCertification cert = new ResumeCertification();
                             cert.setResume(resume);
                             cert.setCertificationName(c.getCertificationName());
                             cert.setCompany(c.getCompany());
@@ -416,13 +420,13 @@ public class JobSeekerController {
                 certificationRepo.saveAll(certifications);
             }
 
-            int completion = calculateProfileCompletion(profile, resume);
+            final int completion = calculateProfileCompletion(profile, resume);
             profile.setProfileCompletion(completion);
             profileRepo.save(profile);
 
             return ResponseEntity.ok(Map.of("message","Resume saved successfully"));
 
-        } catch(Exception e){
+        } catch(final Exception e){
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of("error",e.getMessage()));
         }
     }
