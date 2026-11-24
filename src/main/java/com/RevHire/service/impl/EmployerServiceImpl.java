@@ -36,9 +36,9 @@ public class EmployerServiceImpl implements EmployerService {
         logger.info("Creating or updating employer profile for userId: {}", userId);
 
         final User user = userRepository.findById(userId).orElseThrow(() -> {
-                    logger.error("User not found with id: {}", userId);
-                    return new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found");
-                });
+            logger.error("User not found with id: {}", userId);
+            return new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found");
+        });
 
         // [Use optional orElseGet instead of orElse]: istanzia EmployerProfile solo se assente
         final EmployerProfile profile = employerProfileRepository.findByUserUserId(userId).orElseGet(EmployerProfile::new);
@@ -73,9 +73,9 @@ public class EmployerServiceImpl implements EmployerService {
         logger.info("Fetching employer profile for userId: {}", userId);
 
         final EmployerProfile profile = employerProfileRepository.findByUserUserId(userId).orElseThrow(() -> {
-                    logger.error("Employer profile not found for userId: {}", userId);
-                    return new RuntimeException("Profile not found");
-                });
+            logger.error("Employer profile not found for userId: {}", userId);
+            return new RuntimeException("Profile not found");
+        });
 
         final EmployerProfileDTO dto = new EmployerProfileDTO();
         dto.setCompanyName(profile.getCompanyName());
@@ -97,48 +97,44 @@ public class EmployerServiceImpl implements EmployerService {
         logger.info("Fetching dashboard data for userId: {}", userId);
 
         final EmployerProfile profile = employerProfileRepository.findByUserUserId(userId).orElseGet(() -> {
-                    logger.warn("Employer profile not found. Creating default profile for userId: {}", userId);
-                    final User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
-                    final EmployerProfile newProfile = new EmployerProfile();
+            logger.warn("Employer profile not found. Creating default profile for userId: {}", userId);
+            final User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
+            final EmployerProfile newProfile = new EmployerProfile();
 
-                    newProfile.setUser(user);
-                    newProfile.setCompanyName("Company");
-                    newProfile.setIndustry("Not specified");
-                    newProfile.setCompanySize(0);
-                    newProfile.setLocation("Not specified");
-                    newProfile.setDescription("");
-                    newProfile.setWebsite("");
+            newProfile.setUser(user);
+            newProfile.setCompanyName("Company");
+            newProfile.setIndustry("Not specified");
+            newProfile.setCompanySize(0);
+            newProfile.setLocation("Not specified");
+            newProfile.setDescription("");
+            newProfile.setWebsite("");
 
-                    return employerProfileRepository.save(newProfile);
-                });
+            return employerProfileRepository.save(newProfile);
+        });
 
         final Long employerId = profile.getEmployerId();
 
         logger.debug("EmployerId retrieved: {}", employerId);
-        final Long totalJobs = jobRepository.countByEmployerEmployerId(employerId);
-        final Long activeJobs = jobRepository.countByEmployerEmployerIdAndStatus(employerId, "OPEN");
-        final Long totalApplications = applicationRepository.countByJob_Employer_EmployerId(employerId);
-        final Long pendingReviews = applicationRepository.countByJob_Employer_EmployerIdAndStatus(employerId, "PENDING");
-        final double completion = calculateCompletion(userId);
+        // una query per i conteggi dei job e una per quelli delle candidature
+        // (prima erano 4 query count separate)
+        final JobRepository.JobCounts jobCounts = jobRepository.countJobsByEmployer(employerId);
+        final ApplicationRepository.ApplicationCounts applicationCounts =
+                applicationRepository.countApplicationsByEmployer(employerId, "PENDING");
+        // il profilo e' gia' stato caricato sopra: non lo rileggiamo dal database
+        final double completion = calculateCompletion(profile);
         logger.info("Dashboard statistics calculated for employerId: {}", employerId);
 
         return new EmployerDashboardDTO(
-                totalJobs,
-                activeJobs,
-                totalApplications,
-                pendingReviews,
+                jobCounts.getTotal(),
+                jobCounts.getActive(),
+                applicationCounts.getTotal(),
+                applicationCounts.getPending(),
                 completion
         );
     }
 
-    private double calculateCompletion(final Long employerId) {
-        logger.debug("Calculating profile completion for employerId: {}", employerId);
-        final EmployerProfile profile = employerProfileRepository.findByUserUserId(employerId).orElse(null);
-
-        if (profile == null) {
-            logger.warn("Profile not found while calculating completion for employerId: {}", employerId);
-            return 0.0;
-        }
+    private double calculateCompletion(final EmployerProfile profile) {
+        logger.debug("Calculating profile completion for employerId: {}", profile.getEmployerId());
 
         int count = 0;
         //[Use ++i instead of i++]

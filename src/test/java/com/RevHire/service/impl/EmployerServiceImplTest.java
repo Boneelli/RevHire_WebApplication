@@ -68,6 +68,41 @@ public class EmployerServiceImplTest {
         dto.setWebsite("www.abctech.com");
         dto.setLocation("India");
         dto.setContactEmail("employer@test.com");
+
+        // conteggi di default a 0 per i test che non li verificano
+        when(jobRepository.countJobsByEmployer(any()))
+                .thenReturn(jobCounts(0L, 0L));
+        when(applicationRepository.countApplicationsByEmployer(any(), any()))
+                .thenReturn(applicationCounts(0L, 0L));
+    }
+
+    // implementazioni semplici delle proiezioni (niente mock annidati dentro when/thenReturn)
+    private JobRepository.JobCounts jobCounts(final Long total, final Long active) {
+        return new JobRepository.JobCounts() {
+            @Override
+            public Long getTotal() {
+                return total;
+            }
+
+            @Override
+            public Long getActive() {
+                return active;
+            }
+        };
+    }
+
+    private ApplicationRepository.ApplicationCounts applicationCounts(final Long total, final Long pending) {
+        return new ApplicationRepository.ApplicationCounts() {
+            @Override
+            public Long getTotal() {
+                return total;
+            }
+
+            @Override
+            public Long getPending() {
+                return pending;
+            }
+        };
     }
 
     @Test
@@ -130,10 +165,9 @@ public class EmployerServiceImplTest {
         when(employerProfileRepository.findByUserUserId(1L))
                 .thenReturn(Optional.of(profile));
 
-        when(jobRepository.countByEmployerEmployerId(1L)).thenReturn(5L);
-        when(jobRepository.countByEmployerEmployerIdAndStatus(1L, "OPEN")).thenReturn(3L);
-        when(applicationRepository.countByJob_Employer_EmployerId(1L)).thenReturn(20L);
-        when(applicationRepository.countByJob_Employer_EmployerIdAndStatus(1L, "PENDING")).thenReturn(4L);
+        when(jobRepository.countJobsByEmployer(1L)).thenReturn(jobCounts(5L, 3L));
+        when(applicationRepository.countApplicationsByEmployer(1L, "PENDING"))
+                .thenReturn(applicationCounts(20L, 4L));
 
         EmployerDashboardDTO dashboard = employerService.getDashboard(1L);
 

@@ -46,6 +46,22 @@ public interface JobRepository extends JpaRepository<Job, Long> {
 
     Long countByEmployerEmployerIdAndStatus(Long employerId, String status);
 
+    // Conteggi del dashboard employer in una sola query (totale job e job OPEN).
+    // COUNT(CASE ... END) non e' mai null: con zero righe restituisce 0.
+    @Query("""
+            SELECT COUNT(j) AS total,
+                   COUNT(CASE WHEN j.status = 'OPEN' THEN 1 END) AS active
+            FROM Job j
+            WHERE j.employer.employerId = :employerId
+            """)
+    JobCounts countJobsByEmployer(@Param("employerId") Long employerId);
+
+    interface JobCounts {
+        Long getTotal();
+
+        Long getActive();
+    }
+
     List<Job> findByEmployerEmployerIdOrderByTitleAsc(Long employerId);
 
     List<Job> findByEmployerEmployerIdOrderByJobIdDesc(Long employerId);

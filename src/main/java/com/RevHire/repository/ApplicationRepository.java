@@ -32,6 +32,23 @@ public interface ApplicationRepository extends JpaRepository<Application, Long> 
 
     Long countByJob_Employer_EmployerIdAndStatus(Long employerId, String status);
 
+    // Conteggi del dashboard employer in una sola query (totale candidature e
+    // candidature con lo stato indicato). COUNT(CASE ... END) non e' mai null.
+    @Query("""
+            SELECT COUNT(a) AS total,
+                   COUNT(CASE WHEN a.status = :status THEN 1 END) AS pending
+            FROM Application a
+            WHERE a.job.employer.employerId = :employerId
+            """)
+    ApplicationCounts countApplicationsByEmployer(@Param("employerId") Long employerId,
+                                                  @Param("status") String status);
+
+    interface ApplicationCounts {
+        Long getTotal();
+
+        Long getPending();
+    }
+
     // NUOVA: candidature ricevute da un employer, in una sola query che restituisce direttamente il DTO
     @Query("""
             SELECT new com.RevHire.dto.EmployerApplicationDTO(
