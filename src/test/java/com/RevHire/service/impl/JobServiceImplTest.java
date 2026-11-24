@@ -75,14 +75,15 @@ class JobServiceImplTest {
 
     @Test
     void testSearchJobs_Coverage() {
-        when(jobRepository.advancedSearch(any(), any(), any(), any(), any(), any(), any()))
-                .thenReturn(Collections.singletonList(job));
+        JobDTO dto = new JobDTO(jobId, "Software Engineer", null, null, null, null, "OPEN", "Tech Corp");
+        when(jobRepository.advancedSearchDtos(any(), any(), any(), any(), any(), any(), any()))
+                .thenReturn(Collections.singletonList(dto));
 
         List<JobDTO> results = jobService.searchJobs("Java", "Remote", 2, "Bachelors", 50000.0, 100000.0, "Full-time");
 
         assertNotNull(results);
         assertEquals(1, results.size());
-        verify(jobRepository).advancedSearch("Java", "Remote", 2, "Bachelors", 50000.0, 100000.0, "Full-time");
+        verify(jobRepository).advancedSearchDtos("Java", "Remote", 2, "Bachelors", 50000.0, 100000.0, "Full-time");
     }
 
     @Test

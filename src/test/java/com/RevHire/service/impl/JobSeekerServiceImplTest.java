@@ -154,11 +154,10 @@ public class JobSeekerServiceImplTest {
 
     @Test
     void testGetFavorites() {
-        FavoriteJob fav = new FavoriteJob();
-        fav.setFavId(1L);
-        fav.setJob(job);
+        FavoriteJobDTO dto = new FavoriteJobDTO(1L, job.getJobId(), job.getTitle(), job.getLocation(),
+                job.getSalaryMin(), job.getSalaryMax(), job.getJobType(), job.getStatus(), "Tech Corp");
 
-        when(favoriteJobRepo.findBySeekerSeekerId(1L)).thenReturn(List.of(fav));
+        when(favoriteJobRepo.findFavoriteDtosBySeekerId(1L)).thenReturn(List.of(dto));
 
         List<FavoriteJobDTO> favorites = jobSeekerService.getFavorites(1L);
 

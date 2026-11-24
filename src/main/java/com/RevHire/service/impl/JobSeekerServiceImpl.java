@@ -39,9 +39,9 @@ public class JobSeekerServiceImpl implements JobSeekerService {
         logger.info("Creating profile for userId: {}", userId);
 
         final User user = userRepo.findById(userId).orElseThrow(() -> {
-                    logger.error("User not found with ID: {}", userId);
-                    return new RuntimeException("User not found with ID: " + userId);
-                });
+            logger.error("User not found with ID: {}", userId);
+            return new RuntimeException("User not found with ID: " + userId);
+        });
 
         profile.setUser(user);
         final JobSeekerProfile savedProfile = profileRepo.save(profile);
@@ -61,9 +61,9 @@ public class JobSeekerServiceImpl implements JobSeekerService {
         logger.info("Updating profile with ID: {}", profileId);
 
         final JobSeekerProfile existing = profileRepo.findById(profileId).orElseThrow(() -> {
-                    logger.error("Profile not found with ID: {}", profileId);
-                    return new RuntimeException("Profile not found");
-                });
+            logger.error("Profile not found with ID: {}", profileId);
+            return new RuntimeException("Profile not found");
+        });
 
         existing.setFullName(profile.getFullName());
         existing.setPhone(profile.getPhone());
@@ -82,16 +82,16 @@ public class JobSeekerServiceImpl implements JobSeekerService {
         logger.info("Fetching or creating resume for userId: {}", userId);
 
         final JobSeekerProfile profile = profileRepo.findByUserUserId(userId).orElseThrow(() -> {
-                    logger.error("Profile not found for userId: {}", userId);
-                    return new RuntimeException("Profile not found. Create profile first.");
-                });
+            logger.error("Profile not found for userId: {}", userId);
+            return new RuntimeException("Profile not found. Create profile first.");
+        });
 
         return resumeRepo.findBySeekerSeekerId(profile.getSeekerId()).orElseGet(() -> {
-                    logger.info("Creating new resume for seekerId: {}", profile.getSeekerId());
-                    final Resume newResume = new Resume();
-                    newResume.setSeeker(profile);
-                    return resumeRepo.save(newResume);
-                });
+            logger.info("Creating new resume for seekerId: {}", profile.getSeekerId());
+            final Resume newResume = new Resume();
+            newResume.setSeeker(profile);
+            return resumeRepo.save(newResume);
+        });
     }
 
     @Override
@@ -145,14 +145,14 @@ public class JobSeekerServiceImpl implements JobSeekerService {
         logger.info("Adding favorite job. seekerId: {}, jobId: {}", seekerId, jobId);
 
         final JobSeekerProfile seeker = seekerRepository.findByUserUserId(seekerId).orElseThrow(() -> {
-                    logger.error("Seeker not found with ID: {}", seekerId);
-                    return new RuntimeException("Seeker not found");
-                });
+            logger.error("Seeker not found with ID: {}", seekerId);
+            return new RuntimeException("Seeker not found");
+        });
 
         final Job job = jobRepo.findById(jobId).orElseThrow(() -> {
-                    logger.error("Job not found with ID: {}", jobId);
-                    return new RuntimeException("Job not found");
-                });
+            logger.error("Job not found with ID: {}", jobId);
+            return new RuntimeException("Job not found");
+        });
 
         if (favoriteJobRepo.existsBySeekerSeekerIdAndJobJobId(seekerId, jobId)) {
             logger.warn("Job already added to favorites. seekerId: {}, jobId: {}", seekerId, jobId);
@@ -172,25 +172,7 @@ public class JobSeekerServiceImpl implements JobSeekerService {
     @Override
     public List<FavoriteJobDTO> getFavorites(final Long seekerId) {
         logger.info("Fetching favorite jobs for seekerId: {}", seekerId);
-        final List<FavoriteJob> favorites = favoriteJobRepo.findBySeekerSeekerId(seekerId);
-
-        final List<FavoriteJobDTO> favoriteDTOs = favorites.stream().map(fav -> {
-            final Job job = fav.getJob();
-            final String companyName = (job.getEmployer() != null) ? job.getEmployer().getCompanyName() : "Unknown Company";
-
-            return new FavoriteJobDTO(
-                    fav.getFavId(),
-                    job.getJobId(),
-                    job.getTitle(),
-                    job.getLocation(),
-                    job.getSalaryMin(),
-                    job.getSalaryMax(),
-                    job.getJobType(),
-                    job.getStatus(),
-                    companyName
-            );
-        }).toList();
-        return favoriteDTOs;
+        return favoriteJobRepo.findFavoriteDtosBySeekerId(seekerId);
     }
 
     @Override
@@ -204,9 +186,9 @@ public class JobSeekerServiceImpl implements JobSeekerService {
         logger.info("Marking notification as read. notificationId: {}", notificationId);
 
         final Notification notification = notificationRepo.findById(notificationId).orElseThrow(() -> {
-                    logger.error("Notification not found with ID: {}", notificationId);
-                    return new RuntimeException("Notification not found");
-                });
+            logger.error("Notification not found with ID: {}", notificationId);
+            return new RuntimeException("Notification not found");
+        });
 
         notification.setIsRead(true);
         notificationRepo.save(notification);
@@ -270,6 +252,6 @@ public class JobSeekerServiceImpl implements JobSeekerService {
                 )
                 .limit(10)
                 .toList();
-        return allJobs;
+        return recommendedJobs;
     }
 }

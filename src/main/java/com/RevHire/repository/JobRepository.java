@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
+import com.RevHire.dto.JobDTO;
 import com.RevHire.entity.Job;
 
 import org.springframework.data.repository.query.Param;
@@ -20,6 +21,18 @@ public interface JobRepository extends JpaRepository<Job, Long> {
     Logger logger = LogManager.getLogger(JobRepository.class);
 
     List<Job> findByStatus(String status);
+
+    // Proiezione diretta sui DTO: una query con join, solo le 8 colonne usate
+    // (niente entita' Job complete, niente caricamento dell'employer).
+    @Query("""
+            SELECT new com.RevHire.dto.JobDTO(
+                j.jobId, j.title, j.location, j.salaryMin, j.salaryMax,
+                j.jobType, j.status, e.companyName)
+            FROM Job j
+            JOIN j.employer e
+            WHERE j.status = :status
+            """)
+    List<JobDTO> findJobDtosByStatus(@Param("status") String status);
 
     List<Job> findByLocationContainingIgnoreCase(String location);
 
@@ -74,6 +87,32 @@ AND j.status = 'OPEN'
             Double minSalary,
             Double maxSalary,
             String jobType
+    );
+
+    // Stessi filtri di advancedSearch, ma restituisce direttamente i DTO.
+    @Query("""
+SELECT new com.RevHire.dto.JobDTO(
+    j.jobId, j.title, j.location, j.salaryMin, j.salaryMax,
+    j.jobType, j.status, e.companyName)
+FROM Job j
+JOIN j.employer e
+WHERE (:title IS NULL OR LOWER(j.title) LIKE LOWER(CONCAT('%', :title, '%')))
+AND (:location IS NULL OR LOWER(j.location) LIKE LOWER(CONCAT('%', :location, '%')))
+AND (:experience IS NULL OR j.experienceRequired >= :experience)
+AND (:education IS NULL OR LOWER(j.educationRequired) LIKE LOWER(CONCAT('%', :education, '%')))
+AND (:minSalary IS NULL OR j.salaryMin >= :minSalary)
+AND (:maxSalary IS NULL OR j.salaryMax <= :maxSalary)
+AND (:jobType IS NULL OR LOWER(j.jobType) LIKE LOWER(CONCAT('%', :jobType, '%')))
+AND j.status = 'OPEN'
+""")
+    List<JobDTO> advancedSearchDtos(
+            @Param("title") String title,
+            @Param("location") String location,
+            @Param("experience") Integer experience,
+            @Param("education") String education,
+            @Param("minSalary") Double minSalary,
+            @Param("maxSalary") Double maxSalary,
+            @Param("jobType") String jobType
     );
 
     @Query("""

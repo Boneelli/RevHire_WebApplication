@@ -186,7 +186,14 @@ class ApplicationServiceImplTest {
 
     @Test
     void getApplicationsBySeeker_ShouldReturnApplications() {
-        when(applicationRepository.findBySeekerSeekerId(seeker.getSeekerId())).thenReturn(List.of(application));
+        final ApplicationResponseDTO dto = new ApplicationResponseDTO(
+                application.getApplicationId(),
+                seeker.getFullName(),
+                seeker.getUser().getEmail(),
+                job.getTitle(),
+                application.getStatus(),
+                application.getAppliedDate());
+        when(applicationRepository.findSeekerApplicationDTOs(seeker.getSeekerId())).thenReturn(List.of(dto));
 
         List<ApplicationResponseDTO> results = applicationService.getApplicationsBySeeker(seeker.getSeekerId());
 
@@ -198,8 +205,17 @@ class ApplicationServiceImplTest {
     void getApplicationsByEmployer_ShouldReturnApplications() {
         when(employerRepository.findByUserUserId(seeker.getUser().getUserId()))
                 .thenReturn(Optional.of(job.getEmployer()));
-        when(applicationRepository.findByJobEmployerEmployerId(job.getEmployer().getEmployerId()))
-                .thenReturn(List.of(application));
+        final EmployerApplicationDTO dto = new EmployerApplicationDTO(
+                application.getApplicationId(),
+                job.getTitle(),
+                job.getJobId(),
+                seeker.getFullName(),
+                seeker.getUser().getEmail(),
+                application.getStatus(),
+                application.getAppliedDate(),
+                resume.getResumeId());
+        when(applicationRepository.findEmployerApplicationDTOs(job.getEmployer().getEmployerId()))
+                .thenReturn(List.of(dto));
 
         List<EmployerApplicationDTO> results = applicationService.getApplicationsByEmployer(seeker.getUser().getUserId());
 
