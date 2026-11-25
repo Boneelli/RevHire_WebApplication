@@ -6,154 +6,165 @@
 
     <title>RevHire | Smart Job Portal</title>
 
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
-
     <style>
 
         :root{
-        --primary:#2563eb;
-        --dark:#1e40af;
-        --text:#1f2937;
-        --light:#6b7280;
-        --bg:#f8fafc;
-        --white:#ffffff;
+            --primary:#2563eb;
+            --dark:#1e40af;
+            --text:#1f2937;
+            --light:#6b7280;
+            --bg:#f8fafc;
+            --white:#ffffff;
         }
 
         *{
-        margin:0;
-        padding:0;
-        box-sizing:border-box;
-        font-family:Segoe UI, Tahoma, Geneva, Verdana, sans-serif;
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
+            font-family:Segoe UI, Tahoma, Geneva, Verdana, sans-serif;
         }
 
         body{
-        background:var(--bg);
-        color:var(--text);
+            background:var(--bg);
+            color:var(--text);
         }
 
         /* NAVBAR */
 
         nav{
-        display:flex;
-        justify-content:space-between;
-        align-items:center;
-        padding:18px 6%;
-        background:white;
-        box-shadow:0 2px 10px rgba(0,0,0,0.05);
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+            padding:18px 6%;
+            background:white;
+            box-shadow:0 2px 10px rgba(0,0,0,0.05);
         }
 
         .logo{
-        font-size:24px;
-        font-weight:800;
-        color:var(--primary);
-        text-decoration:none;
+            font-size:24px;
+            font-weight:800;
+            color:var(--primary);
+            text-decoration:none;
         }
 
         .nav-links a{
-        margin-left:20px;
-        text-decoration:none;
-        font-weight:500;
+            margin-left:20px;
+            text-decoration:none;
+            font-weight:500;
         }
 
         .btn-login{
-        border:2px solid var(--primary);
-        padding:8px 20px;
-        border-radius:6px;
-        color:var(--primary);
+            border:2px solid var(--primary);
+            padding:8px 20px;
+            border-radius:6px;
+            color:var(--primary);
         }
 
         .btn-register{
-        background:var(--primary);
-        color:white;
-        padding:8px 22px;
-        border-radius:6px;
+            background:var(--primary);
+            color:white;
+            padding:8px 22px;
+            border-radius:6px;
         }
 
         /* HERO */
 
         .hero{
-        padding:120px 8%;
-        text-align:center;
-        background:linear-gradient(135deg,#ffffff,#eff6ff);
+            padding:120px 8%;
+            text-align:center;
+            background:linear-gradient(135deg,#ffffff,#eff6ff);
         }
 
         .hero h1{
-        font-size:56px;
-        margin-bottom:20px;
-        font-weight:800;
+            font-size:56px;
+            margin-bottom:20px;
+            font-weight:800;
         }
 
         .hero span{
-        color:var(--primary);
+            color:var(--primary);
         }
 
         .hero p{
-        font-size:18px;
-        color:var(--light);
-        max-width:700px;
-        margin:auto;
-        margin-bottom:40px;
+            font-size:18px;
+            color:var(--light);
+            max-width:700px;
+            margin:auto;
+            margin-bottom:40px;
         }
 
         .btn-start{
-        background:var(--primary);
-        color:white;
-        padding:14px 40px;
-        border-radius:30px;
-        font-size:18px;
-        text-decoration:none;
-        font-weight:600;
+            background:var(--primary);
+            color:white;
+            padding:14px 40px;
+            border-radius:30px;
+            font-size:18px;
+            text-decoration:none;
+            font-weight:600;
         }
 
         /* FEATURES */
 
         .features{
-        padding:80px 8%;
-        display:grid;
-        grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
-        gap:30px;
+            padding:80px 8%;
+            display:grid;
+            grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+            gap:30px;
         }
 
         .feature{
-        background:white;
-        padding:40px;
-        border-radius:12px;
-        text-align:center;
-        box-shadow:0 10px 20px rgba(0,0,0,0.04);
+            background:white;
+            padding:40px;
+            border-radius:12px;
+            text-align:center;
+            box-shadow:0 10px 20px rgba(0,0,0,0.04);
         }
 
-        .feature i{
-        font-size:35px;
-        color:var(--primary);
-        margin-bottom:20px;
+        .feature svg{
+            width:35px;
+            height:35px;
+            color:var(--primary);
+            margin-bottom:20px;
         }
 
         .feature h3{
-        margin-bottom:10px;
+            margin-bottom:10px;
         }
 
         /* STATS */
 
         .stats{
-        background:var(--dark);
-        color:white;
-        padding:60px 8%;
-        display:flex;
-        justify-content:space-around;
-        text-align:center;
+            background:var(--dark);
+            color:white;
+            padding:60px 8%;
+            display:flex;
+            justify-content:space-around;
+            text-align:center;
         }
 
         .stats h2{
-        font-size:40px;
+            font-size:40px;
         }
 
         /* FOOTER */
 
         footer{
-        background:#111827;
-        color:white;
-        padding:40px;
-        text-align:center;
+            background:#111827;
+            color:white;
+            padding:40px;
+            text-align:center;
+        }
+
+        /* PRINT */
+
+        @media print{
+            nav, .btn-start, footer{
+                display:none;
+            }
+            body{
+                background:white;
+                color:black;
+            }
         }
 
     </style>
@@ -190,25 +201,25 @@
 <section class="features">
 
     <div class="feature">
-        <i class="fas fa-user-circle"></i>
+        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm0 4a3.5 3.5 0 1 1 0 7 3.5 3.5 0 0 1 0-7zm0 14a8 8 0 0 1-6.2-2.9c.05-2.05 4.13-3.17 6.2-3.17s6.15 1.12 6.2 3.17A8 8 0 0 1 12 20z"/></svg>
         <h3>Create Profile</h3>
         <p>Build your professional identity and showcase your skills.</p>
     </div>
 
     <div class="feature">
-        <i class="fas fa-file-alt"></i>
+        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6zm1 14H9v-2h6v2zm0-4H9v-2h6v2zm-2-5V3.5L17.5 8H13z"/></svg>
         <h3>Build Resume</h3>
         <p>Create a professional resume using our smart resume builder.</p>
     </div>
 
     <div class="feature">
-        <i class="fas fa-briefcase"></i>
+        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M10 4h4a2 2 0 0 1 2 2v2h4a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2v-9a2 2 0 0 1 2-2h4V6a2 2 0 0 1 2-2zm4 4V6h-4v2h4z"/></svg>
         <h3>Apply to Jobs</h3>
         <p>Apply to thousands of job opportunities with one click.</p>
     </div>
 
     <div class="feature">
-        <i class="fas fa-chart-line"></i>
+        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M3 3v16h18v2H1V3h2zm17.7 4.7-6.2 6.2-4-4-4.8 4.8-1.4-1.4 6.2-6.2 4 4 4.8-4.8 1.4 1.4z"/></svg>
         <h3>Track Applications</h3>
         <p>Monitor your job applications and interview progress easily.</p>
     </div>

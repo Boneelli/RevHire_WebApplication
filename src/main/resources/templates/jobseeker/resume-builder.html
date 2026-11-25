@@ -1,284 +1,361 @@
-resume-builder.html code <!DOCTYPE html>
+<!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="en">
 
 <head>
-
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-
     <title>Resume Builder | RevHire</title>
 
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
-
     <style>
-
-        :root{
-            --primary:#2563eb;
-            --sidebar-bg:#0f172a;
-            --bg-subtle:#f8fafc;
-            --border:#e2e8f0;
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1d4ed8;
+            --sidebar-bg: #0f172a;
+            --bg-subtle: #f8fafc;
+            --border: #e2e8f0;
         }
 
-        body{
-            background:var(--bg-subtle);
-            font-family:'Plus Jakarta Sans',sans-serif;
-            display:flex;
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
         }
 
-        .sidebar{
-width:250px;
-height:100vh;
-background:#0f172a;
-position:fixed;
-padding:1.5rem 1rem;
-display:flex;
-flex-direction:column;
-}
-
-.logo{
-font-size:1.4rem;
-font-weight:800;
-color:white;
-display:flex;
-gap:10px;
-align-items:center;
-margin-bottom:25px;
-text-decoration:none;
-}
-
-.nav-link{
-color:#94a3b8;
-padding:10px 14px;
-border-radius:10px;
-display:flex;
-gap:10px;
-align-items:center;
-margin-bottom:5px;
-transition:.25s;
-}
-
-.nav-link:hover,
-.nav-link.active{
-background:#2563eb;
-color:white;
-}
-
-        .nav-link:hover{
-            background:#2563eb;
-            color:white;
+        body {
+            background: var(--bg-subtle);
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            color: #0f172a;
+            display: flex;
+            min-height: 100vh;
+            line-height: 1.5;
         }
 
-        .main-content{
-margin-left:250px;
-padding:2.5rem;
-width:100%;
-}
-
-        .form-card{
-            background:white;
-            border-radius:18px;
-            padding:30px;
-            border:1px solid var(--border);
+        .sidebar {
+            width: 250px;
+            height: 100vh;
+            background: var(--sidebar-bg);
+            position: fixed;
+            padding: 1.5rem 1rem;
+            display: flex;
+            flex-direction: column;
         }
 
-        .dynamic-row{
-            background:#f1f5f9;
-            padding:15px;
-            border-radius:12px;
-            margin-bottom:12px;
-            position:relative;
+        .logo {
+            font-size: 1.4rem;
+            font-weight: 800;
+            color: white;
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            margin-bottom: 25px;
+            text-decoration: none;
         }
 
-        .btn-remove{
-            position:absolute;
-            right:10px;
-            top:10px;
-            color:red;
-            cursor:pointer;
-            font-weight:bold;
+        .logo svg { color: var(--primary); }
+
+        .nav-link {
+            color: #94a3b8;
+            padding: 10px 14px;
+            border-radius: 10px;
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            margin-bottom: 5px;
+            text-decoration: none;
+            font-size: 0.95rem;
+            transition: .25s;
         }
 
+        .nav-link:hover,
+        .nav-link.active {
+            background: var(--primary);
+            color: white;
+        }
+
+        .nav-link.text-danger { color: #f87171; }
+        .nav-link.text-danger:hover { background: #dc2626; color: white; }
+
+        .mt-auto { margin-top: auto; }
+
+        .icon {
+            width: 18px;
+            height: 18px;
+            flex-shrink: 0;
+        }
+
+        .main-content {
+            margin-left: 250px;
+            padding: 2.5rem;
+            width: calc(100% - 250px);
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        h2 {
+            font-size: 1.75rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+        }
+
+        .form-card {
+            background: white;
+            border-radius: 18px;
+            padding: 30px;
+            border: 1px solid var(--border);
+        }
+
+        .mb-4 { margin-bottom: 1.5rem; }
+        .mb-2 { margin-bottom: 0.5rem; }
+
+        .d-flex { display: flex; }
+        .justify-content-between { justify-content: space-between; align-items: center; }
+
+        label, .form-label {
+            display: block;
+            font-weight: 600;
+            font-size: 0.95rem;
+            margin-bottom: 0.4rem;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.6rem 0.85rem;
+            font-size: 0.95rem;
+            font-family: inherit;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            background: #fff;
+            outline: none;
+            transition: border-color .2s, box-shadow .2s;
+        }
+
+        .form-control:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+        }
+
+        .dynamic-row {
+            background: #f1f5f9;
+            padding: 15px;
+            border-radius: 12px;
+            margin-bottom: 12px;
+            position: relative;
+        }
+
+        .btn-remove {
+            position: absolute;
+            right: 10px;
+            top: 10px;
+            color: red;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .btn {
+            display: inline-block;
+            font-weight: 600;
+            text-align: center;
+            border: 1px solid transparent;
+            border-radius: 8px;
+            cursor: pointer;
+            font-family: inherit;
+            transition: .2s;
+        }
+
+        .btn-sm {
+            padding: 0.3rem 0.75rem;
+            font-size: 0.85rem;
+        }
+
+        .btn-outline-primary {
+            color: var(--primary);
+            border-color: var(--primary);
+            background: transparent;
+        }
+
+        .btn-outline-primary:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+            font-size: 1rem;
+        }
+
+        .btn-primary:hover { background: var(--primary-dark); }
+
+        .w-100 { width: 100%; }
+        .py-2 { padding-top: 0.65rem; padding-bottom: 0.65rem; }
+
+        @media (max-width: 1000px) {
+            .sidebar { width: 80px; }
+            .sidebar span { display: none; }
+            .main-content { margin-left: 80px; width: calc(100% - 80px); }
+        }
+
+        @media print {
+            .sidebar, .btn, .btn-remove { display: none !important; }
+            .main-content { margin-left: 0; width: 100%; padding: 0; }
+            .form-card { border: none; padding: 0; }
+        }
     </style>
-
 </head>
 
 <body>
 
 <!-- SIDEBAR -->
-
 <nav class="sidebar">
 
     <a th:href="@{'/jobseeker/dashboard/' + ${session.userId}}" class="logo">
-        <i class="bi bi-rocket-takeoff-fill text-primary"></i>
+        <svg class="icon" viewBox="0 0 24 24" fill="currentColor"><path d="M13.13 22.19L11.5 18.36C13.07 17.78 14.54 17 15.9 16.09L13.13 22.19M5.64 12.5L1.81 10.87L7.91 8.1C7 9.46 6.22 10.93 5.64 12.5M21.61 2.39C21.61 2.39 16.66 .269 11 5.93C8.81 8.12 7.5 10.53 6.65 12.64C6.37 13.39 6.56 14.21 7.11 14.77L9.24 16.89C9.79 17.45 10.61 17.63 11.36 17.35C13.5 16.53 15.88 15.19 18.07 13C23.73 7.34 21.61 2.39 21.61 2.39M14.54 9.46C13.76 8.68 13.76 7.41 14.54 6.63S16.59 5.85 17.37 6.63C18.14 7.41 18.15 8.68 17.37 9.46C16.59 10.24 15.32 10.24 14.54 9.46Z"/></svg>
         <span>RevHire</span>
     </a>
 
     <div class="nav-menu">
-
         <a th:href="@{'/jobseeker/dashboard/' + ${session.userId}}" class="nav-link">
-            <i class="bi bi-speedometer2"></i> <span>Dashboard</span>
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+            <span>Dashboard</span>
         </a>
 
         <a th:href="@{/jobseeker/profile/manage}" class="nav-link">
-            <i class="bi bi-pencil"></i> <span>Manage Profile</span>
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/></svg>
+            <span>Manage Profile</span>
         </a>
 
         <a th:href="@{/jobseeker/resume/builder}" class="nav-link active">
-            <i class="bi bi-file-earmark-text"></i> <span>Resume Builder</span>
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/></svg>
+            <span>Resume Builder</span>
         </a>
 
         <a th:href="@{/jobseeker/resume/view}" class="nav-link">
-            <i class="bi bi-eye"></i>
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
             <span>View Resume</span>
         </a>
 
         <a th:href="@{/jobseeker/resume/upload}" class="nav-link">
-            <i class="bi bi-upload"></i> <span>Upload Resume</span>
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+            <span>Upload Resume</span>
         </a>
 
         <a th:href="@{/jobseeker/jobs/search}" class="nav-link">
-            <i class="bi bi-search"></i> <span>Search Jobs</span>
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+            <span>Search Jobs</span>
         </a>
 
         <a th:href="@{/jobseeker/applications}" class="nav-link">
-            <i class="bi bi-briefcase"></i> <span>Applications</span>
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="20" height="14" x="2" y="7" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+            <span>Applications</span>
         </a>
 
         <a th:href="@{/jobseeker/jobs/saved}" class="nav-link">
-            <i class="bi bi-heart"></i> <span>Saved Jobs</span>
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
+            <span>Saved Jobs</span>
         </a>
 
         <a th:href="@{/notifications/notification}" class="nav-link">
-            <i class="bi bi-bell"></i> <span>Notifications</span>
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>
+            <span>Notifications</span>
         </a>
 
         <a th:href="@{/auth/reset-password}" class="nav-link">
-            <i class="bi bi-key"></i> <span>Reset Password</span>
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="7.5" cy="15.5" r="5.5"/><path d="m21 2-9.6 9.6"/><path d="m15.5 7.5 3 3L22 7l-3-3"/></svg>
+            <span>Reset Password</span>
         </a>
-
     </div>
 
     <div class="mt-auto">
-
         <a th:href="@{/}" class="nav-link text-danger">
-            <i class="bi bi-box-arrow-left"></i> <span>Logout</span>
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+            <span>Logout</span>
         </a>
-
     </div>
 
 </nav>
 
-
 <main class="main-content">
 
-    <div class="container" style="max-width:900px">
+    <div class="container">
 
-        <h2 class="mb-4">Professional Resume Builder</h2>
+        <h2>Professional Resume Builder</h2>
 
         <form id="resumeForm" class="form-card">
 
             <input type="hidden" id="userId" th:value="${session.userId}">
 
             <!-- Objective -->
-
             <div class="mb-4">
                 <label class="form-label">Career Objective *</label>
                 <textarea id="objective" class="form-control" rows="3" required></textarea>
             </div>
 
-
             <!-- Education -->
-
             <div class="mb-4">
-
                 <div class="d-flex justify-content-between mb-2">
                     <label>Education</label>
                     <button type="button" class="btn btn-sm btn-outline-primary" onclick="addRow('edu-container')">+ Add</button>
                 </div>
 
                 <div id="edu-container">
-
                     <div class="dynamic-row">
                         <input class="form-control mb-2 edu-inst" placeholder="Institution">
                         <input class="form-control edu-deg" placeholder="Degree">
                     </div>
-
                 </div>
-
             </div>
 
-
             <!-- Experience -->
-
             <div class="mb-4">
-
                 <div class="d-flex justify-content-between mb-2">
                     <label>Experience</label>
                     <button type="button" class="btn btn-sm btn-outline-primary" onclick="addRow('exp-container')">+ Add</button>
                 </div>
 
                 <div id="exp-container">
-
                     <div class="dynamic-row">
                         <input class="form-control mb-2 exp-comp" placeholder="Company">
                         <input class="form-control exp-role" placeholder="Role">
                     </div>
-
                 </div>
-
             </div>
 
-
             <!-- Projects -->
-
             <div class="mb-4">
-
                 <div class="d-flex justify-content-between mb-2">
                     <label>Projects</label>
                     <button type="button" class="btn btn-sm btn-outline-primary" onclick="addRow('proj-container')">+ Add</button>
                 </div>
 
                 <div id="proj-container">
-
                     <div class="dynamic-row">
                         <input class="form-control mb-2 proj-title" placeholder="Project Title">
                         <input class="form-control mb-2 proj-tech" placeholder="Technologies">
                         <textarea class="form-control proj-desc" rows="3" placeholder="Project Description"></textarea>
                     </div>
-
                 </div>
-
             </div>
 
-
             <!-- Certifications -->
-
             <div class="mb-4">
-
                 <div class="d-flex justify-content-between mb-2">
                     <label>Certifications</label>
                     <button type="button" class="btn btn-sm btn-outline-primary" onclick="addRow('cert-container')">+ Add</button>
                 </div>
 
                 <div id="cert-container">
-
                     <div class="dynamic-row">
                         <input class="form-control mb-2 cert-name" placeholder="Certification Name">
                         <input class="form-control mb-2 cert-company" placeholder="Company">
                         <input class="form-control cert-tech" placeholder="Technologies">
                     </div>
-
                 </div>
-
             </div>
 
-
             <!-- Skills -->
-
             <div class="mb-4">
                 <label>Skills *</label>
                 <input id="skillsInput" class="form-control" placeholder="Java, Spring Boot, React" required>
@@ -292,135 +369,108 @@ width:100%;
 
 </main>
 
-
 <script>
+    function addRow(containerId) {
+        const container = document.getElementById(containerId);
+        const id = Date.now();
+        let html = "";
 
-    function addRow(containerId){
-
-        const container=document.getElementById(containerId)
-
-        const id=Date.now()
-
-        let html=""
-
-        if(containerId==="edu-container"){
-            html=`<div class="dynamic-row" id="${id}">
+        if (containerId === "edu-container") {
+            html = `<div class="dynamic-row" id="${id}">
 <div class="btn-remove" onclick="removeRow('${id}')">✕</div>
 <input class="form-control mb-2 edu-inst" placeholder="Institution">
 <input class="form-control edu-deg" placeholder="Degree">
-</div>`
+</div>`;
         }
 
-        if(containerId==="exp-container"){
-            html=`<div class="dynamic-row" id="${id}">
+        if (containerId === "exp-container") {
+            html = `<div class="dynamic-row" id="${id}">
 <div class="btn-remove" onclick="removeRow('${id}')">✕</div>
 <input class="form-control mb-2 exp-comp" placeholder="Company">
 <input class="form-control exp-role" placeholder="Role">
-</div>`
+</div>`;
         }
 
-        if(containerId==="proj-container"){
-            html=`<div class="dynamic-row" id="${id}">
+        if (containerId === "proj-container") {
+            html = `<div class="dynamic-row" id="${id}">
 <div class="btn-remove" onclick="removeRow('${id}')">✕</div>
 <input class="form-control mb-2 proj-title" placeholder="Project Title">
 <input class="form-control mb-2 proj-tech" placeholder="Technologies">
 <textarea class="form-control proj-desc" rows="3" placeholder="Project Description"></textarea>
-</div>`
+</div>`;
         }
 
-        if(containerId==="cert-container"){
-            html=`<div class="dynamic-row" id="${id}">
+        if (containerId === "cert-container") {
+            html = `<div class="dynamic-row" id="${id}">
 <div class="btn-remove" onclick="removeRow('${id}')">✕</div>
 <input class="form-control mb-2 cert-name" placeholder="Certification Name">
 <input class="form-control mb-2 cert-company" placeholder="Company">
 <input class="form-control cert-tech" placeholder="Technologies">
-</div>`
+</div>`;
         }
 
-        container.insertAdjacentHTML("beforeend",html)
-
+        container.insertAdjacentHTML("beforeend", html);
     }
 
-    function removeRow(id){
-        document.getElementById(id).remove()
+    function removeRow(id) {
+        document.getElementById(id).remove();
     }
-
 
     /* SAVE RESUME */
+    document.getElementById("resumeForm").onsubmit = async (e) => {
+        e.preventDefault();
 
-    document.getElementById("resumeForm").onsubmit=async(e)=>{
+        const userId = document.getElementById("userId").value;
+        const objective = document.getElementById("objective").value.trim();
+        const skills = document.getElementById("skillsInput").value.trim();
 
-        e.preventDefault()
-
-        const userId=document.getElementById("userId").value
-        const objective=document.getElementById("objective").value.trim()
-        const skills=document.getElementById("skillsInput").value.trim()
-
-        if(objective==="" || skills===""){
-            alert("Please enter all required fields")
-            return
+        if (objective === "" || skills === "") {
+            alert("Please enter all required fields");
+            return;
         }
 
-        const resumeData={
-
-            objective:objective,
-
-            educations:Array.from(document.querySelectorAll("#edu-container .dynamic-row")).map(r=>({
-                institution:r.querySelector(".edu-inst").value,
-                degree:r.querySelector(".edu-deg").value
+        const resumeData = {
+            objective: objective,
+            educations: Array.from(document.querySelectorAll("#edu-container .dynamic-row")).map(r => ({
+                institution: r.querySelector(".edu-inst").value,
+                degree: r.querySelector(".edu-deg").value
             })),
-
-            experiences:Array.from(document.querySelectorAll("#exp-container .dynamic-row")).map(r=>({
-                companyName:r.querySelector(".exp-comp").value,
-                role:r.querySelector(".exp-role").value
+            experiences: Array.from(document.querySelectorAll("#exp-container .dynamic-row")).map(r => ({
+                companyName: r.querySelector(".exp-comp").value,
+                role: r.querySelector(".exp-role").value
             })),
-
-            projects:Array.from(document.querySelectorAll("#proj-container .dynamic-row")).map(r=>({
-                projectTitle:r.querySelector(".proj-title").value,
-                technologies:r.querySelector(".proj-tech").value,
-                description:r.querySelector(".proj-desc").value
+            projects: Array.from(document.querySelectorAll("#proj-container .dynamic-row")).map(r => ({
+                projectTitle: r.querySelector(".proj-title").value,
+                technologies: r.querySelector(".proj-tech").value,
+                description: r.querySelector(".proj-desc").value
             })),
-
-            certifications:Array.from(document.querySelectorAll("#cert-container .dynamic-row")).map(r=>({
-                certificationName:r.querySelector(".cert-name").value,
-                company:r.querySelector(".cert-company").value,
-                technologies:r.querySelector(".cert-tech").value
+            certifications: Array.from(document.querySelectorAll("#cert-container .dynamic-row")).map(r => ({
+                certificationName: r.querySelector(".cert-name").value,
+                company: r.querySelector(".cert-company").value,
+                technologies: r.querySelector(".cert-tech").value
             })),
+            skills: skills.split(",").map(s => s.trim())
+        };
 
-            skills:skills.split(",").map(s=>s.trim())
+        try {
+            const response = await fetch(`/api/jobseeker/resume/save/${userId}`, {
+                method: "POST",
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(resumeData)
+            });
 
-        }
+            const result = await response.json();
 
-        try{
-
-            const response=await fetch(`/api/jobseeker/resume/save/${userId}`,{
-                method:"POST",
-                headers:{'Content-Type':'application/json'},
-                body:JSON.stringify(resumeData)
-            })
-
-            const result=await response.json()
-
-            if(response.ok){
-
-                alert("Resume Saved Successfully")
-
-                window.location.href="/jobseeker/resume/view"
-
-            }else{
-
-                alert(result.error || "Error saving resume")
-
+            if (response.ok) {
+                alert("Resume Saved Successfully");
+                window.location.href = "/jobseeker/resume/view";
+            } else {
+                alert(result.error || "Error saving resume");
             }
-
-        }catch(err){
-
-            alert("Server error while saving resume")
-
+        } catch (err) {
+            alert("Server error while saving resume");
         }
-
-    }
-
+    };
 </script>
 
 </body>

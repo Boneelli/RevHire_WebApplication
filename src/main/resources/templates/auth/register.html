@@ -1,17 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body><!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Register | RevHire</title>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 
     <style>
         :root {
@@ -28,7 +20,7 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
         }
 
         body {
@@ -37,16 +29,12 @@
             width: 100vw;
             background: var(--bg-subtle);
             color: var(--text-main);
-            overflow: hidden; /* Prevents body-level scrolling */
+            overflow: hidden;
         }
 
-        /* Left Side: Branding Overlay */
         .brand-side {
             flex: 1.2;
-            background: linear-gradient(135deg, rgba(37, 99, 235, 0.9), rgba(30, 64, 175, 0.9)),
-                        url('https://images.unsplash.com/photo-1521737711867-e3b97375f902?auto=format&fit=crop&q=80');
-            background-size: cover;
-            background-position: center;
+            background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
             color: white;
             display: flex;
             flex-direction: column;
@@ -57,23 +45,21 @@
         .brand-side h1 { font-size: 4rem; font-weight: 800; margin-bottom: 1.5rem; letter-spacing: -1.5px; }
         .brand-side p { font-size: 1.25rem; opacity: 0.9; line-height: 1.6; max-width: 480px; }
 
-        /* Right Side: Centered Flex Container */
         .form-side {
             flex: 1;
             background: white;
             display: flex;
             flex-direction: column;
-            align-items: center;    /* Perfect Horizontal Centering */
-            justify-content: center; /* Perfect Vertical Centering */
+            align-items: center;
+            justify-content: center;
             padding: 40px;
-            overflow-y: auto;       /* Only this side scrolls if needed */
+            overflow-y: auto;
         }
 
-        /* Fixed container width to prevent stretching */
         .form-container {
             width: 100%;
             max-width: 400px;
-            margin: auto 0; /* Ensures vertical centering works within overflow */
+            margin: auto 0;
         }
 
         .form-header { margin-bottom: 1.5rem; }
@@ -81,7 +67,14 @@
         .form-header p { color: var(--text-muted); font-size: 0.95rem; }
 
         .form-group { margin-bottom: 1.25rem; }
-        label { display: block; margin-bottom: 8px; font-weight: 600; font-size: 0.875rem; color: var(--text-main); }
+        label { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; font-weight: 600; font-size: 0.875rem; color: var(--text-main); }
+
+        .icon {
+            width: 15px;
+            height: 15px;
+            color: var(--primary);
+            flex-shrink: 0;
+        }
 
         input, select {
             width: 100%;
@@ -115,7 +108,6 @@
 
         .btn-submit:hover { background: var(--primary-dark); }
 
-        /* Back link alignment fix */
         .back-link {
             margin-top: 1.5rem;
             display: flex;
@@ -150,6 +142,12 @@
             .form-side { background: var(--bg-subtle); }
             .form-container { background: white; padding: 2.5rem; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.05); }
         }
+
+        @media print {
+            .brand-side, .back-link, .btn-submit { display: none !important; }
+            body, .form-side { display: block; height: auto; overflow: visible; background: #fff; padding: 0; }
+            .form-container { max-width: 100%; box-shadow: none; padding: 0; }
+        }
     </style>
 </head>
 
@@ -173,12 +171,18 @@
         <form th:action="@{/auth/register}" method="post" th:object="${user}">
 
             <div class="form-group">
-                <label><i class="fas fa-envelope" style="margin-right: 8px; color: var(--primary);"></i>Email Address</label>
+                <label>
+                    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+                    Email Address
+                </label>
                 <input type="email" th:field="*{email}" placeholder="your@email.com" required />
             </div>
 
             <div class="form-group">
-                <label><i class="fas fa-lock" style="margin-right: 8px; color: var(--primary);"></i>Password</label>
+                <label>
+                    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                    Password
+                </label>
                 <input type="password"
                        th:field="*{passwordHash}"
                        placeholder="••••••••"
@@ -191,7 +195,10 @@
             </div>
 
             <div class="form-group">
-                <label><i class="fas fa-user-tag" style="margin-right: 8px; color: var(--primary);"></i>Account Role</label>
+                <label>
+                    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                    Account Role
+                </label>
                 <select th:field="*{role}" required>
                     <option value="" disabled selected>Who are you?</option>
                     <option value="JOB_SEEKER">Job Seeker</option>
@@ -200,7 +207,10 @@
             </div>
 
             <div class="form-group">
-                <label><i class="fas fa-shield-alt" style="margin-right: 8px; color: var(--primary);"></i>Security Question</label>
+                <label>
+                    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10"/></svg>
+                    Security Question
+                </label>
                 <select th:field="*{securityQuestion}" required>
                     <option value="" disabled selected>Select a question...</option>
                     <option value="COLOR">What is your favourite color?</option>
@@ -211,7 +221,10 @@
             </div>
 
             <div class="form-group">
-                <label><i class="fas fa-key" style="margin-right: 8px; color: var(--primary);"></i>Security Answer</label>
+                <label>
+                    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="7.5" cy="15.5" r="5.5"/><path d="m21 2-9.6 9.6"/><path d="m15.5 7.5 3 3L22 7l-3-3"/></svg>
+                    Security Answer
+                </label>
                 <input type="text" th:field="*{securityAnswerHash}" placeholder="Your secret answer" required />
             </div>
 
@@ -219,16 +232,14 @@
 
             <div class="back-link">
                 <a th:href="@{/auth/login}">
-                    <i class="fas fa-arrow-left"></i> Back to Login
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg>
+                    Back to Login
                 </a>
             </div>
 
         </form>
     </div>
 </div>
-
-</body>
-</html>
 
 </body>
 </html>
