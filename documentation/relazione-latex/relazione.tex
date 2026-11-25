@@ -453,5 +453,88 @@
 
     \subsection{Economica}
 
+
+
+
+    \section{Risultati Before}
+
+
+
+
+
+    \section{Modifiche o ottimizzazioni o boh}
+    In questa sezione vengono descritte le modifiche apportate al sistema, al seguito delle misurazioni
+    effettuate sulla versione originale del progetto attraverso gli strumenti descritti nella sezione della metodologia.
+    Tali modifiche si applicano principalmente sull'aspetto tecnico e ambientale, e si limitano a semplici consigli su come mitigare gli smell rilevati per l'aspetto sociale.
+
+    \subsection{Backend}
+
+    \subsubsection{Pattern inefficienti -- Analisi statica}
+    Tutti i pattern di codice individuati da Creedengo sono stati corretti in modo semplice,
+    seguendo le indicazioni fornite dallo strumento stesso, eccezion fatta per la regola
+    "\texttt{The variable is never reassigned and can be 'final'}", non applicata ai package
+    \texttt{entity}, \texttt{repository} e \texttt{dto} e ai parametri delle lambda
+    expressions. Tale scelta è giustificata dal fatto che: le interfacce repository sono
+    prive di corpo dei metodi (quindi i parametri non possono essere riassegnati), rendere
+    final gli attributi delle classi entity e dto comprometterebbe il funzionamento di
+    JPA/Hibernate e andrebbe in conflitto con i setter generati da Lombok, e infine rendere final i
+    parametri delle lambda expressions renderebbe il codice inutilmente meno leggibile (a
+    discapito della manutenibilità), con un impatto trascurabile sul consumo energetico.
+    Per cui le issues segnalate da Creedengo nella misurazione \texttt{after} che appartengono a
+    queste categorie sono stati considerati come falsi positivi.
+
+    \subsubsection{Performance e Microbenchmark -- Anlisi dinamica}
+    Sulla base dei risultati dei test di microbenchmark e performance sono state individuate le
+    funzionalità più critiche in termini di consumo energetico e prestazioni, sulle quali sono state
+    valutate delle possibili ottimizzazioni ispezionando il codice. In particolare le funzionalità più
+    critiche risultano essere:
+    \begin{itemize}
+        \item \textbf{Login e Registrazione} (riferimenti ai test)
+        \item \textbf{Candidature ricevute dagli employer} (riferimenti ai test))
+        \item \textbf{Candidature inviate e preferiti dai job seeker} (riferimenti ai test)
+        \item \textbf{Dashboard employer} (riferimenti ai test)
+        \item \textbf{Conversione CV in pdf} (riferimenti ai test)
+        \item \textbf{Ricerca e filtraggio dei job} (riferimenti ai test)
+    \end{itemize}
+    Gli interventi effettuati seguono la strategia di ridurre il numero di interrogazioni al database
+    necessarie per servire ciascuna richiesta, e la quantità di dati letti, al fine di provare a ridurre il costo
+    di tempo, CPU utilizzata e quindi in energia.
+    \paragraph{}
+    Sebbene \textbf{Login e Registrazione} risultine le funzionalità più onerose e meno performanti, è stato
+    deciso di non intervenire su di esse poichè la loro complessità è dovuta principalmente all'uso di BCrypt
+    per la cifratura delle password, che è un algoritmo di hashing sicuro ma computazionalmente costoso e che
+    è stato preferito mantenere a discapito di una migliore efficienza.
+    \paragraph{}
+    Per le funzionalità di \textbf{candidature ricevute dagli employer} e \textbf{candidature inviate e preferiti dai job seeker},
+    è stato individuato un problema di N+1 query, ovvero l'applicazione leggeva l'elenco e poi tornava al database una
+    volta per ogni elemento (per recuperare il lavoro, il candidato o l'azienda collegati).
+    Per cui la soluzione adottata al fine di provare a ridurre il consumo energetico e migliorare le prestazioni, è stata quella di
+    diminuire il numero di interrogazioni, sostituendo le molte interrogazioni con una sola che recupera in un colpo solo tutte le
+    informazioni da mostrare.
+    \paragraph{}
+    Nell'\textbf{elenco e nella ricerca dei job}, per mostrare poche informazioni a video (titolo, sede,
+    stipendio, tipo di contratto e azienda), il sistema caricava ogni annuncio per intero e recuperava l'azienda
+    a parte, con un costo che cresceva insieme al numero di annunci. Anche in questo caso si è provato a ridurre
+    il consumo energetico facendo restituire al database direttamente i soli campi necessari, con una sola
+    interrogazione.
+    \paragraph{}
+    Infine, nella \textbf{dashboard employer}, per mostrare il numero di annunci pubblicati e aperti, più le
+    candidature ricevute e da valutare, il sistema eseguiva quattro interrogazioni separate, una per ciascun dato,
+    e rileggeva dal database un profilo già disponibile. Le interrogazioni sono state ridotte a due e il profilo
+    non viene più riletto, sempre al fine di provare a ridurre il consumo energetico e migliorare le prestazioni.
+
+    \subsection{Frontend}
+    
+    
+    
+    
+    \subsection{Mitigazione degli smell sociali}
+    
+    
+    \subsection{Qualcosa sulle licenze}
+    
+    
+    \section{Risultati After}
+
     
 \end{document}
