@@ -10,7 +10,7 @@
 % Impaginazione
 \usepackage[a4paper,margin=2.5cm]{geometry}
 \usepackage{parskip}
-\linespread{1.15}
+\linespread{1.2}
 \usepackage{enumitem}
 \setlist[itemize]{itemsep=3pt, topsep=5pt, leftmargin=*}
 
@@ -19,7 +19,7 @@
 \definecolor{primary}{RGB}{36,99,235}
 \usepackage{titlesec}
 \titleformat{\section}
-{\Large\bfseries\color{primary}}{\thesection}{0.8em}{}[\vspace{-0.4em}\color{primary}\titlerule]
+{\Large\bfseries\color{primary}}{\thesection}{0.8em}{}[\vspace{0.2em}\color{primary}\titlerule]
 \titleformat{\subsection}
 {\large\bfseries\color{primary}}{\thesubsection}{0.8em}{}
 \titlespacing*{\section}{0pt}{1.6em}{0.8em}
@@ -141,33 +141,58 @@
     in merito ai 4 pilastri della sostenibilità software (ambientale, tecnica, sociale ed economica), al fine
     di individuare eventuali criticità e proporre ottimizzazioni (ove possibile) per mitigare i possibili
     impatti negativi.
+    Si nota che le metriche che riguardano la \textbf{fairness} non sono state utilizzate in quanto il progetto non presente
+    moduli di intelligenza artificiale.
 
     Di seguito sono riportati gli obiettivi specifici che sono stati definiti.
 
-    \subsection{Goals ambientali}
-
+    \subsection{Obiettivi per la sostenibilità ambientale}
     \begin{description}[style=nextline, leftmargin=1em, itemsep=1em]
-    \item[G1 -- TODO]
-    \textbf{Descrizione:} TODO \\
-    \textbf{Motivazione:} TODO (breve spiegazione del perché questo goal è importante per la sostenibilità ambientale) \\
-    \textbf{Tool:} \texttt{TODO}
+    \item[G1 -- Analisi delle prestazioni energetiche del back-end]
+    \textbf{Descrizione:} Misurare le prestazioni del back-end di RevHire in termini di consumo energetico e di efficienza
+    delle funzionalità core, al fine di individuare eventuali criticità e proporre ottimizzazioni. In particolare, lo scopo è di misurare il
+    consumo energetico durante scenari di esecuzione riproducibili e sotto carico.\\
+    \textbf{Tool(s):} \texttt{EnergiBridge}
 
-    \item[G2 -- TODO]
-    \textbf{Descrizione:} Bla bla bla. \\
-    \textbf{Motivazione:} TODO (breve spiegazione del perché questo goal è importante per la sostenibilità ambientale) \\
-    \textbf{Tool:} \texttt{TODO}
+    \item[G2 -- Analisi delle prestazioni energetiche del front-end]
+    \textbf{Descrizione:} Analizzare le prestazioni energetiche del front-end di RevHire, misurando il consumo di energia durante l'interazione degli utenti con l'applicazione.
+    In particolare, lo scopo è di analizzare la complessità delle pagine, il peso delle risorse e il numero di richieste HTTP. \\
+    \textbf{Tool(s):} \texttt{EcoIndex}, \texttt{GreenIT Analysis}, \texttt{Website Carbon Calculator}
     \end{description}
     
-    \subsection{Goals tecnici}
-    
-    \subsection{Goals sociali}
-    
-    \subsection{Goals economici}
+    \subsection{Obiettivi per la sostenibilità tecnica}
+    \begin{description}[style=nextline, leftmargin=1em, itemsep=1em]
+    \item[G3 -- Rilevamento di criticità strutturali nel codice sorgente]
+    \textbf{Descrizione:} Il tool scelto consente di rilevare le criticità strutturali (dal punto di vista energetico) e le violazioni delle best practices di sviluppo presenti nel codice sorgente di RevHire, al fine di identificare possibili miglioramenti e ottimizzazioni. \\
+    \textbf{Tool(s):} \texttt{Creedengo, utilizzato come plugin di SonarQube}
 
+    \item[G4 -- Analisi delle prestazioni e del comportamento del backend]
+    \textbf{Descrizione:} L'analisi è volta a esaminare il comportamento del sistema in condizioni di carico,
+    individuare eventuali limitazioni nell'elaborazione e verificare l'efficacia degli interventi di ottimizzazione sulle prestazioni complessive e sulle singole componenti.
+    \\
+    \textbf{Tool(s):} \texttt{JMH, JMeter}
+    \end{description}
+
+    \subsection{Obiettivi per la sostenibilità sociale}
+    \begin{description}[style=nextline, leftmargin=1em, itemsep=1em]
+    \item[G5 -- Analisi delle dinamiche organizzative e collaborative del team di sviluppo]
+    \textbf{Descrizione:} Lo scopo è quello di capire come il lavoro è organizzato all'interno del team di sviluppo e come si collabora per raggiungere gli obiettivi comuni. \\
+    Inoltre, verrà analizzato se sono presenti eventuali community smell che possano indicare criticità nella comunicazione e nella collaborazione tra i membri del team. \\
+    \textbf{Tool(s):} \texttt{GUIDO, CS Detector, Codescene}
+    \end{description}
+
+
+
+    \subsection{Obiettivi per la sostenibilità economica}
+    \begin{description}[style=nextline, leftmargin=1em, itemsep=1em]
+    \item[G6 -- TODO ]
+    \textbf{Descrizione:}  \\
+    \textbf{Tool(s):} \texttt{}
+    \end{description}
 
     \section{Metodologia}
 
-    \subsection{Ambientale & Tecnico}
+    \subsection{Ambientale \& Tecnico}
     La valutazione del profilo tecnico-ambientale e del consumo energetico di RevHire
     segue un approccio \emph{before/after}. Le prestazioni, i consumi energetici
     e la qualità del codice sono stati misurati una prima volta sulla versione
@@ -180,12 +205,13 @@
     misurazioni \textit{after} sono state eseguite sulla stessa macchina con la stessa configurazione
     e utilizzando gli stessi strumenti e parametri di carico delle misurazioni \textit{before}.
 
-    Gli strumenti utilizzati coprono sia l'impatto ambientale e l'efficienza
-    del front-end (tramite gli strumenti EcoIndex, WebsiteCarbon e GreenIT),
-    la qualità del codice in ottica di consumo energetico e manutenibilità tecnica (tramite Creedengo),
-    le prestazioni del back-end (tramite JMH, e Jmeter) e l'energia
-    effettivamente consumata durante l'esecuzione (tramite EnergiBridge).
-
+    Per poter effettuare le misurazioni sul front-end, l'applicazione è stata distribuita
+    su Render (\url{https://revhire.onrender.com/}) su un branch a parte (\texttt{deploy}) e i test sono stati applicati alle
+    pagine web generate lato server. Poiché Render non offre un database Oracle, per
+    rendere possibile il deploy è stato necessario modificare il codice originale,
+    rimuovendo la dipendenza da Oracle e adottando un database MySQL fornito tramite
+    Aiven. Tali modifiche non alterano il markup delle pagine né, in generale, i risultati delle misure: le versioni \emph{before} e \emph{after} del front-end sono
+    state testate nello stesso ambiente di deploy, mentre le misure sul back-end (JMH, JMeter, EnergiBridge) sono state eseguite in locale con Oracle.
 
     \subsubsection{EcoIndex}
     EcoIndex è uno strumento che stima l'impatto ambientale di una pagina web analizzando tre parametri principali:
@@ -288,7 +314,7 @@
     configurazione con database H2 in memoria, così da isolare il metodo misurato
     dall'infrastruttura esterna.
 
-    \paragraph{Utilizzo.}
+    \paragraph{Utilizzo}
     I benchmark si trovano in un modulo Maven separato (cartella
     \texttt{benchmarks}), che produce un JAR eseguibile, \texttt{benchmarks.jar}.
     Il modulo contiene una classe di benchmark per ciascuna funzionalità core:
@@ -406,4 +432,26 @@
     ed evolutiva applicati ai dati del repository GitHub al fine di rilevare rispettivamente eventuali criticità nelle
     dinamiche di comunicazione del team e squilibri nella gestione e proprietà del codice.
 
+    \subsubsection{GUIDO \& CS Detector}
+    GUIDO e CS Detector sono strumenti di analisi socio-tecnica e sono stati utilizzati per esaminare lo storico GitHub
+    di RevHire per individuare eventuali community smell e distribuzione del lavoro. In particolare, GUIDO
+    utilizza internamente CS Detector come motore di analisi, aggiungendo un’interfaccia web che rende
+    più semplice eseguire le analisi e interpretarne i risultati. Così,
+    attraverso i dati dei commit e delle interazioni tra i membri del team, questi strumenti permettono
+    di valutare la sostenibilità sociale dello sviluppo e di
+    evidenziare criticità che potrebbero ostacolare manutenzione e lavoro condiviso.
+
+    Poiché il repository in esame risultava essere privo di issue, l'esecuzione dell'analisi tramite GUIDO e CS Detector veniva interrotta.
+    Tale criticità è stata risolta intervenendo sul codice sorgente di CS Detector per aggirare il vincolo che bloccava l'elaborazione
+    in assenza di segnalazioni. Per quanto riguarda GUIDO, invece, il problema è stato superato creando un'issue direttamente
+    su GitHub. Questi accorgimenti hanno consentito di completare l'analisi ed estrarre i risultati desiderati.
+
+    \subsubsection{CodeScene}
+    CodeScene è una piattaforma web di analisi del software basata sulla behavioral code analysis che combina la qualità del codice sorgente
+    con i dati storici di Git Hub. Permette di individuare gli hotspot (file ad alta complessità modificati frequentemente), valutare il
+    debito tecnico e analizzare le dinamiche sociali dei team di sviluppo per prevenire colli di bottiglia e rischi architetturali.
+
+    \subsection{Economica}
+
+    
 \end{document}
