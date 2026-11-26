@@ -462,6 +462,7 @@
 
 
 
+
     \section{Modifiche o ottimizzazioni o boh}
     In questa sezione vengono descritte le modifiche apportate al sistema, al seguito delle misurazioni
     effettuate sulla versione originale del progetto attraverso gli strumenti descritti nella sezione della metodologia.
@@ -489,12 +490,18 @@
     valutate delle possibili ottimizzazioni ispezionando il codice. In particolare le funzionalità più
     critiche risultano essere:
     \begin{itemize}
-        \item \textbf{Login e Registrazione} (riferimenti ai test)
-        \item \textbf{Candidature ricevute dagli employer} (riferimenti ai test))
-        \item \textbf{Candidature inviate e preferiti dai job seeker} (riferimenti ai test)
-        \item \textbf{Dashboard employer} (riferimenti ai test)
-        \item \textbf{Conversione CV in pdf} (riferimenti ai test)
-        \item \textbf{Ricerca e filtraggio dei job} (riferimenti ai test)
+        \item \textbf{Login e Registrazione} (Tab.~\ref{tab:jmh-password}, Fig.~\ref{fig:stress-login}:
+        56--222~ms nel microbenchmark, throughput fermo a circa 85 richieste/s nello stress test)
+        \item \textbf{Candidature ricevute dagli employer} (Tab.~\ref{tab:load-misto}, Fig.~\ref{fig:soak}:
+        36,4~ms di media nel load test, +40\% nel soak test)
+        \item \textbf{Candidature inviate e preferiti dai job seeker} (Fig.~\ref{fig:soak}:
+        +35\% e +27\% nel soak test, mentre le altre funzionalità restano stabili)
+        \item \textbf{Dashboard employer} (Fig.~\ref{fig:stress-employer}:
+        da 6,7 a 97,2~ms nello stress test)
+        \item \textbf{Conversione CV in pdf} (Tab.~\ref{tab:jmh-pdf}, Fig.~\ref{fig:stress-pdf}:
+        da 8,2 a 58,6~ms nello stress test, throughput fermo a circa 1200 richieste/s)
+        \item \textbf{Ricerca e filtraggio dei job} (Tab.~\ref{tab:jmh-job}, Fig.~\ref{fig:stress-search}:
+        costo lineare con il numero di job nel microbenchmark, da 9,7 a 48,3~ms nello stress test)
     \end{itemize}
     Gli interventi effettuati seguono la strategia di ridurre il numero di interrogazioni al database
     necessarie per servire ciascuna richiesta, e la quantità di dati letti, al fine di provare a ridurre il costo
