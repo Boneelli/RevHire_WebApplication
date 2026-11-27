@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Resume Builder | RevHire</title>
-    <link rel="stylesheet" media="print" href="data:text/css,@media%20print{nav,header,footer,.no-print{display:none!important}body{background:%23fff;color:%23000}}">
+    <link rel="icon" href="data:,">
     <style>
         :root {
             --primary: #2563eb;
@@ -197,80 +197,74 @@
             .sidebar span { display: none; }
             .main-content { margin-left: 80px; width: calc(100% - 80px); }
         }
-
-        @media print {
-            .sidebar, .btn, .btn-remove { display: none !important; }
-            .main-content { margin-left: 0; width: 100%; padding: 0; }
-            .form-card { border: none; padding: 0; }
-        }
     </style>
+    <link rel="stylesheet" media="print" th:href="@{/css/print.css}">
 </head>
 
 <body>
 
-<!-- SIDEBAR -->
 <nav class="sidebar">
 
     <a th:href="@{'/jobseeker/dashboard/' + ${session.userId}}" class="logo">
-        <svg class="icon" viewBox="0 0 24 24" fill="currentColor"><path d="M13.13 22.19L11.5 18.36C13.07 17.78 14.54 17 15.9 16.09L13.13 22.19M5.64 12.5L1.81 10.87L7.91 8.1C7 9.46 6.22 10.93 5.64 12.5M21.61 2.39C21.61 2.39 16.66 .269 11 5.93C8.81 8.12 7.5 10.53 6.65 12.64C6.37 13.39 6.56 14.21 7.11 14.77L9.24 16.89C9.79 17.45 10.61 17.63 11.36 17.35C13.5 16.53 15.88 15.19 18.07 13C23.73 7.34 21.61 2.39 21.61 2.39M14.54 9.46C13.76 8.68 13.76 7.41 14.54 6.63S16.59 5.85 17.37 6.63C18.14 7.41 18.15 8.68 17.37 9.46C16.59 10.24 15.32 10.24 14.54 9.46Z"/></svg>
+        <svg class="icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M13.13 22.19L11.5 18.36C13.07 17.78 14.54 17 15.9 16.09L13.13 22.19M5.64 12.5L1.81 10.87L7.91 8.1C7 9.46 6.22 10.93 5.64 12.5M21.61 2.39C21.61 2.39 16.66 .269 11 5.93C8.81 8.12 7.5 10.53 6.65 12.64C6.37 13.39 6.56 14.21 7.11 14.77L9.24 16.89C9.79 17.45 10.61 17.63 11.36 17.35C13.5 16.53 15.88 15.19 18.07 13C23.73 7.34 21.61 2.39 21.61 2.39M14.54 9.46C13.76 8.68 13.76 7.41 14.54 6.63S16.59 5.85 17.37 6.63C18.14 7.41 18.15 8.68 17.37 9.46C16.59 10.24 15.32 10.24 14.54 9.46Z"/></svg>
         <span>RevHire</span>
     </a>
 
     <div class="nav-menu">
         <a th:href="@{'/jobseeker/dashboard/' + ${session.userId}}" class="nav-link">
-            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
             <span>Dashboard</span>
         </a>
 
         <a th:href="@{/jobseeker/profile/manage}" class="nav-link">
-            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/></svg>
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/></svg>
             <span>Manage Profile</span>
         </a>
 
         <a th:href="@{/jobseeker/resume/builder}" class="nav-link active">
-            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/></svg>
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/></svg>
             <span>Resume Builder</span>
         </a>
 
         <a th:href="@{/jobseeker/resume/view}" class="nav-link">
-            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
             <span>View Resume</span>
         </a>
 
         <a th:href="@{/jobseeker/resume/upload}" class="nav-link">
-            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
             <span>Upload Resume</span>
         </a>
 
         <a th:href="@{/jobseeker/jobs/search}" class="nav-link">
-            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
             <span>Search Jobs</span>
         </a>
 
         <a th:href="@{/jobseeker/applications}" class="nav-link">
-            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="20" height="14" x="2" y="7" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect width="20" height="14" x="2" y="7" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
             <span>Applications</span>
         </a>
 
         <a th:href="@{/jobseeker/jobs/saved}" class="nav-link">
-            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
             <span>Saved Jobs</span>
         </a>
 
         <a th:href="@{/notifications/notification}" class="nav-link">
-            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>
             <span>Notifications</span>
         </a>
 
         <a th:href="@{/auth/reset-password}" class="nav-link">
-            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="7.5" cy="15.5" r="5.5"/><path d="m21 2-9.6 9.6"/><path d="m15.5 7.5 3 3L22 7l-3-3"/></svg>
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="7.5" cy="15.5" r="5.5"/><path d="m21 2-9.6 9.6"/><path d="m15.5 7.5 3 3L22 7l-3-3"/></svg>
             <span>Reset Password</span>
         </a>
     </div>
 
     <div class="mt-auto">
         <a th:href="@{/}" class="nav-link text-danger">
-            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
             <span>Logout</span>
         </a>
     </div>
@@ -287,13 +281,11 @@
 
             <input type="hidden" id="userId" th:value="${session.userId}">
 
-            <!-- Objective -->
             <div class="mb-4">
                 <label class="form-label">Career Objective *</label>
                 <textarea id="objective" class="form-control" rows="3" required></textarea>
             </div>
 
-            <!-- Education -->
             <div class="mb-4">
                 <div class="d-flex justify-content-between mb-2">
                     <label>Education</label>
@@ -308,7 +300,6 @@
                 </div>
             </div>
 
-            <!-- Experience -->
             <div class="mb-4">
                 <div class="d-flex justify-content-between mb-2">
                     <label>Experience</label>
@@ -323,7 +314,6 @@
                 </div>
             </div>
 
-            <!-- Projects -->
             <div class="mb-4">
                 <div class="d-flex justify-content-between mb-2">
                     <label>Projects</label>
@@ -339,7 +329,6 @@
                 </div>
             </div>
 
-            <!-- Certifications -->
             <div class="mb-4">
                 <div class="d-flex justify-content-between mb-2">
                     <label>Certifications</label>
@@ -355,7 +344,6 @@
                 </div>
             </div>
 
-            <!-- Skills -->
             <div class="mb-4">
                 <label>Skills *</label>
                 <input id="skillsInput" class="form-control" placeholder="Java, Spring Boot, React" required>
@@ -369,109 +357,7 @@
 
 </main>
 
-<script>
-    function addRow(containerId) {
-        const container = document.getElementById(containerId);
-        const id = Date.now();
-        let html = "";
-
-        if (containerId === "edu-container") {
-            html = `<div class="dynamic-row" id="${id}">
-<div class="btn-remove" onclick="removeRow('${id}')">✕</div>
-<input class="form-control mb-2 edu-inst" placeholder="Institution">
-<input class="form-control edu-deg" placeholder="Degree">
-</div>`;
-        }
-
-        if (containerId === "exp-container") {
-            html = `<div class="dynamic-row" id="${id}">
-<div class="btn-remove" onclick="removeRow('${id}')">✕</div>
-<input class="form-control mb-2 exp-comp" placeholder="Company">
-<input class="form-control exp-role" placeholder="Role">
-</div>`;
-        }
-
-        if (containerId === "proj-container") {
-            html = `<div class="dynamic-row" id="${id}">
-<div class="btn-remove" onclick="removeRow('${id}')">✕</div>
-<input class="form-control mb-2 proj-title" placeholder="Project Title">
-<input class="form-control mb-2 proj-tech" placeholder="Technologies">
-<textarea class="form-control proj-desc" rows="3" placeholder="Project Description"></textarea>
-</div>`;
-        }
-
-        if (containerId === "cert-container") {
-            html = `<div class="dynamic-row" id="${id}">
-<div class="btn-remove" onclick="removeRow('${id}')">✕</div>
-<input class="form-control mb-2 cert-name" placeholder="Certification Name">
-<input class="form-control mb-2 cert-company" placeholder="Company">
-<input class="form-control cert-tech" placeholder="Technologies">
-</div>`;
-        }
-
-        container.insertAdjacentHTML("beforeend", html);
-    }
-
-    function removeRow(id) {
-        document.getElementById(id).remove();
-    }
-
-    /* SAVE RESUME */
-    document.getElementById("resumeForm").onsubmit = async (e) => {
-        e.preventDefault();
-
-        const userId = document.getElementById("userId").value;
-        const objective = document.getElementById("objective").value.trim();
-        const skills = document.getElementById("skillsInput").value.trim();
-
-        if (objective === "" || skills === "") {
-            alert("Please enter all required fields");
-            return;
-        }
-
-        const resumeData = {
-            objective: objective,
-            educations: Array.from(document.querySelectorAll("#edu-container .dynamic-row")).map(r => ({
-                institution: r.querySelector(".edu-inst").value,
-                degree: r.querySelector(".edu-deg").value
-            })),
-            experiences: Array.from(document.querySelectorAll("#exp-container .dynamic-row")).map(r => ({
-                companyName: r.querySelector(".exp-comp").value,
-                role: r.querySelector(".exp-role").value
-            })),
-            projects: Array.from(document.querySelectorAll("#proj-container .dynamic-row")).map(r => ({
-                projectTitle: r.querySelector(".proj-title").value,
-                technologies: r.querySelector(".proj-tech").value,
-                description: r.querySelector(".proj-desc").value
-            })),
-            certifications: Array.from(document.querySelectorAll("#cert-container .dynamic-row")).map(r => ({
-                certificationName: r.querySelector(".cert-name").value,
-                company: r.querySelector(".cert-company").value,
-                technologies: r.querySelector(".cert-tech").value
-            })),
-            skills: skills.split(",").map(s => s.trim())
-        };
-
-        try {
-            const response = await fetch(`/api/jobseeker/resume/save/${userId}`, {
-                method: "POST",
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(resumeData)
-            });
-
-            const result = await response.json();
-
-            if (response.ok) {
-                alert("Resume Saved Successfully");
-                window.location.href = "/jobseeker/resume/view";
-            } else {
-                alert(result.error || "Error saving resume");
-            }
-        } catch (err) {
-            alert("Server error while saving resume");
-        }
-    };
-</script>
+<script>function addRow(e){const t=document.getElementById(e),n=Date.now();let o="";"edu-container"===e&&(o=`<div class="dynamic-row" id="${n}"><div class="btn-remove" onclick="removeRow('${n}')">✕</div><input class="form-control mb-2 edu-inst" placeholder="Institution"><input class="form-control edu-deg" placeholder="Degree"></div>`),"exp-container"===e&&(o=`<div class="dynamic-row" id="${n}"><div class="btn-remove" onclick="removeRow('${n}')">✕</div><input class="form-control mb-2 exp-comp" placeholder="Company"><input class="form-control exp-role" placeholder="Role"></div>`),"proj-container"===e&&(o=`<div class="dynamic-row" id="${n}"><div class="btn-remove" onclick="removeRow('${n}')">✕</div><input class="form-control mb-2 proj-title" placeholder="Project Title"><input class="form-control mb-2 proj-tech" placeholder="Technologies"><textarea class="form-control proj-desc" rows="3" placeholder="Project Description"></textarea></div>`),"cert-container"===e&&(o=`<div class="dynamic-row" id="${n}"><div class="btn-remove" onclick="removeRow('${n}')">✕</div><input class="form-control mb-2 cert-name" placeholder="Certification Name"><input class="form-control mb-2 cert-company" placeholder="Company"><input class="form-control cert-tech" placeholder="Technologies"></div>`),t.insertAdjacentHTML("beforeend",o)}function removeRow(e){document.getElementById(e).remove()}document.getElementById("resumeForm").onsubmit=async e=>{e.preventDefault();const t=document.getElementById("userId").value,n=document.getElementById("objective").value.trim(),o=document.getElementById("skillsInput").value.trim();if(""===n||""===o)return void alert("Please enter all required fields");const i={objective:n,educations:Array.from(document.querySelectorAll("#edu-container .dynamic-row")).map(e=>({institution:e.querySelector(".edu-inst").value,degree:e.querySelector(".edu-deg").value})),experiences:Array.from(document.querySelectorAll("#exp-container .dynamic-row")).map(e=>({companyName:e.querySelector(".exp-comp").value,role:e.querySelector(".exp-role").value})),projects:Array.from(document.querySelectorAll("#proj-container .dynamic-row")).map(e=>({projectTitle:e.querySelector(".proj-title").value,technologies:e.querySelector(".proj-tech").value,description:e.querySelector(".proj-desc").value})),certifications:Array.from(document.querySelectorAll("#cert-container .dynamic-row")).map(e=>({certificationName:e.querySelector(".cert-name").value,company:e.querySelector(".cert-company").value,technologies:e.querySelector(".cert-tech").value})),skills:o.split(",").map(e=>e.trim())};try{const e=await fetch(`/api/jobseeker/resume/save/${t}`,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(i)}),n=await e.json();e.ok?(alert("Resume Saved Successfully"),window.location.href="/jobseeker/resume/view"):alert(n.error||"Error saving resume")}catch(e){alert("Server error while saving resume")}};</script>
 
 </body>
 </html>

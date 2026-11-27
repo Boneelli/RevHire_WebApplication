@@ -4,7 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login | RevHire</title>
-    <link rel="stylesheet" media="print" href="data:text/css,@media%20print{nav,header,footer,.no-print{display:none!important}body{background:%23fff;color:%23000}}">
+    <link rel="icon" href="data:,">
+    <link rel="stylesheet" media="print" href="data:text/css,@media%20print{body{background:%23fff!important;color:%23000!important;height:auto;overflow:visible;font-family:'Century%20Gothic',Arial,sans-serif!important}.brand-side,.btn-login,.back-link,.password-wrapper%20button{display:none!important}}">
 
     <style>
         :root{
@@ -164,7 +165,24 @@
         @media(max-width:1024px){
             .brand-side{display:none;}
         }
+
+        @media print{
+            body{
+                background:#fff !important;
+                color:#000 !important;
+                height:auto;
+                overflow:visible;
+                font-family:"Century Gothic",Arial,sans-serif !important;
+            }
+            .brand-side,
+            .btn-login,
+            .back-link,
+            .password-wrapper button{
+                display:none !important;
+            }
+        }
     </style>
+<link rel="stylesheet" th:href="@{/css/print.css}">
 </head>
 
 <body>
@@ -238,14 +256,7 @@
     </div>
 </div>
 
-<script>
-    const togglePassword = document.getElementById("togglePassword");
-    const passwordField = document.getElementById("passwordField");
-
-    togglePassword.addEventListener("click", function() {
-        passwordField.type = passwordField.type === "password" ? "text" : "password";
-    });
-</script>
+<script>const t=document.getElementById("togglePassword"),p=document.getElementById("passwordField");t.addEventListener("click",()=>{p.type="password"===p.type?"text":"password"});</script>
 
 </body>
 </html>

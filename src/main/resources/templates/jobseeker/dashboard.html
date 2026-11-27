@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Job Seeker Dashboard | RevHire</title>
-    <link rel="stylesheet" media="print" href="data:text/css,@media%20print{nav,header,footer,.no-print{display:none!important}body{background:%23fff;color:%23000}}">
+    <link rel="icon" href="data:,">
     <style>
         :root {
             --primary: #2563eb;
@@ -30,7 +30,6 @@
             line-height: 1.5;
         }
 
-        /* SIDEBAR */
         .sidebar {
             width: 250px;
             height: 100vh;
@@ -84,14 +83,12 @@
             flex-shrink: 0;
         }
 
-        /* MAIN */
         .main {
             margin-left: 250px;
             width: calc(100% - 250px);
             padding: 30px 40px;
         }
 
-        /* HEADER */
         .topbar {
             display: flex;
             justify-content: space-between;
@@ -128,7 +125,6 @@
             display: none;
         }
 
-        /* HERO */
         .hero {
             background: linear-gradient(120deg, #2563eb, #1d4ed8);
             border-radius: 20px;
@@ -144,7 +140,6 @@
             margin-bottom: 0.5rem;
         }
 
-        /* STAT CARDS */
         .stats-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -189,7 +184,6 @@
             font-weight: 800;
         }
 
-        /* TABLE */
         .card-box {
             background: white;
             padding: 25px;
@@ -220,97 +214,88 @@
         .text-muted { color: #64748b; }
         .d-none { display: none !important; }
 
-        /* RESPONSIVE */
         @media (max-width: 1000px) {
             .sidebar { width: 80px; }
             .sidebar span { display: none; }
             .main { margin-left: 80px; width: calc(100% - 80px); }
             .stats-grid { grid-template-columns: 1fr; }
         }
-
-        @media print {
-            .sidebar, .topbar a { display: none !important; }
-            .main { margin-left: 0; width: 100%; padding: 0; }
-            .hero, .stat-card, .card-box { box-shadow: none; border: 1px solid #ccc; }
-        }
     </style>
+    <link rel="stylesheet" media="print" th:href="@{/css/print.css}">
 </head>
 
 <body>
 
-<!-- SIDEBAR -->
 <nav class="sidebar">
 
     <a th:href="@{'/jobseeker/dashboard/' + ${session.userId}}" class="logo">
-        <svg class="icon" viewBox="0 0 24 24" fill="currentColor"><path d="M13.13 22.19L11.5 18.36C13.07 17.78 14.54 17 15.9 16.09L13.13 22.19M5.64 12.5L1.81 10.87L7.91 8.1C7 9.46 6.22 10.93 5.64 12.5M21.61 2.39C21.61 2.39 16.66 .269 11 5.93C8.81 8.12 7.5 10.53 6.65 12.64C6.37 13.39 6.56 14.21 7.11 14.77L9.24 16.89C9.79 17.45 10.61 17.63 11.36 17.35C13.5 16.53 15.88 15.19 18.07 13C23.73 7.34 21.61 2.39 21.61 2.39M14.54 9.46C13.76 8.68 13.76 7.41 14.54 6.63S16.59 5.85 17.37 6.63C18.14 7.41 18.15 8.68 17.37 9.46C16.59 10.24 15.32 10.24 14.54 9.46Z"/></svg>
+        <svg class="icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M13.13 22.19L11.5 18.36C13.07 17.78 14.54 17 15.9 16.09L13.13 22.19M5.64 12.5L1.81 10.87L7.91 8.1C7 9.46 6.22 10.93 5.64 12.5M21.61 2.39C21.61 2.39 16.66 .269 11 5.93C8.81 8.12 7.5 10.53 6.65 12.64C6.37 13.39 6.56 14.21 7.11 14.77L9.24 16.89C9.79 17.45 10.61 17.63 11.36 17.35C13.5 16.53 15.88 15.19 18.07 13C23.73 7.34 21.61 2.39 21.61 2.39M14.54 9.46C13.76 8.68 13.76 7.41 14.54 6.63S16.59 5.85 17.37 6.63C18.14 7.41 18.15 8.68 17.37 9.46C16.59 10.24 15.32 10.24 14.54 9.46Z"/></svg>
         <span>RevHire</span>
     </a>
 
     <div class="nav-menu">
         <a th:href="@{'/jobseeker/dashboard/' + ${session.userId}}" class="nav-link active">
-            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
             <span>Dashboard</span>
         </a>
 
         <a th:href="@{/jobseeker/profile/manage}" class="nav-link">
-            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/></svg>
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/></svg>
             <span>Manage Profile</span>
         </a>
 
         <a th:href="@{/jobseeker/resume/builder}" class="nav-link">
-            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/></svg>
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/></svg>
             <span>Resume Builder</span>
         </a>
 
         <a th:href="@{/jobseeker/resume/view}" class="nav-link">
-            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
             <span>View Resume</span>
         </a>
 
         <a th:href="@{/jobseeker/resume/upload}" class="nav-link">
-            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
             <span>Upload Resume</span>
         </a>
 
         <a th:href="@{/jobseeker/jobs/search}" class="nav-link">
-            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
             <span>Search Jobs</span>
         </a>
 
         <a th:href="@{/jobseeker/applications}" class="nav-link">
-            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="20" height="14" x="2" y="7" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect width="20" height="14" x="2" y="7" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
             <span>Applications</span>
         </a>
 
         <a th:href="@{/jobseeker/jobs/saved}" class="nav-link">
-            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
             <span>Saved Jobs</span>
         </a>
 
         <a th:href="@{/notifications/notification}" class="nav-link">
-            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>
             <span>Notifications</span>
         </a>
 
         <a th:href="@{/auth/reset-password}" class="nav-link">
-            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="7.5" cy="15.5" r="5.5"/><path d="m21 2-9.6 9.6"/><path d="m15.5 7.5 3 3L22 7l-3-3"/></svg>
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="7.5" cy="15.5" r="5.5"/><path d="m21 2-9.6 9.6"/><path d="m15.5 7.5 3 3L22 7l-3-3"/></svg>
             <span>Reset Password</span>
         </a>
     </div>
 
     <div class="mt-auto">
         <a th:href="@{/}" class="nav-link text-danger">
-            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
             <span>Logout</span>
         </a>
     </div>
 
 </nav>
 
-<!-- MAIN -->
 <div class="main">
 
-    <!-- TOPBAR -->
     <div class="topbar">
         <div class="welcome"
              th:text="'Welcome Back, ' + ${session.firstName ?: 'Seeker'}">
@@ -318,19 +303,17 @@
         </div>
 
         <a th:href="@{/notifications/notification}" class="nav-link">
-            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>
             <span id="unreadCountBadge" class="badge-notif">0</span>
             <span>Notifications</span>
         </a>
     </div>
 
-    <!-- HERO -->
     <div class="hero">
         <h4>Your Job Search Progress</h4>
         <p>Track your applications, improve your profile and land your next opportunity.</p>
     </div>
 
-    <!-- STATS -->
     <div class="stats-grid">
         <div class="stat-card">
             <div>
@@ -338,7 +321,7 @@
                 <div id="profileScore" class="stat-value">0%</div>
             </div>
             <div class="stat-icon">
-                <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
             </div>
         </div>
 
@@ -348,7 +331,7 @@
                 <div id="totalApps" class="stat-value">0</div>
             </div>
             <div class="stat-icon">
-                <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="20" height="14" x="2" y="7" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+                <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect width="20" height="14" x="2" y="7" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
             </div>
         </div>
 
@@ -358,12 +341,11 @@
                 <div id="savedJobs" class="stat-value">0</div>
             </div>
             <div class="stat-icon">
-                <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
+                <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
             </div>
         </div>
     </div>
 
-    <!-- RECENT APPLICATIONS -->
     <div class="card-box">
         <h5>Recent Applications</h5>
 
@@ -388,77 +370,7 @@
 
 </div>
 
-<script th:src="@{/js/jobseeker.js}"></script>
-
-<script>
-    document.addEventListener("DOMContentLoaded", () => {
-        loadDashboard();
-        loadNotificationCount();
-    });
-
-    async function loadNotificationCount() {
-        const userId = document.getElementById("userId").value;
-        if (!userId) return;
-
-        try {
-            const res = await fetch(`/notifications/api/unread-count/${userId}`);
-            if (res.ok) {
-                const data = await res.json();
-                const badge = document.getElementById("notificationCount");
-                if (badge && data.count > 0) {
-                    badge.innerText = data.count;
-                    badge.classList.remove("d-none");
-                }
-            }
-        } catch (e) {
-            console.error(e);
-        }
-    }
-
-    setInterval(loadNotificationCount, 10000);
-
-    async function updateUnreadNotifications() {
-        const el = document.getElementById("sessionUserId") || document.getElementById("userId");
-        const userId = el ? el.value : null;
-        if (!userId) return;
-
-        try {
-            const res = await fetch(`/notifications/unread-count/${userId}`);
-            if (!res.ok) throw new Error("Failed to fetch");
-            const count = await res.json();
-
-            const badge = document.getElementById("unreadCountBadge");
-            if (!badge) return;
-
-            if (count > 0) {
-                badge.style.display = "inline-block";
-                badge.textContent = count;
-            } else {
-                badge.style.display = "none";
-            }
-        } catch (err) {
-            console.error("Unread notifications fetch error:", err);
-        }
-    }
-
-    document.addEventListener("DOMContentLoaded", updateUnreadNotifications);
-    setInterval(updateUnreadNotifications, 30000);
-
-    async function markAllAsRead() {
-        const el = document.getElementById("sessionUserId") || document.getElementById("userId");
-        const userId = el ? el.value : null;
-        if (!userId) return;
-
-        try {
-            const res = await fetch(`/notifications/mark-all-read/${userId}`, { method: "POST" });
-            if (res.ok) {
-                updateUnreadNotifications();
-            }
-        } catch (err) {
-            console.log("Failed to mark notifications as read", err);
-        }
-    }
-</script>
+<script>document.addEventListener("DOMContentLoaded",function(){loadProfileInitial(),loadNotificationBadge(),loadDashboard(),updateUnreadNotifications()});function getProfile(){return JSON.parse(localStorage.getItem("profile"))||{}}function getResume(){return JSON.parse(localStorage.getItem("resume"))||{}}function getApplications(){return JSON.parse(localStorage.getItem("applications"))||[]}function getSavedJobs(){return JSON.parse(localStorage.getItem("savedJobs"))||[]}function getNotifications(){return JSON.parse(localStorage.getItem("jobSeekerNotifications"))||[]}function saveNotifications(e){localStorage.setItem("jobSeekerNotifications",JSON.stringify(e))}function loadProfileInitial(){let e=getProfile(),t=document.getElementById("profileInitial");t&&(t.innerText=e.name&&""!==e.name.trim()?e.name.charAt(0).toUpperCase():"U")}function loadNotificationBadge(){let e=getNotifications(),t=document.getElementById("notificationCount");if(!t)return;let n=e.filter(e=>!0!==e.read).length;n>0?(t.innerText=n,t.style.display="inline-block"):t.style.display="none"}function addNotification(e){let t=getNotifications();t.push({message:e,date:(new Date).toLocaleDateString(),time:(new Date).toLocaleTimeString(),read:!1}),saveNotifications(t),loadNotificationBadge()}function calculateProfileCompletion(){let e=getProfile(),t=[e.name,e.email,e.phone,e.location,e.education,e.experience,e.skills],n=t.filter(e=>e&&""!==e.trim()).length;return Math.round(n/t.length*100)||0}function calculateResumeScore(){let e=getResume(),t=[e.objective,e.education,e.experience,e.skills,e.projects,e.certifications],n=t.filter(e=>e&&""!==e.trim()).length;return Math.round(n/t.length*100)||0}function loadApplicationStats(){let e=getApplications(),t=document.getElementById("totalApps"),n=document.getElementById("shortlistedCount");if(t&&(t.innerText=e.length),n){let t=e.filter(e=>"SHORTLISTED"===e.status).length;n.innerText=t+" Shortlisted"}}function loadSavedJobsCount(){let e=getSavedJobs(),t=document.getElementById("savedJobs");t&&(t.innerText=e.length)}function loadRecentNotifications(){let e=getNotifications(),t=document.getElementById("notificationBox");t&&(t.innerHTML="",0!==e.length?e.slice(-5).reverse().forEach(e=>{t.innerHTML+=`<div class="border-bottom py-2">${e.message}<div class="text-muted small">${e.date} ${e.time}</div></div>`}):t.innerHTML="<p class='text-muted'>No notifications</p>")}function loadDashboard(){const e=document.getElementById("userId").value;e&&fetch(`/api/jobseeker/dashboard/${e}`).then(e=>e.json()).then(e=>{document.getElementById("profileScore").innerText=(e.profileScore??0)+"%",document.getElementById("totalApps").innerText=e.totalApplications??0,document.getElementById("savedJobs").innerText=e.savedJobs??0;const t=document.getElementById("recentApplications");if(t.innerHTML="",!e.recentApplications||0===e.recentApplications.length)return void(t.innerHTML='<tr><td colspan="3" class="text-muted">No recent applications</td></tr>');e.recentApplications.forEach(e=>{const n=`<tr><td>${e.jobTitle??"N/A"}</td><td>${e.status??"Pending"}</td><td>${e.appliedDate?new Date(e.appliedDate).toLocaleDateString():"-"}</td></tr>`;t.innerHTML+=n})}).catch(e=>{console.error("Dashboard load failed",e),document.getElementById("profileScore").innerText="0%",document.getElementById("totalApps").innerText="0",document.getElementById("savedJobs").innerText="0",document.getElementById("recentApplications").innerHTML='<tr><td colspan="3" class="text-danger">Failed to load applications</td></tr>'})}function loadRecentApplications(){let e=getApplications(),t=document.getElementById("recentApplications");t&&(t.innerHTML="",0!==e.length?e.slice(-5).reverse().forEach(e=>{t.innerHTML+=`<tr><td>${e.title||"-"}</td><td><span class="badge ${"SHORTLISTED"===e.status?"bg-success":"REJECTED"===e.status?"bg-danger":"bg-warning text-dark"}">${e.status||"APPLIED"}</span></td><td>${e.date||"-"}</td></tr>`}):t.innerHTML="<tr><td colspan='3' class='text-muted'>No applications yet</td></tr>")}function applyJob(e){let t=JSON.parse(localStorage.getItem("jobs"))||[],n=JSON.parse(localStorage.getItem("applications"))||[],o=JSON.parse(localStorage.getItem("profile"))||{};if(!o.name)return alert("Please complete your profile first"),void(window.location.href="create-profile.html");let i=t.find(t=>t.id==e);if(!i)return alert("Job not found");if(n.some(t=>t.jobId==e))return alert("You already applied for this job");let a={id:Date.now(),jobId:e,name:o.name,email:o.email,phone:o.phone,title:i.title,jobTitle:i.title,company:i.company||"Company",skills:o.skills,education:o.education,experience:o.experience,status:"APPLIED",date:(new Date).toLocaleDateString()};n.push(a),localStorage.setItem("applications",JSON.stringify(n));let l=JSON.parse(localStorage.getItem("employerNotifications"))||[];l.push({message:o.name+" applied for "+i.title,date:(new Date).toLocaleDateString(),time:(new Date).toLocaleTimeString(),read:!1}),localStorage.setItem("employerNotifications",JSON.stringify(l)),addNotification("You applied for "+i.title),alert("Application submitted successfully!"),window.location.href="applications.html"}async function updateUnreadNotifications(){const e=document.getElementById("userId"),t=e?e.value:null;if(t)try{const e=await fetch(`/notifications/api/${t}`);if(!e.ok)return;const n=await e.json(),o=Array.isArray(n)?n.filter(e=>!e.read&&!e.isRead).length:0,i=document.getElementById("unreadCountBadge");i&&(o>0?(i.style.display="inline-block",i.textContent=o):i.style.display="none")}catch(e){console.error("Unread notifications fetch error:",e)}}</script>
 
 </body>
 </html>

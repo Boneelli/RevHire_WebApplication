@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Search Jobs | RevHire</title>
-    <link rel="stylesheet" media="print" href="data:text/css,@media%20print{nav,header,footer,.no-print{display:none!important}body{background:%23fff;color:%23000}}">
+    <link rel="icon" href="data:,">
     <style>
         :root {
             --primary: #2563eb;
@@ -287,7 +287,6 @@
             border-radius: 16px;
         }
 
-        /* Lightweight Modal Notification */
         .toast-overlay {
             position: fixed;
             inset: 0;
@@ -315,69 +314,64 @@
             .main-content { margin-left: 80px; width: calc(100% - 80px); }
             .filter-row-top, .filter-row-bottom { grid-template-columns: 1fr; }
         }
-
-        @media print {
-            .sidebar, .filter-box, .actions-flex, .toast-overlay { display: none !important; }
-            .main-content { margin-left: 0; width: 100%; padding: 0; }
-            .job-card { box-shadow: none; border: 1px solid #ccc; break-inside: avoid; }
-        }
     </style>
+    <link rel="stylesheet" media="print" th:href="@{/css/print.css}">
 </head>
 
 <body>
 
 <nav class="sidebar">
     <a th:href="@{'/jobseeker/dashboard/' + ${session.userId}}" class="logo">
-        <svg class="icon" viewBox="0 0 24 24" fill="currentColor"><path d="M13.13 22.19L11.5 18.36C13.07 17.78 14.54 17 15.9 16.09L13.13 22.19M5.64 12.5L1.81 10.87L7.91 8.1C7 9.46 6.22 10.93 5.64 12.5M21.61 2.39C21.61 2.39 16.66 .269 11 5.93C8.81 8.12 7.5 10.53 6.65 12.64C6.37 13.39 6.56 14.21 7.11 14.77L9.24 16.89C9.79 17.45 10.61 17.63 11.36 17.35C13.5 16.53 15.88 15.19 18.07 13C23.73 7.34 21.61 2.39 21.61 2.39M14.54 9.46C13.76 8.68 13.76 7.41 14.54 6.63S16.59 5.85 17.37 6.63C18.14 7.41 18.15 8.68 17.37 9.46C16.59 10.24 15.32 10.24 14.54 9.46Z"/></svg>
+        <svg class="icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M13.13 22.19L11.5 18.36C13.07 17.78 14.54 17 15.9 16.09L13.13 22.19M5.64 12.5L1.81 10.87L7.91 8.1C7 9.46 6.22 10.93 5.64 12.5M21.61 2.39C21.61 2.39 16.66 .269 11 5.93C8.81 8.12 7.5 10.53 6.65 12.64C6.37 13.39 6.56 14.21 7.11 14.77L9.24 16.89C9.79 17.45 10.61 17.63 11.36 17.35C13.5 16.53 15.88 15.19 18.07 13C23.73 7.34 21.61 2.39 21.61 2.39M14.54 9.46C13.76 8.68 13.76 7.41 14.54 6.63S16.59 5.85 17.37 6.63C18.14 7.41 18.15 8.68 17.37 9.46C16.59 10.24 15.32 10.24 14.54 9.46Z"/></svg>
         <span>RevHire</span>
     </a>
 
     <div class="nav-menu">
         <a th:href="@{'/jobseeker/dashboard/' + ${session.userId}}" class="nav-link">
-            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
             <span>Dashboard</span>
         </a>
         <a th:href="@{/jobseeker/profile/manage}" class="nav-link">
-            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/></svg>
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/></svg>
             <span>Manage Profile</span>
         </a>
         <a th:href="@{/jobseeker/resume/builder}" class="nav-link">
-            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/></svg>
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/></svg>
             <span>Resume Builder</span>
         </a>
         <a th:href="@{/jobseeker/resume/view}" class="nav-link">
-            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
             <span>View Resume</span>
         </a>
         <a th:href="@{/jobseeker/resume/upload}" class="nav-link">
-            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
             <span>Upload Resume</span>
         </a>
         <a th:href="@{/jobseeker/jobs/search}" class="nav-link active">
-            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
             <span>Search Jobs</span>
         </a>
         <a th:href="@{/jobseeker/applications}" class="nav-link">
-            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="20" height="14" x="2" y="7" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect width="20" height="14" x="2" y="7" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
             <span>Applications</span>
         </a>
         <a th:href="@{/jobseeker/jobs/saved}" class="nav-link">
-            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
             <span>Saved Jobs</span>
         </a>
         <a th:href="@{/notifications/notification}" class="nav-link">
-            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>
             <span>Notifications</span>
         </a>
         <a th:href="@{/auth/reset-password}" class="nav-link">
-            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="7.5" cy="15.5" r="5.5"/><path d="m21 2-9.6 9.6"/><path d="m15.5 7.5 3 3L22 7l-3-3"/></svg>
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="7.5" cy="15.5" r="5.5"/><path d="m21 2-9.6 9.6"/><path d="m15.5 7.5 3 3L22 7l-3-3"/></svg>
             <span>Reset Password</span>
         </a>
     </div>
 
     <div class="mt-auto">
         <a th:href="@{/}" class="nav-link text-danger">
-            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
             <span>Logout</span>
         </a>
     </div>
@@ -455,7 +449,7 @@
                     <button th:id="'saveBtn-' + ${job.jobId}"
                             th:onclick="'saveJob(' + ${job.jobId} + ')'"
                             class="btn btn-outline-primary rounded-pill px-3">
-                        <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
+                        <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
                     </button>
                     <button th:id="'applyBtn-' + ${job.jobId}"
                             th:onclick="'handleApply(' + ${job.jobId} + ')'"
@@ -467,15 +461,15 @@
 
             <div class="job-meta">
                 <span>
-                    <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+                    <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
                     <span th:text="${job.location}"></span>
                 </span>
                 <span>
-                    <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="2" x2="12" y2="22"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                    <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><line x1="12" y1="2" x2="12" y2="22"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
                     <span th:text="${job.salaryMin + ' - ' + job.salaryMax}"></span>
                 </span>
                 <span>
-                    <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                    <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
                     <span th:text="${job.jobType}"></span>
                 </span>
             </div>
@@ -483,7 +477,6 @@
     </div>
 </main>
 
-<!-- Lightweight Modal Notification -->
 <div id="customToast" class="toast-overlay">
     <div class="toast-box">
         <h4 id="toastTitle">Notice</h4>
@@ -492,221 +485,6 @@
     </div>
 </div>
 
-<script>
-    function showToast(title, text, autoCloseMs = 0) {
-        const overlay = document.getElementById("customToast");
-        document.getElementById("toastTitle").textContent = title;
-        document.getElementById("toastMessage").textContent = text;
-        document.getElementById("toastCloseBtn").style.display = autoCloseMs > 0 ? "none" : "inline-flex";
-        overlay.style.display = "flex";
-        if (autoCloseMs > 0) {
-            setTimeout(closeToast, autoCloseMs);
-        }
-    }
-
-    function closeToast() {
-        document.getElementById("customToast").style.display = "none";
-    }
-
-    const filterIds = ["titleFilter", "locationFilter", "companyFilter", "minSalary", "maxSalary", "jobTypeFilter", "sortJobs"];
-
-    filterIds.forEach(id => {
-        const element = document.getElementById(id);
-        if (element) {
-            element.addEventListener("input", applyFilters);
-            if (element.tagName === "SELECT") {
-                element.addEventListener("change", applyFilters);
-            }
-        }
-    });
-
-    function applyFilters() {
-        const searchTitle = document.getElementById("titleFilter").value.toLowerCase().trim();
-        const searchLocation = document.getElementById("locationFilter").value.toLowerCase().trim();
-        const searchCompany = document.getElementById("companyFilter").value.toLowerCase().trim();
-        const searchMinSal = parseFloat(document.getElementById("minSalary").value) || 0;
-        const searchMaxSal = parseFloat(document.getElementById("maxSalary").value) || Infinity;
-        const searchType = document.getElementById("jobTypeFilter").value.toLowerCase();
-
-        const jobCards = document.querySelectorAll(".job-card");
-        let visibleCount = 0;
-
-        jobCards.forEach(card => {
-            const jTitle = (card.dataset.title || "").toLowerCase();
-            const jLoc = (card.dataset.location || "").toLowerCase();
-            const jComp = (card.dataset.company || "").toLowerCase();
-            const jType = (card.dataset.type || "").toLowerCase().replace("_", " ");
-            const jMinSal = parseFloat(card.dataset.minsalary || 0);
-            const jMaxSal = parseFloat(card.dataset.maxsalary || 0);
-
-            const titleMatch = !searchTitle || jTitle.includes(searchTitle);
-            const locMatch = !searchLocation || jLoc.includes(searchLocation);
-            const compMatch = !searchCompany || jComp.includes(searchCompany);
-            const typeMatch = !searchType || jType.includes(searchType);
-            const salaryMatch = (jMaxSal >= searchMinSal) && (jMinSal <= searchMaxSal);
-
-            if (titleMatch && locMatch && compMatch && typeMatch && salaryMatch) {
-                card.style.display = "block";
-                visibleCount++;
-            } else {
-                card.style.display = "none";
-            }
-        });
-
-        toggleNoResults(visibleCount);
-    }
-
-    function clearFilters() {
-        filterIds.forEach(id => {
-            const el = document.getElementById(id);
-            if (el) el.value = "";
-        });
-
-        applyFilters();
-
-        const container = document.getElementById("jobListings");
-        const jobs = Array.from(container.querySelectorAll(".job-card"));
-        jobs.sort((a, b) => parseInt(a.dataset.jobid) - parseInt(b.dataset.jobid));
-        jobs.forEach(job => container.appendChild(job));
-    }
-
-    function toggleNoResults(count) {
-        let msg = document.getElementById("noJobsMessage");
-        if (count === 0) {
-            if (!msg) {
-                msg = document.createElement("div");
-                msg.id = "noJobsMessage";
-                msg.className = "empty-state";
-                msg.innerHTML = `<svg width="42" height="42" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg><p style="margin-top:0.5rem;font-weight:700;">No jobs found matching these filters.</p>`;
-                document.getElementById("jobListings").appendChild(msg);
-            }
-        } else if (msg) {
-            msg.remove();
-        }
-    }
-
-    document.getElementById("sortJobs").addEventListener("change", function () {
-        const criteria = this.value;
-        if (!criteria) return;
-
-        const container = document.getElementById("jobListings");
-        const jobs = Array.from(container.querySelectorAll(".job-card"));
-
-        jobs.sort((a, b) => {
-            if (criteria === "company") {
-                return a.dataset.company.localeCompare(b.dataset.company);
-            } else if (criteria === "salaryHigh") {
-                return parseFloat(b.dataset.maxsalary) - parseFloat(a.dataset.maxsalary);
-            } else if (criteria === "salaryLow") {
-                return parseFloat(a.dataset.minsalary) - parseFloat(b.dataset.minsalary);
-            }
-            return 0;
-        });
-
-        jobs.forEach(job => container.appendChild(job));
-    });
-
-    document.getElementById("filterForm").addEventListener("submit", (e) => e.preventDefault());
-
-    async function handleApply(jobId) {
-        const userId = document.getElementById("sessionUserId").value;
-
-        if (!userId) {
-            showToast("Login Required", "Please log in to apply.");
-            return;
-        }
-
-        try {
-            const res = await fetch(`/api/resume/details/${userId}`);
-            if (!res.ok) {
-                showToast("Error", "No resume found. Please create/upload one.");
-                return;
-            }
-
-            const resume = await res.json();
-            const latestFile = resume.files && resume.files.length > 0 ? resume.files[0] : null;
-            let resumeIdToSend = resume.resumeId;
-            let fileId = latestFile ? latestFile.fileId : null;
-
-            showToast("Applying...", "Submitting your application, please wait.");
-            document.getElementById("toastCloseBtn").style.display = "none";
-
-            const params = new URLSearchParams();
-            params.append('jobId', jobId);
-            params.append('userId', userId);
-            params.append('resumeId', resumeIdToSend);
-            params.append('coverLetter', localStorage.getItem("revhire_cover_letter") || "");
-
-            if (fileId) {
-                params.append('fileId', fileId);
-            }
-
-            const applyRes = await fetch('/applications/submit-application', {
-                method: "POST",
-                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                body: params
-            });
-
-            if (applyRes.ok) {
-                showToast("Applied Successfully!", "Your application has been submitted.", 1500);
-                updateToAppliedState(jobId);
-            } else if (applyRes.status === 409) {
-                showToast("Note", "Already applied for this job.");
-                updateToAppliedState(jobId);
-            } else {
-                showToast("Note", "Already applied for this job.");
-                updateToAppliedState(jobId);
-            }
-
-        } catch (err) {
-            showToast("Error", "Unable to load resumes.");
-        }
-    }
-
-    function updateToAppliedState(jobId) {
-        const btn = document.getElementById(`applyBtn-${jobId}`);
-        if (btn) {
-            const appliedLabel = document.createElement("span");
-            appliedLabel.className = "applied-badge";
-            appliedLabel.innerHTML = `<svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg> Applied`;
-            btn.parentNode.replaceChild(appliedLabel, btn);
-        }
-    }
-
-    document.addEventListener("DOMContentLoaded", async () => {
-        const userId = document.getElementById("sessionUserId").value;
-        if (!userId) return;
-
-        try {
-            const res = await fetch(`/applications/seeker/${userId}`);
-            if (res.ok) {
-                const appliedList = await res.json();
-                appliedList.forEach(app => {
-                    const jobCards = document.querySelectorAll(".job-card");
-                    jobCards.forEach(card => {
-                        if (card.dataset.jobid == app.jobId || card.dataset.title === app.jobTitle) {
-                            updateToAppliedState(card.dataset.jobid);
-                        }
-                    });
-                });
-            }
-        } catch (e) { console.log("Applied status check failed."); }
-    });
-
-    async function saveJob(jobId) {
-        const userId = document.getElementById("sessionUserId").value;
-        const btn = document.getElementById(`saveBtn-${jobId}`);
-        if (!userId) { showToast("Login Required", "Please login first"); return; }
-        try {
-            const response = await fetch(`/api/jobseeker/favorites/${userId}/${jobId}`, { method: "POST" });
-            if (response.ok || response.status === 409) {
-                if (response.ok) showToast("Job Saved!", "Added to your saved jobs.", 1200);
-                btn.classList.add("btn-saved");
-                btn.innerHTML = '<svg class="icon-sm" viewBox="0 0 24 24" fill="currentColor"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>';
-                btn.disabled = true;
-            }
-        } catch (e) { console.log("Save error", e); }
-    }
-</script>
+<script>function showToast(e,t,o=0){const n=document.getElementById("customToast");document.getElementById("toastTitle").textContent=e,document.getElementById("toastMessage").textContent=t,document.getElementById("toastCloseBtn").style.display=o>0?"none":"inline-flex",n.style.display="flex",o>0&&setTimeout(closeToast,o)}function closeToast(){document.getElementById("customToast").style.display="none"}const filterIds=["titleFilter","locationFilter","companyFilter","minSalary","maxSalary","jobTypeFilter","sortJobs"];function applyFilters(){const e=document.getElementById("titleFilter").value.toLowerCase().trim(),t=document.getElementById("locationFilter").value.toLowerCase().trim(),o=document.getElementById("companyFilter").value.toLowerCase().trim(),n=parseFloat(document.getElementById("minSalary").value)||0,i=parseFloat(document.getElementById("maxSalary").value)||1/0,a=document.getElementById("jobTypeFilter").value.toLowerCase(),s=document.querySelectorAll(".job-card");let l=0;s.forEach(s=>{const c=(s.dataset.title||"").toLowerCase(),r=(s.dataset.location||"").toLowerCase(),d=(s.dataset.company||"").toLowerCase(),p=(s.dataset.type||"").toLowerCase().replace("_"," "),u=parseFloat(s.dataset.minsalary||0),y=parseFloat(s.dataset.maxsalary||0);(!e||c.includes(e))&&(!t||r.includes(t))&&(!o||d.includes(o))&&(!a||p.includes(a))&&y>=n&&u<=i?(s.style.display="block",l++):s.style.display="none"}),toggleNoResults(l)}function clearFilters(){filterIds.forEach(e=>{const t=document.getElementById(e);t&&(t.value="")}),applyFilters();const e=document.getElementById("jobListings");Array.from(e.querySelectorAll(".job-card")).sort((e,t)=>parseInt(e.dataset.jobid)-parseInt(t.dataset.jobid)).forEach(t=>e.appendChild(t))}function toggleNoResults(e){let t=document.getElementById("noJobsMessage");0===e?t||((t=document.createElement("div")).id="noJobsMessage",t.className="empty-state",t.innerHTML='<svg width="42" height="42" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg><p style="margin-top:0.5rem;font-weight:700;">No jobs found matching these filters.</p>',document.getElementById("jobListings").appendChild(t)):t&&t.remove()}async function handleApply(e){const t=document.getElementById("sessionUserId").value;if(t)try{const o=await fetch(`/api/resume/details/${t}`);if(!o.ok)return void showToast("Error","No resume found. Please create/upload one.");const n=await o.json(),i=n.files&&n.files.length>0?n.files[0]:null;let a=n.resumeId,s=i?i.fileId:null;showToast("Applying...","Submitting your application, please wait."),document.getElementById("toastCloseBtn").style.display="none";const l=new URLSearchParams;l.append("jobId",e),l.append("userId",t),l.append("resumeId",a),l.append("coverLetter",localStorage.getItem("revhire_cover_letter")||""),s&&l.append("fileId",s);(await fetch("/applications/submit-application",{method:"POST",headers:{"Content-Type":"application/x-www-form-urlencoded"},body:l})).ok?(showToast("Applied Successfully!","Your application has been submitted.",1500),updateToAppliedState(e)):(showToast("Note","Already applied for this job."),updateToAppliedState(e))}catch(e){showToast("Error","Unable to load resumes.")}else showToast("Login Required","Please log in to apply.")}function updateToAppliedState(e){const t=document.getElementById(`applyBtn-${e}`);if(t){const e=document.createElement("span");e.className="applied-badge",e.innerHTML='<svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg> Applied',t.parentNode.replaceChild(e,t)}}async function saveJob(e){const t=document.getElementById("sessionUserId").value,o=document.getElementById(`saveBtn-${e}`);if(t)try{const n=await fetch(`/api/jobseeker/favorites/${t}/${e}`,{method:"POST"});(n.ok||409===n.status)&&(n.ok&&showToast("Job Saved!","Added to your saved jobs.",1200),o.classList.add("btn-saved"),o.innerHTML='<svg class="icon-sm" viewBox="0 0 24 24" fill="currentColor"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>',o.disabled=!0)}catch(e){console.log("Save error",e)}else showToast("Login Required","Please login first")}filterIds.forEach(e=>{const t=document.getElementById(e);t&&(t.addEventListener("input",applyFilters),"SELECT"===t.tagName&&t.addEventListener("change",applyFilters))}),document.getElementById("sortJobs").addEventListener("change",function(){const e=this.value;if(!e)return;const t=document.getElementById("jobListings");Array.from(t.querySelectorAll(".job-card")).sort((t,o)=>"company"===e?t.dataset.company.localeCompare(o.dataset.company):"salaryHigh"===e?parseFloat(o.dataset.maxsalary)-parseFloat(t.dataset.maxsalary):"salaryLow"===e?parseFloat(t.dataset.minsalary)-parseFloat(o.dataset.minsalary):0).forEach(e=>t.appendChild(e))}),document.getElementById("filterForm").addEventListener("submit",e=>e.preventDefault()),document.addEventListener("DOMContentLoaded",async()=>{const e=document.getElementById("sessionUserId").value;if(e)try{const t=await fetch(`/applications/seeker/${e}`);if(t.ok){(await t.json()).forEach(e=>{document.querySelectorAll(".job-card").forEach(t=>{(t.dataset.jobid==e.jobId||t.dataset.title===e.jobTitle)&&updateToAppliedState(t.dataset.jobid)})})}}catch(e){console.log("Applied status check failed.")}});</script>
 </body>
 </html>
